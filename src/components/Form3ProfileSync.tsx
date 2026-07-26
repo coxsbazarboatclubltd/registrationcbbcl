@@ -1,6 +1,7 @@
 import React from 'react';
 import { CbbcLogo } from './CbbcLogo';
 import { MemberFormData } from '../types';
+import { PhotoUploader } from './PhotoUploader';
 
 interface Form3Props {
   data: MemberFormData;
@@ -130,112 +131,128 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
           <div className="section-num">01</div>
           <h2>Primary Member Information</h2>
         </div>
-        <div className="title-row">
-          <span className="tl">Title</span>
-          <div className="title-opts">
-            <label>
-              <input
-                type="radio"
-                name="title"
-                value="mr"
-                checked={data.title === 'mr'}
-                onChange={() => onChange('title', 'mr')}
-              />{' '}
-              Mr.
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="title"
-                value="mrs"
-                checked={data.title === 'mrs'}
-                onChange={() => onChange('title', 'mrs')}
-              />{' '}
-              Mrs.
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="title"
-                value="dr"
-                checked={data.title === 'dr'}
-                onChange={() => onChange('title', 'dr')}
-              />{' '}
-              Dr.
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="title"
-                value="capt"
-                checked={data.title === 'capt'}
-                onChange={() => onChange('title', 'capt')}
-              />{' '}
-              Capt.
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="title"
-                value="fl"
-                checked={data.title === 'fl'}
-                onChange={() => onChange('title', 'fl')}
-              />{' '}
-              Fl.Lt.
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="title"
-                value="adm"
-                checked={data.title === 'adm'}
-                onChange={() => onChange('title', 'adm')}
-              />{' '}
-              Admiral
-            </label>
+        <div className="flex gap-4 items-start">
+          <div className="flex-1">
+            <div className="title-row">
+              <span className="tl">Title</span>
+              <div className="title-opts">
+                <label>
+                  <input
+                    type="radio"
+                    name="title"
+                    value="mr"
+                    checked={data.title === 'mr'}
+                    onChange={() => onChange('title', 'mr')}
+                  />{' '}
+                  Mr.
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="title"
+                    value="mrs"
+                    checked={data.title === 'mrs'}
+                    onChange={() => onChange('title', 'mrs')}
+                  />{' '}
+                  Mrs.
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="title"
+                    value="dr"
+                    checked={data.title === 'dr'}
+                    onChange={() => onChange('title', 'dr')}
+                  />{' '}
+                  Dr.
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="title"
+                    value="capt"
+                    checked={data.title === 'capt'}
+                    onChange={() => onChange('title', 'capt')}
+                  />{' '}
+                  Capt.
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="title"
+                    value="fl"
+                    checked={data.title === 'fl'}
+                    onChange={() => onChange('title', 'fl')}
+                  />{' '}
+                  Fl.Lt.
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="title"
+                    value="adm"
+                    checked={data.title === 'adm'}
+                    onChange={() => onChange('title', 'adm')}
+                  />{' '}
+                  Admiral
+                </label>
+              </div>
+              <div className="title-name">
+                <input
+                  type="text"
+                  placeholder="Full Name as per NID / Passport"
+                  value={data.candidateName}
+                  onChange={(e) => onChange('candidateName', e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <div className="field">
+                <label>Date of Birth</label>
+                <input
+                  type="date"
+                  value={data.dob}
+                  onChange={(e) => onChange('dob', e.target.value)}
+                />
+              </div>
+              <div className="field">
+                <label>Blood Group</label>
+                <select
+                  value={data.bloodGroup}
+                  onChange={(e) => onChange('bloodGroup', e.target.value)}
+                >
+                  <option value="">Select</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+              </div>
+              <div className="field w2">
+                <label>NID No.</label>
+                <input
+                  type="text"
+                  placeholder="National ID Number"
+                  value={data.nid}
+                  onChange={(e) => onChange('nid', e.target.value)}
+                />
+              </div>
+            </div>
           </div>
-          <div className="title-name">
-            <input
-              type="text"
-              placeholder="Full Name as per NID / Passport"
-              value={data.candidateName}
-              onChange={(e) => onChange('candidateName', e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="field-row">
-          <div className="field">
-            <label>Date of Birth</label>
-            <input
-              type="date"
-              value={data.dob}
-              onChange={(e) => onChange('dob', e.target.value)}
-            />
-          </div>
-          <div className="field">
-            <label>Blood Group</label>
-            <select
-              value={data.bloodGroup}
-              onChange={(e) => onChange('bloodGroup', e.target.value)}
-            >
-              <option value="">Select</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-            </select>
-          </div>
-          <div className="field w2">
-            <label>NID No.</label>
-            <input
-              type="text"
-              placeholder="National ID Number"
-              value={data.nid}
-              onChange={(e) => onChange('nid', e.target.value)}
+          <div className="w-[85px] flex-shrink-0">
+            <PhotoUploader
+              label="Member Photo"
+              sublabel="Passport Size"
+              photoUrl={data.candidatePhotoUrl}
+              onPhotoChange={(url) => {
+                onChange('candidatePhotoUrl', url);
+                if (url) onChange('docPassportPhoto', true);
+              }}
+              className="w-full h-[110px]"
             />
           </div>
         </div>

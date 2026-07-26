@@ -1,6 +1,7 @@
 import React from 'react';
 import { CbbcLogo } from './CbbcLogo';
 import { MemberFormData } from '../types';
+import { PhotoUploader } from './PhotoUploader';
 
 interface Form1Props {
   data: MemberFormData;
@@ -166,10 +167,18 @@ export const Form1PermanentMembership: React.FC<Form1Props> = ({
               </div>
             </div>
           </div>
-          <div className="photo-box">
-            <div className="photo-label">Candidate Photo</div>
-            <div className="photo-size">Passport Size<br />2 inch × 2 inch</div>
-            <div className="seal-label">Member Seal</div>
+          <div className="photo-box flex flex-col items-center justify-between p-1">
+            <PhotoUploader
+              label="Candidate Photo"
+              sublabel="Passport Size&#10;2 inch × 2 inch"
+              photoUrl={data.candidatePhotoUrl}
+              onPhotoChange={(url) => {
+                onChange('candidatePhotoUrl', url);
+                if (url) onChange('docPassportPhoto', true);
+              }}
+              className="w-full h-[120px]"
+            />
+            <div className="seal-label mt-1">Member Seal</div>
           </div>
         </div>
       </div>

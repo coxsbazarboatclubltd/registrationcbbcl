@@ -1,6 +1,7 @@
 import React from 'react';
 import { CbbcLogo } from './CbbcLogo';
 import { MemberFormData } from '../types';
+import { PhotoUploader } from './PhotoUploader';
 
 interface Form2Props {
   data: MemberFormData;
@@ -78,9 +79,17 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
             </div>
           </div>
         </div>
-        <div className="photo-box">
-          <div className="photo-label">Member Photo</div>
-          <div className="photo-size">Passport Size<br />Colour Name</div>
+        <div className="photo-box p-1 flex items-center justify-center">
+          <PhotoUploader
+            label="Member Photo"
+            sublabel="Passport Size"
+            photoUrl={data.candidatePhotoUrl}
+            onPhotoChange={(url) => {
+              onChange('candidatePhotoUrl', url);
+              if (url) onChange('docPassportPhoto', true);
+            }}
+            className="w-full h-[120px]"
+          />
         </div>
       </div>
 
@@ -98,8 +107,17 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           {/* SPOUSE */}
           <div className="dep-card">
             <div className="dep-type">Spouse</div>
-            <div className="dep-photo">
-              <span>Photo<br />Passport</span>
+            <div className="dep-photo p-0.5 overflow-hidden">
+              <PhotoUploader
+                label="Spouse Photo"
+                sublabel="Passport"
+                photoUrl={data.spousePhotoUrl}
+                onPhotoChange={(url) => {
+                  onChange('spousePhotoUrl', url);
+                  if (url) onChange('docSpousePhoto', true);
+                }}
+                className="w-full h-full border-none bg-transparent"
+              />
             </div>
             <div className="dep-field">
               <label>Full Name</label>
@@ -132,8 +150,17 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           {/* CHILD 01 */}
           <div className="dep-card">
             <div className="dep-type">Child 01</div>
-            <div className="dep-photo">
-              <span>Photo<br />Passport</span>
+            <div className="dep-photo p-0.5 overflow-hidden">
+              <PhotoUploader
+                label="Child 01 Photo"
+                sublabel="Passport"
+                photoUrl={data.child01PhotoUrl}
+                onPhotoChange={(url) => {
+                  onChange('child01PhotoUrl', url);
+                  if (url) onChange('docChildrenPhoto', true);
+                }}
+                className="w-full h-full border-none bg-transparent"
+              />
             </div>
             <div className="dep-field">
               <label>Full Name</label>
@@ -174,8 +201,17 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           {/* CHILD 02 */}
           <div className="dep-card">
             <div className="dep-type">Child 02</div>
-            <div className="dep-photo">
-              <span>Photo<br />Passport</span>
+            <div className="dep-photo p-0.5 overflow-hidden">
+              <PhotoUploader
+                label="Child 02 Photo"
+                sublabel="Passport"
+                photoUrl={data.child02PhotoUrl}
+                onPhotoChange={(url) => {
+                  onChange('child02PhotoUrl', url);
+                  if (url) onChange('docChildrenPhoto', true);
+                }}
+                className="w-full h-full border-none bg-transparent"
+              />
             </div>
             <div className="dep-field">
               <label>Full Name</label>
@@ -216,8 +252,17 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           {/* CHILD 03 */}
           <div className="dep-card">
             <div className="dep-type">Child 03</div>
-            <div className="dep-photo">
-              <span>Photo<br />Passport</span>
+            <div className="dep-photo p-0.5 overflow-hidden">
+              <PhotoUploader
+                label="Child 03 Photo"
+                sublabel="Passport"
+                photoUrl={data.child03PhotoUrl}
+                onPhotoChange={(url) => {
+                  onChange('child03PhotoUrl', url);
+                  if (url) onChange('docChildrenPhoto', true);
+                }}
+                className="w-full h-full border-none bg-transparent"
+              />
             </div>
             <div className="dep-field">
               <label>Full Name</label>

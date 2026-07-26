@@ -36,6 +36,14 @@ export interface MemberFormData {
   child03Dob: string;
   child03BloodGroup: string;
   
+  // Uploaded Photo Data URLs
+  candidatePhotoUrl?: string;
+  spousePhotoUrl?: string;
+  familyPhotoUrl?: string;
+  child01PhotoUrl?: string;
+  child02PhotoUrl?: string;
+  child03PhotoUrl?: string;
+
   // Form 2 & 3 specifics
   membershipNo: string;
   emergencyContactName: string;
@@ -65,6 +73,37 @@ export interface MemberFormData {
   privGuest: boolean;
   privVoting: boolean;
   privDeepSea: boolean;
+
+  // Form 4 - Document Checklist fields
+  docNidCopy: boolean;
+  docPassportCopy: boolean;
+  docBirthCert: boolean;
+  docDrivingLicense: boolean;
+  docTinCert: boolean;
+
+  docPassportPhoto: boolean;
+  docFamilyPhoto: boolean;
+  docSpousePhoto: boolean;
+  docChildrenPhoto: boolean;
+
+  docCompanyId: boolean;
+  docVisitingCard: boolean;
+  docEmploymentCert: boolean;
+  docTradeLicense: boolean;
+  docProfMembershipCert: boolean;
+
+  docUtilityBill: boolean;
+  docRentalAgreement: boolean;
+  docPropertyDoc: boolean;
+  docProofPermAddress: boolean;
+
+  docMarriageCert: boolean;
+  docChildrenBirthCert: boolean;
+  docBoatReg: boolean;
+  docBoatInsurance: boolean;
+  docRecLetter: boolean;
+  docOtherDocs: boolean;
+  docDeclarationSigned: boolean;
 }
 
 export const SAMPLE_MEMBER_DATA: MemberFormData = {
@@ -131,6 +170,36 @@ export const SAMPLE_MEMBER_DATA: MemberFormData = {
   privGuest: true,
   privVoting: true,
   privDeepSea: true,
+
+  docNidCopy: true,
+  docPassportCopy: true,
+  docBirthCert: false,
+  docDrivingLicense: true,
+  docTinCert: true,
+
+  docPassportPhoto: true,
+  docFamilyPhoto: true,
+  docSpousePhoto: true,
+  docChildrenPhoto: true,
+
+  docCompanyId: true,
+  docVisitingCard: true,
+  docEmploymentCert: true,
+  docTradeLicense: false,
+  docProfMembershipCert: true,
+
+  docUtilityBill: true,
+  docRentalAgreement: false,
+  docPropertyDoc: true,
+  docProofPermAddress: true,
+
+  docMarriageCert: true,
+  docChildrenBirthCert: true,
+  docBoatReg: false,
+  docBoatInsurance: false,
+  docRecLetter: true,
+  docOtherDocs: false,
+  docDeclarationSigned: true,
 };
 
 export const EMPTY_MEMBER_DATA: MemberFormData = {
@@ -197,4 +266,34 @@ export const EMPTY_MEMBER_DATA: MemberFormData = {
   privGuest: false,
   privVoting: false,
   privDeepSea: false,
+
+  docNidCopy: false,
+  docPassportCopy: false,
+  docBirthCert: false,
+  docDrivingLicense: false,
+  docTinCert: false,
+
+  docPassportPhoto: false,
+  docFamilyPhoto: false,
+  docSpousePhoto: false,
+  docChildrenPhoto: false,
+
+  docCompanyId: false,
+  docVisitingCard: false,
+  docEmploymentCert: false,
+  docTradeLicense: false,
+  docProfMembershipCert: false,
+
+  docUtilityBill: false,
+  docRentalAgreement: false,
+  docPropertyDoc: false,
+  docProofPermAddress: false,
+
+  docMarriageCert: false,
+  docChildrenBirthCert: false,
+  docBoatReg: false,
+  docBoatInsurance: false,
+  docRecLetter: false,
+  docOtherDocs: false,
+  docDeclarationSigned: false,
 };
