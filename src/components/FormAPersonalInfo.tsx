@@ -1,5 +1,6 @@
 import React from 'react';
 import { CbbcLogo } from './CbbcLogo';
+import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
 import { SearchableCategorySelect } from './SearchableCategorySelect';
@@ -21,7 +22,7 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
     <div className="page" id="form-1-page">
       {/* WATERMARK */}
       <div className="watermark-overlay" aria-hidden="true">
-        <CbbcLogo className="w-full h-auto" />
+        <CbbcWatermarkLogo className="w-full h-auto" />
       </div>
 
       {/* HEADER */}
@@ -256,7 +257,7 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
                 onChange('candidatePhotoUrl', url);
                 if (url) onChange('docPassportPhoto', true);
               }}
-              className="w-full h-[120px]"
+              className="w-full h-[135px]"
             />
             <div className="seal-label mt-1">Applicant Seal</div>
           </div>

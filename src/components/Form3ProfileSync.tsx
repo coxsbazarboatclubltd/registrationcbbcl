@@ -1,5 +1,6 @@
 import React from 'react';
 import { CbbcLogo } from './CbbcLogo';
+import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
 import { SearchableCategorySelect } from './SearchableCategorySelect';
@@ -21,7 +22,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
     <div className="page" id="form-4-page">
       {/* WATERMARK */}
       <div className="watermark-overlay" aria-hidden="true">
-        <CbbcLogo className="w-full h-auto" />
+        <CbbcWatermarkLogo className="w-full h-auto" />
       </div>
 
       {/* HEADER */}
@@ -151,7 +152,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               </div>
             </div>
           </div>
-          <div className="w-[85px] flex-shrink-0">
+          <div className="w-[105px] flex-shrink-0">
             <PhotoUploader
               label="Member Photo"
               sublabel="Passport Size"
@@ -160,7 +161,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
                 onChange('candidatePhotoUrl', url);
                 if (url) onChange('docPassportPhoto', true);
               }}
-              className="w-full h-[110px]"
+              className="w-full h-[135px]"
             />
           </div>
         </div>

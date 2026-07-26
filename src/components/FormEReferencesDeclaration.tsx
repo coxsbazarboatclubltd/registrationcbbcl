@@ -1,5 +1,6 @@
 import React from 'react';
 import { CbbcLogo } from './CbbcLogo';
+import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { ReferencesSection } from './ReferencesSection';
 import { DeclarationsAndConsent } from './DeclarationsAndConsent';
@@ -21,7 +22,7 @@ export const FormEReferencesDeclaration: React.FC<FormEProps> = ({
     <div className="page" id="form-5-page">
       {/* WATERMARK */}
       <div className="watermark-overlay" aria-hidden="true">
-        <CbbcLogo className="w-full h-auto" />
+        <CbbcWatermarkLogo className="w-full h-auto" />
       </div>
 
       {/* HEADER */}

@@ -1,4 +1,4 @@
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
 import { MemberFormData } from '../types';
 
@@ -6,132 +6,6 @@ export interface GeneratedPdfResult {
   blob: Blob;
   dataUri: string;
   filename: string;
-}
-
-/**
- * Converts any CSS color string (e.g. oklab, oklch, color-mix) to standard rgb(...) or rgba(...)
- * using the browser's native DOM style computation engine.
- */
-function convertColorToRgb(colorStr: string): string {
-  try {
-    const tempEl = document.createElement('div');
-    tempEl.style.color = colorStr;
-    document.body.appendChild(tempEl);
-    const computed = window.getComputedStyle(tempEl).color;
-    document.body.removeChild(tempEl);
-    if (computed && (computed.startsWith('rgb') || computed.startsWith('#'))) {
-      return computed;
-    }
-  } catch (e) {
-    // fallback
-  }
-  return 'rgb(0, 0, 0)';
-}
-
-/**
- * Replaces function calls like `oklab(...)`, `oklch(...)`, `color-mix(...)` in CSS strings.
- */
-function replaceColorFunc(cssText: string, funcName: string): string {
-  let result = cssText;
-  let searchIdx = 0;
-
-  while (true) {
-    const startIdx = result.toLowerCase().indexOf(funcName + '(', searchIdx);
-    if (startIdx === -1) break;
-
-    let openParens = 0;
-    let endIdx = -1;
-    for (let i = startIdx + funcName.length; i < result.length; i++) {
-      if (result[i] === '(') openParens++;
-      else if (result[i] === ')') {
-        openParens--;
-        if (openParens === 0) {
-          endIdx = i;
-          break;
-        }
-      }
-    }
-
-    if (endIdx !== -1) {
-      const originalFunc = result.slice(startIdx, endIdx + 1);
-      const rgbValue = convertColorToRgb(originalFunc);
-      result = result.slice(0, startIdx) + rgbValue + result.slice(endIdx + 1);
-      searchIdx = startIdx + rgbValue.length;
-    } else {
-      searchIdx = startIdx + funcName.length + 1;
-    }
-  }
-
-  return result;
-}
-
-/**
- * Fixes unsupported CSS color functions (oklab, oklch, color-mix) in a cloned document
- * before html2canvas parses stylesheet rules.
- */
-function fixUnsupportedColorsInDoc(clonedDoc: Document) {
-  // 1. Process all <style> elements
-  const styleElements = clonedDoc.querySelectorAll('style');
-  styleElements.forEach((styleEl) => {
-    if (styleEl.textContent) {
-      let text = styleEl.textContent;
-      if (text.includes('oklab') || text.includes('oklch') || text.includes('color-mix')) {
-        text = replaceColorFunc(text, 'color-mix');
-        text = replaceColorFunc(text, 'oklab');
-        text = replaceColorFunc(text, 'oklch');
-        styleEl.textContent = text;
-      }
-    }
-  });
-
-  // 2. Process stylesheet cssRules
-  try {
-    Array.from(clonedDoc.styleSheets).forEach((sheet) => {
-      try {
-        const rules = Array.from(sheet.cssRules || sheet.rules || []);
-        rules.forEach((rule, ruleIdx) => {
-          if (
-            rule.cssText &&
-            (rule.cssText.includes('oklab') ||
-              rule.cssText.includes('oklch') ||
-              rule.cssText.includes('color-mix'))
-          ) {
-            const newCssText = replaceColorFunc(
-              replaceColorFunc(
-                replaceColorFunc(rule.cssText, 'color-mix'),
-                'oklab'
-              ),
-              'oklch'
-            );
-            sheet.deleteRule(ruleIdx);
-            sheet.insertRule(newCssText, ruleIdx);
-          }
-        });
-      } catch (e) {
-        // Cross-origin or read-only stylesheet ignored
-      }
-    });
-  } catch (e) {
-    // Ignore
-  }
-
-  // 3. Process inline style attributes
-  const allEls = clonedDoc.querySelectorAll<HTMLElement>('*');
-  allEls.forEach((el) => {
-    const inlineStyle = el.getAttribute('style');
-    if (
-      inlineStyle &&
-      (inlineStyle.includes('oklab') ||
-        inlineStyle.includes('oklch') ||
-        inlineStyle.includes('color-mix'))
-    ) {
-      let fixedStyle = inlineStyle;
-      fixedStyle = replaceColorFunc(fixedStyle, 'color-mix');
-      fixedStyle = replaceColorFunc(fixedStyle, 'oklab');
-      fixedStyle = replaceColorFunc(fixedStyle, 'oklch');
-      el.setAttribute('style', fixedStyle);
-    }
-  });
 }
 
 /**
@@ -225,28 +99,29 @@ export async function generateFullApplicationPdf(
     // Small delay to allow browser layout reflow
     await new Promise((resolve) => setTimeout(resolve, 100));
 
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
+    // Capture all pages concurrently — html2canvas-pro natively supports the
+    // oklch/color-mix colors Tailwind v4 generates, so no DOM-wide color-patching
+    // pass is needed per page (that traversal was the main source of slow, and
+    // occasionally incorrect, PDF generation).
+    const canvases = await Promise.all(
+      elements.map((element) =>
+        html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#ffffff',
+          windowWidth: 1200,
+        })
+      )
+    );
 
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        windowWidth: 1200,
-        onclone: (clonedDoc) => {
-          fixUnsupportedColorsInDoc(clonedDoc);
-        },
-      });
-
+    canvases.forEach((canvas, i) => {
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
-
       if (i > 0) {
         pdf.addPage();
       }
-
       pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-    }
+    });
   } finally {
     // Restore original visibility styles
     for (const item of originalDisplays) {

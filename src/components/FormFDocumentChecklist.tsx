@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { CbbcLogo } from './CbbcLogo';
+import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 
 interface FormFProps {
@@ -296,7 +297,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
       <div className="page hidden print:block" id="form-6-page">
         {/* WATERMARK */}
         <div className="watermark-overlay" aria-hidden="true">
-          <CbbcLogo className="w-full h-auto" />
+          <CbbcWatermarkLogo className="w-full h-auto" />
         </div>
 
         {/* HEADER */}

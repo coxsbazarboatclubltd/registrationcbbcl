@@ -1,5 +1,6 @@
 import React from 'react';
 import { CbbcLogo } from './CbbcLogo';
+import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 
 interface FormBProps {
@@ -19,7 +20,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
     <div className="page" id="form-2-page">
       {/* WATERMARK */}
       <div className="watermark-overlay" aria-hidden="true">
-        <CbbcLogo className="w-full h-auto" />
+        <CbbcWatermarkLogo className="w-full h-auto" />
       </div>
 
       {/* HEADER */}

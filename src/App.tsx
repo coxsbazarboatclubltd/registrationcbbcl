@@ -7,7 +7,8 @@ import { FormEReferencesDeclaration } from './components/FormEReferencesDeclarat
 import { FormFDocumentChecklist } from './components/FormFDocumentChecklist';
 import { FormGOfficialUseOnlyPage } from './components/FormGOfficialUseOnlyPage';
 import { PageNavigationFooter } from './components/PageNavigationFooter';
-import { CbbcLogo } from './components/CbbcLogo';
+import { SiteHeader } from './components/SiteHeader';
+import { SiteFooter } from './components/SiteFooter';
 import { MemberFormData, SAMPLE_MEMBER_DATA, EMPTY_MEMBER_DATA } from './types';
 import { SubmissionModal } from './components/SubmissionModal';
 import { validateMemberForm, ValidationError } from './utils/formValidation';
@@ -157,7 +158,8 @@ export default function App() {
         refNo,
         dateStr,
         generated?.dataUri || '',
-        turnstileToken
+        turnstileToken,
+        docNo
       );
 
       if (submitRes.success) {
@@ -177,40 +179,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#e8e8e8]">
-      {/* SECTION A: TOP BAR (Hidden on print) */}
-      <header className="top-bar no-print">
-        <div className="flex items-center gap-3">
-          <CbbcLogo clipPathId="clippath-topbar" className="w-[42px] h-[42px]" />
-          <div className="text-left hidden sm:block">
-            <span className="text-[7px] text-gray-300 tracking-[1.5px] uppercase block">
-              Established 2026
-            </span>
-            <span className="font-['Cinzel'] text-[13px] font-bold text-[#c4a56a] tracking-[1px]">
-              COX'S BAZAR BOAT CLUB
-            </span>
-          </div>
-        </div>
-
-        <div className="title-center">COX'S BAZAR BOAT CLUB LTD.</div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setFormData(SAMPLE_MEMBER_DATA)}
-            className="text-[9px] uppercase tracking-wider text-[#c4a56a] hover:text-white underline transition-colors cursor-pointer mr-2"
-            title="Pre-fill with sample member profile"
-          >
-            Sample Data
-          </button>
-          <button
-            onClick={() => setFormData(EMPTY_MEMBER_DATA)}
-            className="text-[9px] uppercase tracking-wider text-gray-400 hover:text-white underline transition-colors cursor-pointer mr-2"
-            title="Reset form fields"
-          >
-            Clear Form
-          </button>
-          <div className="portal-label">Member Portal</div>
-        </div>
-      </header>
+      {/* SECTION A: SITE HEADER (Hidden on print) */}
+      <SiteHeader
+        onSampleData={() => setFormData(SAMPLE_MEMBER_DATA)}
+        onClearForm={() => setFormData(EMPTY_MEMBER_DATA)}
+      />
 
       {/* SEVEN TAB NAVIGATION (Hidden on print) */}
       <nav className="tab-nav no-print">
@@ -374,6 +347,8 @@ export default function App() {
           />
         </div>
       </main>
+
+      <SiteFooter />
 
       {/* SUBMISSION MODAL */}
       <SubmissionModal

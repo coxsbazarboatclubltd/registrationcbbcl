@@ -18,7 +18,8 @@ export class SubmissionService {
     refNo: string,
     docDate: string,
     pdfDataUri: string,
-    turnstileToken?: string
+    turnstileToken?: string,
+    docNo?: string
   ): Promise<SubmissionResponse> {
     try {
       const response = await fetch('/api/submit', {
@@ -29,6 +30,7 @@ export class SubmissionService {
         body: JSON.stringify({
           data,
           refNo,
+          docNo,
           submissionDate: docDate,
           pdfBase64: pdfDataUri,
           turnstileToken: turnstileToken || 'mock-turnstile-verified-token',
