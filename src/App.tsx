@@ -180,7 +180,10 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#e8e8e8]">
       {/* SECTION A: SITE HEADER (Hidden on print) */}
-      <SiteHeader onClearForm={() => setFormData(EMPTY_MEMBER_DATA)} />
+      <SiteHeader
+        onSampleData={() => setFormData(SAMPLE_MEMBER_DATA)}
+        onClearForm={() => setFormData(EMPTY_MEMBER_DATA)}
+      />
 
       {/* SEVEN TAB NAVIGATION (Hidden on print) */}
       <nav className="tab-nav no-print">
