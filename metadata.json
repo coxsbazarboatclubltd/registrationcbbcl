@@ -1,0 +1,6 @@
+{
+  "name": "Cox's Bazar Boat Club Forms Portal",
+  "description": "Official Member Portal with print-ready institutional forms for Cox's Bazar Boat Club Ltd.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

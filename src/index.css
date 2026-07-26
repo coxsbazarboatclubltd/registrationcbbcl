@@ -1,0 +1,784 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+
+:root {
+  --gold: #9d7f46;
+  --gold-light: #c4a56a;
+  --navy: #1a2744;
+  --text: #2c2c2c;
+  --muted: #6b6b6b;
+  --border: #c8c8c8;
+  --field-bg: #f7f8f9;
+  --label: #7a5c1e;
+  --page-bg: #ffffff;
+  --warn-bg: #fffbe6;
+  --warn-border: #e0c060;
+  --green: #2e7d32;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: #e8e8e8;
+  color: var(--text);
+  font-size: 11px;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── TAB SHELL ── */
+.top-bar {
+  background: var(--navy);
+  color: #ffffff;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--gold);
+}
+
+.top-bar .title-center {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.top-bar .portal-label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.9;
+  color: #ffffff;
+}
+
+.tab-nav {
+  display: flex;
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  flex: 1;
+  height: 38px;
+  background: #ffffff;
+  color: var(--navy);
+  border: none;
+  border-bottom: 1px solid var(--gold);
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab-btn:hover {
+  background: #fdfbf7;
+}
+
+.tab-btn.active {
+  background: var(--gold);
+  color: #ffffff;
+  border-bottom: none;
+}
+
+.canvas-container {
+  background: #e8e8e8;
+  min-height: calc(100vh - 120px);
+  padding: 20px 0 40px;
+}
+
+.print-btn-wrap {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  background: var(--navy);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.print-btn:hover {
+  background: var(--gold);
+}
+
+/* ── A4 PAGE LAYOUT ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--page-bg);
+  margin: 0 auto;
+  padding: 14mm 14mm 12mm;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-wrap svg {
+  width: 52px;
+  height: 52px;
+}
+
+.club-name {
+  font-family: 'Cinzel', serif;
+}
+
+.club-name .est {
+  font-size: 7px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.club-name h1 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.club-name .sub {
+  font-size: 7.5px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+}
+
+.club-name .form-title {
+  font-size: 8px;
+  letter-spacing: 2.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: 4px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+}
+
+.header-right {
+  text-align: right;
+}
+
+.doc-table {
+  border-collapse: collapse;
+  font-size: 8px;
+}
+
+.doc-table td {
+  padding: 1.5px 4px;
+}
+
+.doc-table td:first-child {
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.doc-table td:last-child {
+  color: var(--navy);
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── SECTIONS ── */
+.section {
+  margin-bottom: 10px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1.5px solid var(--gold);
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+}
+
+.section-num {
+  background: var(--navy);
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-title h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ── FIELD GRID ── */
+.field-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.field label {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--label);
+  margin-bottom: 2px;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"],
+.field input[type="date"],
+.field select {
+  background: var(--field-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 4px 6px;
+  font-size: 9.5px;
+  font-family: 'Lato', sans-serif;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--gold);
+  background: #fffdf7;
+}
+
+.field.w2 { flex: 2; }
+.field.w3 { flex: 3; }
+.field.w15 { flex: 1.5; }
+
+/* ── PHOTO BOX ── */
+.photo-section {
+  display: flex;
+  gap: 12px;
+}
+
+.photo-section .fields-col {
+  flex: 1;
+}
+
+.photo-box {
+  width: 90px;
+  flex-shrink: 0;
+  border: 1.5px dashed var(--gold);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 4px;
+  color: var(--muted);
+  gap: 4px;
+  border-radius: 2px;
+  background: #fafaf8;
+  box-sizing: border-box;
+}
+
+.photo-box .photo-label {
+  font-size: 7.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+}
+
+.photo-box .photo-size {
+  font-size: 6.5px;
+  color: var(--muted);
+}
+
+.photo-box .seal-label {
+  margin-top: 8px;
+  font-size: 6.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border-top: 1px solid var(--gold);
+  padding-top: 4px;
+  width: 100%;
+}
+
+/* ── PRIMARY MEMBER BAR (Form 2) ── */
+.primary-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  background: #f9f9f9;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.primary-bar .fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+}
+
+.primary-bar .photo-box {
+  width: 80px;
+}
+
+.pb-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+/* ── DEPENDENT CARDS GRID (Form 2) ── */
+.dep-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.dep-card {
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 6px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.dep-card .dep-type {
+  font-size: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  text-align: center;
+}
+
+.dep-card .dep-photo {
+  width: 52px;
+  height: 52px;
+  border: 1.5px dashed var(--border);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+}
+
+.dep-card .dep-photo span {
+  font-size: 6px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.dep-card .dep-field {
+  width: 100%;
+}
+
+.dep-card .dep-field label {
+  font-size: 6.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--label);
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 1px;
+}
+
+.dep-card .dep-field input,
+.dep-card .dep-field select {
+  width: 100%;
+  font-size: 8px;
+  padding: 3px 4px;
+  background: var(--field-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: 'Lato', sans-serif;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.dep-card .dep-field input:focus,
+.dep-card .dep-field select:focus {
+  border-color: var(--gold);
+}
+
+/* ── WARNING BOX (Form 2) ── */
+.warning-box {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 3px;
+  padding: 8px 10px;
+  margin-top: 8px;
+}
+
+.warning-box .warn-title {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.warning-box p {
+  font-size: 7.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.warning-box strong {
+  color: var(--navy);
+}
+
+/* ── MEMBERSHIP CATEGORY (Form 3) ── */
+.cat-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 7px 12px;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
+
+.cat-bar .cat-label {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--label);
+  margin-bottom: 4px;
+}
+
+.cat-options {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cat-options label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 8.5px;
+  cursor: pointer;
+}
+
+.cat-options input[type="radio"] {
+  accent-color: var(--gold);
+  width: 11px;
+  height: 11px;
+}
+
+.reg-num-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.reg-num-box .rn-label {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--label);
+  margin-bottom: 2px;
+}
+
+.reg-num-box input {
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1.5px solid var(--gold);
+  border-radius: 2px;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  color: var(--navy);
+  background: #fffdf7;
+  width: 100px;
+  text-align: center;
+  outline: none;
+}
+
+/* ── TITLE ROW (Form 3) ── */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.title-row .tl {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+.title-opts {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: var(--field-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 4px 8px;
+}
+
+.title-opts label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 8.5px;
+  cursor: pointer;
+}
+
+.title-opts input[type="radio"] {
+  accent-color: var(--gold);
+}
+
+.title-name {
+  flex: 1;
+}
+
+.title-name input {
+  background: var(--field-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 4px 6px;
+  font-size: 9.5px;
+  font-family: 'Lato', sans-serif;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.title-name input:focus {
+  border-color: var(--gold);
+  background: #fffdf7;
+}
+
+/* ── PROFESSION TYPE ROW (Form 3) ── */
+.prof-type-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.prof-type-row .ptl {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--label);
+  min-width: 90px;
+}
+
+.prof-opts {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.prof-opts label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 8.5px;
+  cursor: pointer;
+}
+
+.prof-opts input[type="radio"] {
+  accent-color: var(--gold);
+}
+
+/* ── CHECKLIST (Form 3) ── */
+.checklist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.checklist-col {
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 10px;
+}
+
+.checklist-col .cl-title {
+  font-size: 7.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--navy);
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 3px;
+}
+
+.cl-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.cl-item input[type="checkbox"] {
+  accent-color: var(--green);
+  width: 12px;
+  height: 12px;
+}
+
+.cl-item label {
+  font-size: 8px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+/* ── SPOUSE SYNC BOX (Form 3) ── */
+.spouse-sync {
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 10px;
+  background: #fafafa;
+}
+
+.spouse-sync .ss-label {
+  font-size: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--label);
+  margin-bottom: 5px;
+}
+
+/* ── FOOTER ── */
+.footer {
+  position: absolute;
+  bottom: 8mm;
+  left: 14mm;
+  right: 14mm;
+  border-top: 1px solid var(--gold);
+  padding-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  font-size: 7px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.footer-left strong {
+  color: var(--navy);
+}
+
+.footer-center {
+  font-size: 7px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-right {
+  font-size: 7px;
+  color: var(--muted);
+}
+
+/* ── PRINT MEDIA RULES ── */
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+  .top-bar,
+  .tab-nav,
+  .print-btn-wrap,
+  .no-print {
+    display: none !important;
+  }
+  .canvas-container {
+    background: #ffffff !important;
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+  .page {
+    margin: 0 !important;
+    box-shadow: none !important;
+    padding: 12mm 13mm 15mm !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+  }
+}
