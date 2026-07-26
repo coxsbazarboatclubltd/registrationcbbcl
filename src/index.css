@@ -24,6 +24,7 @@ body {
   font-size: 11px;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 /* ── TAB SHELL ── */
@@ -54,6 +55,24 @@ body {
   gap: 8px;
 }
 
+/* On narrow screens, 7 flex:1 tabs become unreadable slivers — make the
+   strip horizontally swipeable with fixed-width tabs instead. */
+@media (max-width: 900px) {
+  .tab-nav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .tab-btn {
+    flex: 0 0 auto;
+    min-width: 132px;
+    padding: 0 10px;
+    font-size: 9.5px;
+    white-space: nowrap;
+  }
+}
+
 .tab-btn:hover {
   background: #fdfbf7;
 }
@@ -68,6 +87,7 @@ body {
   background: #e8e8e8;
   min-height: calc(100vh - 120px);
   padding: 20px 0 40px;
+  overflow-x: hidden;
 }
 
 .print-btn-wrap {
@@ -102,7 +122,7 @@ body {
   width: 210mm;
   min-height: 297mm;
   background: var(--page-bg);
-  margin: 0 auto;
+  margin: 0;
   padding: 14mm 14mm 12mm;
   box-shadow: 0 4px 24px rgba(0,0,0,0.15);
   position: relative;
@@ -111,6 +131,16 @@ body {
   border-top: 5mm solid var(--navy);
   border-bottom: 5mm solid var(--navy);
   overflow: hidden;
+  /* Scale + re-center the fixed A4 canvas to fit any viewport width (both
+     values computed in JS in App.tsx; --page-scale is 1 and --page-offset
+     matches the old margin:auto centering on desktop, so this is a no-op
+     there). transform-origin:top left plus translateX (which composes AFTER
+     the scale, so it moves by real screen pixels, not scaled ones) is used
+     instead of margin:auto because auto margins collapse to 0 once the box
+     is wider than its container. Reset to "none"/0 during PDF capture. */
+  transform: translateX(var(--page-offset, 0px)) scale(var(--page-scale, 1));
+  transform-origin: top left;
+  margin-bottom: calc((var(--page-scale, 1) - 1) * 297mm);
 }
 
 /* ── WATERMARK ── */

@@ -66,6 +66,8 @@ export async function generateFullApplicationPdf(
     elDisplay: string;
     elVisibility: string;
     elHiddenClass: boolean;
+    elTransform: string;
+    elMarginBottom: string;
   }
   const originalDisplays: DisplayState[] = [];
 
@@ -82,6 +84,8 @@ export async function generateFullApplicationPdf(
         elDisplay: el.style.display,
         elVisibility: el.style.visibility,
         elHiddenClass,
+        elTransform: el.style.transform,
+        elMarginBottom: el.style.marginBottom,
       });
 
       if (parent) {
@@ -94,6 +98,10 @@ export async function generateFullApplicationPdf(
       }
       el.style.display = 'block';
       el.style.visibility = 'visible';
+      // Neutralize the mobile-responsive scale-to-fit transform (see .page in
+      // index.css) so the PDF always captures the page at true A4 size.
+      el.style.transform = 'none';
+      el.style.marginBottom = '0';
     }
 
     // Small delay to allow browser layout reflow
@@ -131,6 +139,8 @@ export async function generateFullApplicationPdf(
       }
       item.el.style.display = item.elDisplay;
       item.el.style.visibility = item.elVisibility;
+      item.el.style.transform = item.elTransform;
+      item.el.style.marginBottom = item.elMarginBottom;
       if (item.elHiddenClass) {
         item.el.classList.add('hidden');
       }

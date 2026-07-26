@@ -44,6 +44,28 @@ export default function App() {
     }
   }, [formData]);
 
+  // Scale + re-center the fixed A4-width (210mm) page canvas to fit any
+  // viewport so mobile users see a shrunk-but-readable page instead of a
+  // horizontally clipped desktop layout. Exposed as --page-scale/--page-offset
+  // and consumed by the .page rule in index.css; never applies to print/PDF
+  // output (pdfGenerator.ts resets both before capturing each page).
+  useEffect(() => {
+    const A4_WIDTH_PX = 210 * (96 / 25.4);
+    const VIEWPORT_GUTTER_PX = 16;
+
+    const updateScale = () => {
+      const rawScale = Math.min(1, (window.innerWidth - VIEWPORT_GUTTER_PX) / A4_WIDTH_PX);
+      const scale = Math.max(rawScale, 0.28);
+      const offsetPx = Math.max(0, (window.innerWidth - A4_WIDTH_PX * scale) / 2);
+      document.documentElement.style.setProperty('--page-scale', scale.toFixed(4));
+      document.documentElement.style.setProperty('--page-offset', `${offsetPx.toFixed(2)}px`);
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
+
   // Submission & Modal States
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSavingPdf, setIsSavingPdf] = useState(false);
