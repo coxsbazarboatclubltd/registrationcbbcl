@@ -1,4 +1,5 @@
 import React from 'react';
+import { CbbcLogo } from './CbbcLogo';
 import { GeneratedPdfResult, downloadPdfBlob } from '../utils/pdfGenerator';
 import { ValidationError } from '../utils/formValidation';
 import { TurnstileWidget } from './TurnstileWidget';
@@ -50,8 +51,8 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
       <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full border border-[#c4a56a]/30 overflow-hidden text-[#2c2c2c]">
         {/* Modal Header */}
         <div className="bg-[#1a2744] px-6 py-4 border-b border-[#9d7f46] flex items-center justify-between text-white">
-          <div className="flex items-center gap-2">
-            <span className="text-[#c4a56a] text-lg">⚓</span>
+          <div className="flex items-center gap-2.5">
+            <CbbcLogo clipPathId="clippath-modal" className="w-[32px] h-[32px]" />
             <h3 className="font-['Cinzel'] font-bold text-sm sm:text-base tracking-wider text-[#c4a56a]">
               COX'S BAZAR BOAT CLUB LTD.
             </h3>

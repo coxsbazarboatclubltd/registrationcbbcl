@@ -1,21 +1,24 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Form1PermanentMembership } from './components/Form1PermanentMembership';
+import { FormAPersonalInfo } from './components/FormAPersonalInfo';
+import { FormBProfessionalFamily } from './components/FormBProfessionalFamily';
 import { Form2ProximityCard } from './components/Form2ProximityCard';
 import { Form3ProfileSync } from './components/Form3ProfileSync';
-import { Form4DocumentChecklist } from './components/Form4DocumentChecklist';
+import { FormEReferencesDeclaration } from './components/FormEReferencesDeclaration';
+import { FormFDocumentChecklist } from './components/FormFDocumentChecklist';
+import { FormGOfficialUseOnlyPage } from './components/FormGOfficialUseOnlyPage';
+import { PageNavigationFooter } from './components/PageNavigationFooter';
 import { CbbcLogo } from './components/CbbcLogo';
 import { MemberFormData, SAMPLE_MEMBER_DATA, EMPTY_MEMBER_DATA } from './types';
 import { SubmissionModal } from './components/SubmissionModal';
 import { validateMemberForm, ValidationError } from './utils/formValidation';
-import { generateFullApplicationPdf, GeneratedPdfResult } from './utils/pdfGenerator';
-import { EmailService } from './services/emailService';
+import { generateFullApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
 import { ReferenceService } from './services/referenceService';
 import { SubmissionService } from './services/submissionService';
 
 const LOCAL_STORAGE_KEY = 'cbbc_membership_form_data_v1';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<1 | 2 | 3 | 4>(1);
+  const [activeTab, setActiveTab] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1);
 
   // Initialize state from local storage or sample data
   const [formData, setFormData] = useState<MemberFormData>(() => {
@@ -42,6 +45,7 @@ export default function App() {
 
   // Submission & Modal States
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSavingPdf, setIsSavingPdf] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStatus, setModalStatus] = useState<
     'idle' | 'validating' | 'generating_pdf' | 'sending_email' | 'success' | 'error' | 'validation_error'
@@ -52,25 +56,18 @@ export default function App() {
   const [turnstileToken, setTurnstileToken] = useState<string>('mock-turnstile-verified-token');
   const [referenceNumber, setReferenceNumber] = useState<string>('');
 
-  // Auto-generate Doc Numbers and Date once on initial load
-  const { dateStr, docNo1, docNo2, docNo3, docNo4 } = useMemo(() => {
+  // Auto-generate Doc Number and Application Date once on initial load
+  const { dateStr, docNo } = useMemo(() => {
     const now = new Date();
     const pad = (n: number) => String(n).padStart(2, '0');
     const dStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
     const cleanDate = dStr.replace(/-/g, '');
     const timeBase = String(now.getTime()).slice(-5);
-
-    const uid1 = timeBase + String(Math.floor(Math.random() * 900) + 100);
-    const uid2 = timeBase + String(Math.floor(Math.random() * 900) + 100);
-    const uid3 = timeBase + String(Math.floor(Math.random() * 900) + 100);
-    const uid4 = timeBase + String(Math.floor(Math.random() * 900) + 100);
+    const randDigits = String(Math.floor(Math.random() * 900) + 100);
 
     return {
       dateStr: dStr,
-      docNo1: `CBBC-PM-${cleanDate}-${uid1}`,
-      docNo2: `CBBC-PX-${cleanDate}-${uid2}`,
-      docNo3: `CBBC-PS-${cleanDate}-${uid3}`,
-      docNo4: `CBBC-DC-${cleanDate}-${uid4}`,
+      docNo: `CBBCL-DOC-${cleanDate}-${timeBase}${randDigits}`,
     };
   }, []);
 
@@ -79,6 +76,36 @@ export default function App() {
       ...prev,
       [field]: value,
     }));
+  };
+
+  const handleNextPage = () => {
+    if (activeTab < 7) {
+      setActiveTab((prev) => (prev + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (activeTab > 1) {
+      setActiveTab((prev) => (prev - 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleSaveAsPdf = async () => {
+    if (isSavingPdf || isSubmitting) return;
+    setIsSavingPdf(true);
+
+    try {
+      const tempRefNo = formData.registrationNumber || referenceNumber || 'CBBCL-2026-000001';
+      const result = await generateFullApplicationPdf(formData, tempRefNo, dateStr);
+      downloadPdfBlob(result.blob, result.filename);
+    } catch (err) {
+      console.error('Save as PDF error:', err);
+      alert('Could not generate PDF download. Please ensure all form pages are rendered and try again.');
+    } finally {
+      setIsSavingPdf(false);
+    }
   };
 
   const handlePrint = () => {
@@ -98,8 +125,12 @@ export default function App() {
     const refNo = referenceNumber || ReferenceService.generateReferenceNumber();
     setReferenceNumber(refNo);
 
-    // 1. Validate form fields, formats, uploads & declarations
-    const errors = validateMemberForm(formData);
+    // Update registration number in formData
+    const updatedFormData = { ...formData, registrationNumber: refNo };
+    setFormData(updatedFormData);
+
+    // 1. Validate form fields, formats, uploads & declarations across all pages
+    const errors = validateMemberForm(updatedFormData);
     if (errors.length > 0) {
       setValidationErrors(errors);
       setModalStatus('validation_error');
@@ -107,11 +138,11 @@ export default function App() {
       return;
     }
 
-    // 2. Generate Complete 4-Page Registration PDF Package
+    // 2. Generate Complete 7-Page Registration PDF Package
     let generated: GeneratedPdfResult | null = null;
     try {
       setModalStatus('generating_pdf');
-      generated = await generateFullApplicationPdf(formData, refNo, dateStr);
+      generated = await generateFullApplicationPdf(updatedFormData, refNo, dateStr);
       setPdfResult(generated);
     } catch (pdfErr: any) {
       console.warn('PDF generation error:', pdfErr);
@@ -122,7 +153,7 @@ export default function App() {
       setModalStatus('sending_email');
 
       const submitRes = await SubmissionService.submitApplication(
-        formData,
+        updatedFormData,
         refNo,
         dateStr,
         generated?.dataUri || '',
@@ -133,21 +164,6 @@ export default function App() {
         setModalStatus('success');
         setIsSubmitting(false);
       } else {
-        // Fallback to EmailJS if serverless endpoint unreachable/unconfigured
-        if (EmailService.isConfigured()) {
-          const emailJsRes = await EmailService.sendApplication(
-            formData,
-            refNo,
-            dateStr,
-            generated?.dataUri
-          );
-          if (emailJsRes.success) {
-            setModalStatus('success');
-            setIsSubmitting(false);
-            return;
-          }
-        }
-
         setErrorDetails(submitRes.errorDetails || submitRes.message);
         setModalStatus('error');
         setIsSubmitting(false);
@@ -196,130 +212,166 @@ export default function App() {
         </div>
       </header>
 
-      {/* FOUR TAB BUTTONS (Hidden on print) */}
+      {/* SEVEN TAB NAVIGATION (Hidden on print) */}
       <nav className="tab-nav no-print">
         <button
           className={`tab-btn ${activeTab === 1 ? 'active' : ''}`}
           onClick={() => setActiveTab(1)}
         >
-          <span>01</span> Application for Permanent Membership
+          <span>01</span> Membership Application
         </button>
         <button
           className={`tab-btn ${activeTab === 2 ? 'active' : ''}`}
           onClick={() => setActiveTab(2)}
         >
-          <span>02</span> Database for Proximity ID Card
+          <span>02</span> Professional &amp; Family Information
         </button>
         <button
           className={`tab-btn ${activeTab === 3 ? 'active' : ''}`}
           onClick={() => setActiveTab(3)}
         >
-          <span>03</span> Profile Synchronization &amp; Database Form
+          <span>03</span> Membership ID Card Information
         </button>
         <button
           className={`tab-btn ${activeTab === 4 ? 'active' : ''}`}
           onClick={() => setActiveTab(4)}
         >
-          <span>04</span> Document Checklist
+          <span>04</span> Member Database Synchronization
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 5 ? 'active' : ''}`}
+          onClick={() => setActiveTab(5)}
+        >
+          <span>05</span> References &amp; Declaration
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 6 ? 'active' : ''}`}
+          onClick={() => setActiveTab(6)}
+        >
+          <span>06</span> Document Checklist
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 7 ? 'active' : ''}`}
+          onClick={() => setActiveTab(7)}
+        >
+          <span>07</span> Official Use Only
         </button>
       </nav>
 
       {/* CANVAS & ACTIVE FORM PANEL */}
-      <main className="canvas-container flex-1">
-        {/* Floating / Top Action Buttons (Hidden on print) */}
-        <div className="print-btn-wrap no-print flex items-center justify-center gap-3 flex-wrap max-w-4xl mx-auto px-4">
-          <button
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className={`px-6 py-2.5 bg-[#1a2744] text-[#c4a56a] hover:bg-[#25365d] border border-[#c4a56a] rounded font-['Lato'] text-xs font-bold uppercase tracking-wider shadow-md transition-all flex items-center gap-2 cursor-pointer ${
-              isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-            }`}
-          >
-            {isSubmitting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                <span>Submitting Application...</span>
-              </>
-            ) : (
-              <>
-                <span>📨</span> Submit Application
-              </>
-            )}
-          </button>
-
-          <button onClick={handlePrint} className="print-btn">
-            🖨 Print / Save as PDF
-          </button>
-        </div>
-
-        {/* Form 1 */}
+      <main className="canvas-container flex-1 pb-12">
+        {/* Tab 01: Form A - Membership Application */}
         <div className={`form-panel ${activeTab === 1 ? 'block' : 'hidden'}`}>
-          <Form1PermanentMembership
+          <FormAPersonalInfo
             data={formData}
             onChange={handleFieldChange}
-            docNo={docNo1}
+            docNo={docNo}
             docDate={dateStr}
+          />
+          <PageNavigationFooter
+            currentPage={1}
+            onPrevious={handlePreviousPage}
+            onNext={handleNextPage}
           />
         </div>
 
-        {/* Form 2 */}
+        {/* Tab 02: Form B - Professional & Family Information */}
         <div className={`form-panel ${activeTab === 2 ? 'block' : 'hidden'}`}>
+          <FormBProfessionalFamily
+            data={formData}
+            onChange={handleFieldChange}
+            docNo={docNo}
+            docDate={dateStr}
+          />
+          <PageNavigationFooter
+            currentPage={2}
+            onPrevious={handlePreviousPage}
+            onNext={handleNextPage}
+          />
+        </div>
+
+        {/* Tab 03: Form C - Membership ID Card Information */}
+        <div className={`form-panel ${activeTab === 3 ? 'block' : 'hidden'}`}>
           <Form2ProximityCard
             data={formData}
             onChange={handleFieldChange}
-            docNo={docNo2}
+            docNo={docNo}
             docDate={dateStr}
+          />
+          <PageNavigationFooter
+            currentPage={3}
+            onPrevious={handlePreviousPage}
+            onNext={handleNextPage}
           />
         </div>
 
-        {/* Form 3 */}
-        <div className={`form-panel ${activeTab === 3 ? 'block' : 'hidden'}`}>
+        {/* Tab 04: Form D - Member Database Synchronization */}
+        <div className={`form-panel ${activeTab === 4 ? 'block' : 'hidden'}`}>
           <Form3ProfileSync
             data={formData}
             onChange={handleFieldChange}
-            docNo={docNo3}
+            docNo={docNo}
             docDate={dateStr}
+          />
+          <PageNavigationFooter
+            currentPage={4}
+            onPrevious={handlePreviousPage}
+            onNext={handleNextPage}
           />
         </div>
 
-        {/* Form 4 */}
-        <div className={`form-panel ${activeTab === 4 ? 'block' : 'hidden'}`}>
-          <Form4DocumentChecklist
+        {/* Tab 05: Form E - References & Declaration */}
+        <div className={`form-panel ${activeTab === 5 ? 'block' : 'hidden'}`}>
+          <FormEReferencesDeclaration
             data={formData}
             onChange={handleFieldChange}
-            docNo={docNo4}
+            docNo={docNo}
             docDate={dateStr}
+          />
+          <PageNavigationFooter
+            currentPage={5}
+            onPrevious={handlePreviousPage}
+            onNext={handleNextPage}
           />
         </div>
 
-        {/* Bottom Submission Action Bar */}
-        <div className="no-print mt-8 text-center max-w-2xl mx-auto px-4 bg-white p-5 rounded-lg border border-[#c8c8c8] shadow-sm">
-          <h4 className="font-['Cinzel'] text-sm font-bold text-[#1a2744] mb-1">
-            Ready to Submit Your Application?
-          </h4>
-          <p className="text-xs text-gray-600 mb-4">
-            Clicking "Submit Application" will validate your entries, generate the official PDF registration document, and automatically transmit your application to <span className="font-bold text-[#1a2744]">membership@coxsbazarboatclubltd.com</span>.
-          </p>
-          <div className="flex items-center justify-center gap-3">
-            <button
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className={`px-8 py-3 bg-[#1a2744] text-white hover:bg-[#9d7f46] rounded font-bold text-xs uppercase tracking-widest shadow transition-all flex items-center gap-2 cursor-pointer ${
-                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-              }`}
-            >
-              {isSubmitting ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Processing...</span>
-                </>
-              ) : (
-                <>
-                  <span>📨</span> Submit Application
-                </>
-              )}
-            </button>
-          </div>
+        {/* Tab 06: Form F - Document Checklist */}
+        <div className={`form-panel ${activeTab === 6 ? 'block' : 'hidden'}`}>
+          <FormFDocumentChecklist
+            data={formData}
+            onChange={handleFieldChange}
+            docNo={docNo}
+            docDate={dateStr}
+          />
+          <PageNavigationFooter
+            currentPage={6}
+            onPrevious={handlePreviousPage}
+            onNext={handleNextPage}
+            onSaveAsPdf={handleSaveAsPdf}
+            onPrint={handlePrint}
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            isSavingPdf={isSavingPdf}
+          />
+        </div>
+
+        {/* Tab 07: Form G - Official Use Only */}
+        <div className={`form-panel ${activeTab === 7 ? 'block' : 'hidden'}`}>
+          <FormGOfficialUseOnlyPage
+            data={formData}
+            docNo={docNo}
+            docDate={dateStr}
+          />
+          <PageNavigationFooter
+            currentPage={7}
+            onPrevious={handlePreviousPage}
+            onNext={handleNextPage}
+            onSaveAsPdf={handleSaveAsPdf}
+            onPrint={handlePrint}
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            isSavingPdf={isSavingPdf}
+          />
         </div>
       </main>
 
@@ -342,4 +394,3 @@ export default function App() {
     </div>
   );
 }
-

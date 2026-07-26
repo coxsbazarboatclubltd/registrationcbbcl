@@ -2,6 +2,7 @@ import React from 'react';
 import { CbbcLogo } from './CbbcLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
+import { SearchableCategorySelect } from './SearchableCategorySelect';
 
 interface Form3Props {
   data: MemberFormData;
@@ -17,13 +18,15 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
   docDate,
 }) => {
   return (
-    <div className="page" id="form-3-page">
+    <div className="page" id="form-4-page">
+      {/* WATERMARK */}
+      <div className="watermark-overlay" aria-hidden="true">
+        <CbbcLogo className="w-full h-auto" />
+      </div>
+
       {/* HEADER */}
       <div className="header">
         <div className="header-left">
-          <div className="logo-wrap">
-            <CbbcLogo clipPathId="cpathc" className="w-[52px] h-[52px]" />
-          </div>
           <div className="club-name">
             <div className="est">Established 2026</div>
             <h1>
@@ -33,23 +36,30 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               Marine Drive · Cox's Bazar · People's Republic of Bangladesh
             </div>
             <div className="form-title">
-              Profile Synchronization &amp; Database Form
+              FORM D · Member Database Synchronization
             </div>
           </div>
+        </div>
+        <div className="header-center">
+          <CbbcLogo className="w-[58px] h-[58px]" />
         </div>
         <div className="header-right">
           <table className="doc-table">
             <tbody>
               <tr>
-                <td>DOC NO:</td>
-                <td>{docNo}</td>
+                <td>Registration No.:</td>
+                <td className="font-bold text-[#0f5132]">{data.registrationNumber || 'CBBCL-2026-000001'}</td>
               </tr>
               <tr>
-                <td>DATE:</td>
+                <td>Document No.:</td>
+                <td>{docNo || 'CBBCL-DOC-20260726-00001'}</td>
+              </tr>
+              <tr>
+                <td>Application Date:</td>
                 <td>{docDate}</td>
               </tr>
               <tr>
-                <td>VER/REV:</td>
+                <td>Document Version:</td>
                 <td>Ver 1.0 / R01</td>
               </tr>
             </tbody>
@@ -58,71 +68,11 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
       </div>
 
       {/* MEMBERSHIP CATEGORY BAR */}
-      <div className="cat-bar">
-        <div>
-          <div className="cat-label">A. Membership Category Classification</div>
-          <div className="cat-options">
-            <label>
-              <input
-                type="radio"
-                name="memcat"
-                value="permanent"
-                checked={data.membershipCategory === 'permanent'}
-                onChange={() => onChange('membershipCategory', 'permanent')}
-              />{' '}
-              Permanent Member
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="memcat"
-                value="life"
-                checked={data.membershipCategory === 'life'}
-                onChange={() => onChange('membershipCategory', 'life')}
-              />{' '}
-              Life Member
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="memcat"
-                value="associate"
-                checked={data.membershipCategory === 'associate'}
-                onChange={() => onChange('membershipCategory', 'associate')}
-              />{' '}
-              Associate Member
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="memcat"
-                value="honorary"
-                checked={data.membershipCategory === 'honorary'}
-                onChange={() => onChange('membershipCategory', 'honorary')}
-              />{' '}
-              Honorary Member
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="memcat"
-                value="donor"
-                checked={data.membershipCategory === 'donor'}
-                onChange={() => onChange('membershipCategory', 'donor')}
-              />{' '}
-              Donor Member
-            </label>
-          </div>
-        </div>
-        <div className="reg-num-box">
-          <div className="rn-label">Registration Number</div>
-          <input
-            type="text"
-            placeholder="P-0000"
-            value={data.membershipNo}
-            onChange={(e) => onChange('membershipNo', e.target.value)}
-          />
-        </div>
+      <div className="bg-[#1a2744]/5 border border-[#9d7f46]/40 rounded-lg p-2.5 mb-3">
+        <SearchableCategorySelect
+          value={data.membershipCategory}
+          onChange={(cat) => onChange('membershipCategory', cat)}
+        />
       </div>
 
       {/* SECTION 01 – PRIMARY MEMBER INFORMATION */}
@@ -136,66 +86,24 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
             <div className="title-row">
               <span className="tl">Title</span>
               <div className="title-opts">
-                <label>
-                  <input
-                    type="radio"
-                    name="title"
-                    value="mr"
-                    checked={data.title === 'mr'}
-                    onChange={() => onChange('title', 'mr')}
-                  />{' '}
-                  Mr.
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="title"
-                    value="mrs"
-                    checked={data.title === 'mrs'}
-                    onChange={() => onChange('title', 'mrs')}
-                  />{' '}
-                  Mrs.
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="title"
-                    value="dr"
-                    checked={data.title === 'dr'}
-                    onChange={() => onChange('title', 'dr')}
-                  />{' '}
-                  Dr.
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="title"
-                    value="capt"
-                    checked={data.title === 'capt'}
-                    onChange={() => onChange('title', 'capt')}
-                  />{' '}
-                  Capt.
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="title"
-                    value="fl"
-                    checked={data.title === 'fl'}
-                    onChange={() => onChange('title', 'fl')}
-                  />{' '}
-                  Fl.Lt.
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="title"
-                    value="adm"
-                    checked={data.title === 'adm'}
-                    onChange={() => onChange('title', 'adm')}
-                  />{' '}
-                  Admiral
-                </label>
+                <select
+                  className="title-select border border-[#9d7f46]/50 rounded px-2 py-1 text-[10px] bg-white text-[#1a2744] font-semibold h-[26px]"
+                  value={data.title}
+                  onChange={(e) => onChange('title', e.target.value)}
+                >
+                  <option value="mr">Mr.</option>
+                  <option value="mrs">Mrs.</option>
+                  <option value="miss">Miss</option>
+                  <option value="ms">Ms.</option>
+                  <option value="dr">Dr.</option>
+                  <option value="prof">Prof.</option>
+                  <option value="engr">Engr.</option>
+                  <option value="arch">Architect</option>
+                  <option value="barrister">Barrister</option>
+                  <option value="advocate">Advocate</option>
+                  <option value="hon">Hon.</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
               <div className="title-name">
                 <input
@@ -323,7 +231,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
             <label>Designation</label>
             <input
               type="text"
-              placeholder="Job Title / Rank"
+              placeholder="Job Title / Designation"
               value={data.designation}
               onChange={(e) => onChange('designation', e.target.value)}
             />
@@ -439,131 +347,84 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
         </div>
       </div>
 
-      {/* SECTION 05 – ADMINISTRATIVE AUDIT CHECKLIST & PRIVILEGES */}
+      {/* SECTION 05 – CLUB FACILITIES & PRIVILEGES REQUEST */}
       <div className="section">
         <div className="section-title">
           <div className="section-num">05</div>
-          <h2>Administrative Audit Checklist &amp; Privileges</h2>
+          <h2>Club Facilities &amp; Privileges Request</h2>
         </div>
-        <div className="checklist-grid">
-          <div className="checklist-col">
-            <div className="cl-title">KYC Verification Audit</div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="c1"
-                checked={data.kycPhoto}
-                onChange={(e) => onChange('kycPhoto', e.target.checked)}
-              />
-              <label htmlFor="c1">Executive Member Photo (Passport)</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="c2"
-                checked={data.kycNid}
-                onChange={(e) => onChange('kycNid', e.target.checked)}
-              />
-              <label htmlFor="c2">NID / Passport Copy Verified</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="c3"
-                checked={data.kycSponsor}
-                onChange={(e) => onChange('kycSponsor', e.target.checked)}
-              />
-              <label htmlFor="c3">Sponsor / Proposer Signature</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="c4"
-                checked={data.kycTin}
-                onChange={(e) => onChange('kycTin', e.target.checked)}
-              />
-              <label htmlFor="c4">TIN Certificate Submitted</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="c5"
-                checked={data.kycFeeReceipt}
-                onChange={(e) => onChange('kycFeeReceipt', e.target.checked)}
-              />
-              <label htmlFor="c5">Membership Fee Receipt</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="c6"
-                checked={data.kycCommittee}
-                onChange={(e) => onChange('kycCommittee', e.target.checked)}
-              />
-              <label htmlFor="c6">Committee Approval Obtained</label>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 p-2 bg-[#faf8f5] border border-[#9d7f46]/30 rounded">
+          <div className="cl-item flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="p1"
+              checked={data.privMooring}
+              onChange={(e) => onChange('privMooring', e.target.checked)}
+              className="accent-[#0f5132]"
+            />
+            <label htmlFor="p1" className="text-[9px] font-semibold text-[#1a2744]">
+              Private Lounge &amp; Executive Club Facilities Access
+            </label>
           </div>
-
-          <div className="checklist-col">
-            <div className="cl-title">
-              Marina Berth &amp; Club Dining Privileges
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="p1"
-                checked={data.privMooring}
-                onChange={(e) => onChange('privMooring', e.target.checked)}
-              />
-              <label htmlFor="p1">
-                Request Deep Water Mooring / Sailing Berth Access
-              </label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="p2"
-                checked={data.privDining}
-                onChange={(e) => onChange('privDining', e.target.checked)}
-              />
-              <label htmlFor="p2">Club Dining &amp; Banquet Hall Access</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="p3"
-                checked={data.privSwimming}
-                onChange={(e) => onChange('privSwimming', e.target.checked)}
-              />
-              <label htmlFor="p3">Swimming Bay &amp; Recreation Access</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="p4"
-                checked={data.privGuest}
-                onChange={(e) => onChange('privGuest', e.target.checked)}
-              />
-              <label htmlFor="p4">Guest Invitation Privileges</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="p5"
-                checked={data.privVoting}
-                onChange={(e) => onChange('privVoting', e.target.checked)}
-              />
-              <label htmlFor="p5">Voting Rights (Annual General Meeting)</label>
-            </div>
-            <div className="cl-item">
-              <input
-                type="checkbox"
-                id="p6"
-                checked={data.privDeepSea}
-                onChange={(e) => onChange('privDeepSea', e.target.checked)}
-              />
-              <label htmlFor="p6">Deep Sea Vessel Access Clearance</label>
-            </div>
+          <div className="cl-item flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="p2"
+              checked={data.privDining}
+              onChange={(e) => onChange('privDining', e.target.checked)}
+              className="accent-[#0f5132]"
+            />
+            <label htmlFor="p2" className="text-[9px] font-semibold text-[#1a2744]">
+              Club Dining &amp; Banquet Hall Reservation Privileges
+            </label>
+          </div>
+          <div className="cl-item flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="p3"
+              checked={data.privSwimming}
+              onChange={(e) => onChange('privSwimming', e.target.checked)}
+              className="accent-[#0f5132]"
+            />
+            <label htmlFor="p3" className="text-[9px] font-semibold text-[#1a2744]">
+              Swimming Pool &amp; Water Sports Recreation Access
+            </label>
+          </div>
+          <div className="cl-item flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="p4"
+              checked={data.privGuest}
+              onChange={(e) => onChange('privGuest', e.target.checked)}
+              className="accent-[#0f5132]"
+            />
+            <label htmlFor="p4" className="text-[9px] font-semibold text-[#1a2744]">
+              Guest &amp; Family Invitation Privileges
+            </label>
+          </div>
+          <div className="cl-item flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="p5"
+              checked={data.privVoting}
+              onChange={(e) => onChange('privVoting', e.target.checked)}
+              className="accent-[#0f5132]"
+            />
+            <label htmlFor="p5" className="text-[9px] font-semibold text-[#1a2744]">
+              Voting Rights &amp; AGM Participation (Permanent Members)
+            </label>
+          </div>
+          <div className="cl-item flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="p6"
+              checked={data.privDeepSea}
+              onChange={(e) => onChange('privDeepSea', e.target.checked)}
+              className="accent-[#0f5132]"
+            />
+            <label htmlFor="p6" className="text-[9px] font-semibold text-[#1a2744]">
+              Executive Sports &amp; Deep-Sea Angling Charter Privileges
+            </label>
           </div>
         </div>
       </div>
@@ -597,10 +458,12 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
         <div className="footer-left">
           <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
           <br />
-          Marine Drive, Cox's Bazar, Bangladesh
+          Marine Drive, Cox's Bazar, People's Republic of Bangladesh
+          <br />
+          Tel: +880 1700-000000 | Email: info@coxsbazarboatclub.com | Web: www.coxsbazarboatclub.com
         </div>
-        <div className="footer-center">Confidential Institutional Document</div>
-        <div className="footer-right">Page 1 of 1 &nbsp;|&nbsp; Print-Ready A4</div>
+        <div className="footer-center">Confidential Document</div>
+        <div className="footer-right">Page 4 of 7 &nbsp;|&nbsp; Official Registration Package</div>
       </div>
     </div>
   );

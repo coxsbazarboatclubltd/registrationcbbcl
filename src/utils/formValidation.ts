@@ -11,6 +11,14 @@ export interface ValidationError {
 export function validateMemberForm(data: MemberFormData): ValidationError[] {
   const errors: ValidationError[] = [];
 
+  // 0. Membership Category (Requirement 1 - Mandatory)
+  if (!data.membershipCategory) {
+    errors.push({
+      field: 'membershipCategory',
+      message: 'Membership Category is mandatory. Please select a valid category.',
+    });
+  }
+
   // 1. Candidate Full Name
   if (!data.candidateName || data.candidateName.trim().length < 2) {
     errors.push({
@@ -92,11 +100,11 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
     });
   }
 
-  // 8. Required Declarations & Signatures
-  if (!data.docDeclarationSigned) {
+  // 8. Required Declarations & Privacy Consent (Requirement 5)
+  if (!data.privacyConsent) {
     errors.push({
       field: 'declaration',
-      message: 'You must check the Applicant Declaration in Form 4 (Document Checklist).',
+      message: 'You must read and accept the Confidentiality & Data Privacy Consent statement.',
     });
   }
 

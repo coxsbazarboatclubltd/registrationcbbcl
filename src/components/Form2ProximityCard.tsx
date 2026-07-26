@@ -17,13 +17,15 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
   docDate,
 }) => {
   return (
-    <div className="page" id="form-2-page">
+    <div className="page" id="form-3-page">
+      {/* WATERMARK */}
+      <div className="watermark-overlay" aria-hidden="true">
+        <CbbcLogo className="w-full h-auto" />
+      </div>
+
       {/* HEADER */}
       <div className="header">
         <div className="header-left">
-          <div className="logo-wrap">
-            <CbbcLogo clipPathId="clippath-f2" className="w-[52px] h-[52px]" />
-          </div>
           <div className="club-name">
             <div className="est">Established 2026</div>
             <h1>
@@ -32,22 +34,29 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
             <div className="sub">
               Marine Drive · Cox's Bazar · People's Republic of Bangladesh
             </div>
-            <div className="form-title">Database for Proximity ID Card</div>
+            <div className="form-title">FORM C · Proximity Access Card Requisition</div>
           </div>
+        </div>
+        <div className="header-center">
+          <CbbcLogo className="w-[58px] h-[58px]" />
         </div>
         <div className="header-right">
           <table className="doc-table">
             <tbody>
               <tr>
-                <td>DOC NO:</td>
-                <td>{docNo}</td>
+                <td>Registration No.:</td>
+                <td className="font-bold text-[#0f5132]">{data.registrationNumber || 'CBBCL-2026-000001'}</td>
               </tr>
               <tr>
-                <td>DATE:</td>
+                <td>Document No.:</td>
+                <td>{docNo || 'CBBCL-DOC-20260726-00001'}</td>
+              </tr>
+              <tr>
+                <td>Application Date:</td>
                 <td>{docDate}</td>
               </tr>
               <tr>
-                <td>VER/REV:</td>
+                <td>Document Version:</td>
                 <td>Ver 1.0 / R01</td>
               </tr>
             </tbody>
@@ -59,8 +68,8 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
       <div className="primary-bar">
         <div className="fields">
           <div className="pb-row">
-            <div className="field w2">
-              <label>Primary Member</label>
+            <div className="field flex-1">
+              <label>Primary Member Name</label>
               <input
                 type="text"
                 placeholder="Full Name"
@@ -68,7 +77,26 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
                 onChange={(e) => onChange('candidateName', e.target.value)}
               />
             </div>
-            <div className="field">
+            <div className="field flex-1">
+              <label>Name to appear on Proximity Card</label>
+              <input
+                type="text"
+                placeholder="e.g. S. R. CHOWDHURY"
+                value={data.preferredCardName || data.candidateName}
+                onChange={(e) => onChange('preferredCardName', e.target.value)}
+                className="font-bold uppercase tracking-wider text-[#0f5132]"
+              />
+            </div>
+            <div className="field w-28">
+              <label>Category</label>
+              <input
+                type="text"
+                readOnly
+                value={data.membershipCategory || 'Permanent Member'}
+                className="bg-gray-100 font-bold text-[#1a2744]"
+              />
+            </div>
+            <div className="field w-28">
               <label>Membership No.</label>
               <input
                 type="text"
@@ -383,7 +411,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
       <div className="warning-box">
         <div className="warn-title">⚠ Important Notice · Security Protocols</div>
         <p>
-          Proximity ID cards are the exclusive property of Cox's Bazar Boat Club Ltd. Members and registered dependents must carry these cards at all times on Club premises, deep sea vessels, marine berths, and swimming bays. Loss of card must be reported immediately to the Secretariat Registrar. Issuance of any <strong>duplicate card</strong> incurs a surcharge of BDT 5,000 and is subject to <strong>security clearance and executive committee review</strong>.
+          Proximity ID cards are the exclusive property of Cox's Bazar Boat Club Ltd. Members and registered dependents must carry these cards at all times on Club premises, lounges, recreational facilities, and dining rooms. Loss of card must be reported immediately to the Secretariat Registrar. Issuance of any <strong>duplicate card</strong> incurs a surcharge of BDT 5,000 and is subject to <strong>security clearance and executive committee review</strong>.
         </p>
       </div>
 
@@ -392,10 +420,12 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
         <div className="footer-left">
           <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
           <br />
-          Marine Drive, Cox's Bazar, Bangladesh
+          Marine Drive, Cox's Bazar, People's Republic of Bangladesh
+          <br />
+          Tel: +880 1700-000000 | Email: info@coxsbazarboatclub.com | Web: www.coxsbazarboatclub.com
         </div>
-        <div className="footer-center">Confidential Institutional Document</div>
-        <div className="footer-right">Page 1 of 1 &nbsp;|&nbsp; Print-Ready A4</div>
+        <div className="footer-center">Confidential Document</div>
+        <div className="footer-right">Page 3 of 7 &nbsp;|&nbsp; Official Registration Package</div>
       </div>
     </div>
   );

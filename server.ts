@@ -216,7 +216,7 @@ app.post('/api/submit', async (req: Request, res: Response): Promise<void> => {
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
           <tr><td style="padding: 6px; font-weight: bold; width: 180px;">Reference Number:</td><td style="padding: 6px; color: #0f5132; font-weight: bold;">${referenceNumber}</td></tr>
           <tr><td style="padding: 6px; font-weight: bold;">Submission Date:</td><td style="padding: 6px;">${submissionDate || new Date().toISOString().split('T')[0]}</td></tr>
-          <tr><td style="padding: 6px; font-weight: bold;">Membership Category:</td><td style="padding: 6px;">${formattedCategory}</td></tr>
+          <tr><td style="padding: 6px; font-weight: bold;">Membership Category:</td><td style="padding: 6px;">${data.membershipCategory || 'Permanent Member'}</td></tr>
           <tr><td style="padding: 6px; font-weight: bold;">Applicant Name:</td><td style="padding: 6px;">${data.title ? data.title.toUpperCase() + ' ' : ''}${data.candidateName}</td></tr>
           <tr><td style="padding: 6px; font-weight: bold;">Email:</td><td style="padding: 6px;"><a href="mailto:${data.email}">${data.email}</a></td></tr>
           <tr><td style="padding: 6px; font-weight: bold;">Mobile Phone:</td><td style="padding: 6px;">${data.mobile}</td></tr>
@@ -224,6 +224,9 @@ app.post('/api/submit', async (req: Request, res: Response): Promise<void> => {
           <tr><td style="padding: 6px; font-weight: bold;">Present Address:</td><td style="padding: 6px;">${data.presentAddress || 'N/A'}</td></tr>
           <tr><td style="padding: 6px; font-weight: bold;">Occupation:</td><td style="padding: 6px;">${data.designation ? `${data.designation} at ${data.companyName}` : 'N/A'}</td></tr>
           <tr><td style="padding: 6px; font-weight: bold;">Nominees / Family:</td><td style="padding: 6px;">${nomineeSummary}</td></tr>
+          <tr><td style="padding: 6px; font-weight: bold;">Reference 1:</td><td style="padding: 6px;">${data.ref1Name ? `${data.ref1Name} (${data.ref1Organization || 'N/A'}, Ph: ${data.ref1Phone || 'N/A'})` : 'N/A'}</td></tr>
+          <tr><td style="padding: 6px; font-weight: bold;">Reference 2:</td><td style="padding: 6px;">${data.ref2Name ? `${data.ref2Name} (${data.ref2Organization || 'N/A'}, Ph: ${data.ref2Phone || 'N/A'})` : 'N/A'}</td></tr>
+          <tr><td style="padding: 6px; font-weight: bold;">Data Privacy Consent:</td><td style="padding: 6px; color: #0f5132; font-weight: bold;">${data.privacyConsent ? 'ACCEPTED' : 'PENDING'}</td></tr>
         </table>
 
         <div style="background-color: #f8f9fa; border: 1px solid #e9ecef; padding: 12px; border-radius: 6px; font-size: 12px; margin-bottom: 20px;">
