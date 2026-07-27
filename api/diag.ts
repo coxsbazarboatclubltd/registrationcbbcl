@@ -4,10 +4,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const steps: string[] = [];
   try {
     steps.push('start');
-    const { Resend } = await import('resend');
-    steps.push('resend-imported');
-    const client = new Resend('re_test_dummy');
-    steps.push('resend-constructed');
+    await import('./_lib/resend');
+    steps.push('own-resend-wrapper-imported');
+    await import('./_lib/escapeHtml');
+    steps.push('own-escapeHtml-imported');
+    await import('./_lib/emailService');
+    steps.push('own-emailService-imported');
+    await import('./_lib/submissionHandler');
+    steps.push('own-submissionHandler-imported');
     res.status(200).json({ ok: true, steps, nodeVersion: process.version });
   } catch (error: any) {
     res.status(500).json({
