@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/submit.ts": {
+      "includeFiles": "server/**"
+    },
+    "api/health.ts": {
+      "includeFiles": "server/**"
+    }
+  }
+}
