@@ -148,13 +148,27 @@ export async function generateFullApplicationPdf(
   }
 
   const blob = pdf.output('blob');
-  const dataUri = pdf.output('datauristring');
+  // jsPDF's own output('datauristring') has a known reliability issue where
+  // its internal base64 string-building silently corrupts larger PDFs, while
+  // output('blob') (used for the working "Download PDF" button) takes a
+  // separate, reliable code path. Deriving the data URI from that same blob
+  // via the browser's native FileReader avoids the buggy method entirely.
+  const dataUri = await blobToDataUri(blob);
 
   return {
     blob,
     dataUri,
     filename,
   };
+}
+
+function blobToDataUri(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error || new Error('Failed to read PDF blob.'));
+    reader.readAsDataURL(blob);
+  });
 }
 
 /**
