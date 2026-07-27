@@ -26,19 +26,16 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
         <div className="header-left">
           <div className="club-name">
             <div className="est">Established 2026</div>
-            <h1>
-              COX'S BAZAR<br />BOAT CLUB
-            </h1>
+            <h1 className="whitespace-nowrap">COX'S BAZAR BOAT CLUB LTD.</h1>
             <div className="sub">
-              Marine Drive · Cox's Bazar · People's Republic of Bangladesh
+              Level 9, House 28, Block A, Kolatoli R/A.<br />
+              4700, Cox's Bazar, Bangladesh
             </div>
-            <div className="form-title font-bold text-red-800">
-              OFFICIAL USE ONLY · INTERNAL PROCESSING &amp; BOARD APPROVAL
-            </div>
+            <div className="site-url">www.coxsbazarboatclubltd.com</div>
           </div>
         </div>
         <div className="header-center">
-          <CbbcLogo className="w-[58px] h-[58px]" />
+          <CbbcLogo className="w-[92px] h-[92px]" />
         </div>
         <div className="header-right">
           <table className="doc-table">
@@ -61,6 +58,9 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
               </tr>
             </tbody>
           </table>
+          <div className="form-title font-bold text-red-800">
+            OFFICIAL USE ONLY · INTERNAL PROCESSING &amp; BOARD APPROVAL
+          </div>
         </div>
       </div>
 
@@ -138,28 +138,19 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
           <div className="section-num">03</div>
           <h2>Membership Committee Recommendation &amp; Board Decision</h2>
         </div>
+        <p className="text-[8px] text-gray-500 italic mb-1">For Office Use Only — to be completed manually by the Secretariat / Board after printing.</p>
         <div className="border border-[#9d7f46]/40 bg-[#faf8f5] p-2.5 rounded text-[9px] grid grid-cols-3 gap-3">
           <div>
             <span className="font-bold text-[#1a2744] block mb-1">Committee Recommendation:</span>
-            <div className="flex items-center gap-2">
-              <span className="bg-green-100 text-green-800 border border-green-300 px-2 py-0.5 rounded font-bold">
-                ✓ RECOMMENDED
-              </span>
-            </div>
+            <div className="border-b border-dotted border-gray-400 h-[16px]" />
           </div>
           <div>
             <span className="font-bold text-[#1a2744] block mb-1">Board Approval Decision:</span>
-            <div className="flex items-center gap-2">
-              <span className="bg-[#1a2744] text-[#9d7f46] font-bold px-2 py-0.5 rounded border border-[#9d7f46]/40">
-                APPROVED BY BOARD
-              </span>
-            </div>
+            <div className="border-b border-dotted border-gray-400 h-[16px]" />
           </div>
           <div>
             <span className="font-bold text-[#1a2744] block mb-1">Assigned Membership ID / Status:</span>
-            <div className="font-mono font-bold text-[#0f5132]">
-              ID: P-2026-0812 (Active)
-            </div>
+            <div className="border-b border-dotted border-gray-400 h-[16px]" />
           </div>
         </div>
       </div>
@@ -170,9 +161,12 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
           <div className="section-num">04</div>
           <h2>Office Notes &amp; Applicant Interview Remarks</h2>
         </div>
-        <div className="border border-[#c8c8c8] p-2 rounded min-h-[55px] bg-white text-[8.5px] text-gray-700">
-          <div className="font-bold text-[#1a2744] mb-1">Applicant Interview &amp; Balloting Notes:</div>
-          Candidate interviewed by Membership Scrutiny Panel on ________________. Credentials verified against official club membership standards. Passed executive balloting unanimously. Entrance fee and inaugural subscription cleared under Receipt No: _______________.
+        <p className="text-[8px] text-gray-500 italic mb-1">For Office Use Only — to be completed manually by the Secretariat after printing.</p>
+        <div className="border border-[#c8c8c8] p-2 rounded min-h-[65px] bg-white text-[8.5px] text-gray-700 space-y-3">
+          <div className="font-bold text-[#1a2744]">Applicant Interview &amp; Balloting Notes:</div>
+          <div className="border-b border-dotted border-gray-400 h-[14px]" />
+          <div className="border-b border-dotted border-gray-400 h-[14px]" />
+          <div className="border-b border-dotted border-gray-400 h-[14px]" />
         </div>
       </div>
 
@@ -183,43 +177,61 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
           <h2>Approval Signatures &amp; Official Seal</h2>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mt-2 text-[8.5px]">
+        <div className="grid grid-cols-3 gap-x-3 gap-y-8 mt-8 text-[8.5px]">
           {/* Row 1 Signatures */}
-          <div className="border-t border-[#1a2744] pt-1 text-center">
-            <div className="font-bold text-[#1a2744]">PREPARED BY</div>
-            <div className="text-gray-500">Membership Desk Officer</div>
+          <div className="text-center">
+            <div className="h-[34px]" />
+            <div className="border-t border-[#1a2744] pt-1">
+              <div className="font-bold text-[#1a2744]">FOUNDING PRESIDENT</div>
+              <div className="text-gray-500">Cox's Bazar Boat Club Ltd.</div>
+            </div>
           </div>
 
-          <div className="border-t border-[#1a2744] pt-1 text-center">
-            <div className="font-bold text-[#1a2744]">VERIFIED BY</div>
-            <div className="text-gray-500">Administrative Officer</div>
+          <div className="text-center">
+            <div className="h-[34px]" />
+            <div className="border-t border-[#1a2744] pt-1">
+              <div className="font-bold text-[#1a2744]">DIRECTOR FINANCE</div>
+              <div className="text-gray-500">Executive Committee</div>
+            </div>
           </div>
 
-          <div className="border-t border-[#1a2744] pt-1 text-center">
-            <div className="font-bold text-[#1a2744]">TREASURER</div>
-            <div className="text-gray-500">Cox's Bazar Boat Club Ltd.</div>
+          <div className="text-center">
+            <div className="h-[34px]" />
+            <div className="border-t border-[#1a2744] pt-1">
+              <div className="font-bold text-[#1a2744]">SECRETARY GENERAL</div>
+              <div className="text-gray-500">Executive Secretariat</div>
+            </div>
           </div>
 
           {/* Row 2 Signatures */}
-          <div className="border-t border-[#1a2744] pt-4 text-center">
-            <div className="font-bold text-[#1a2744]">MEMBERSHIP COMMITTEE CHAIR</div>
-            <div className="text-gray-500">Selection Panel</div>
+          <div className="text-center">
+            <div className="h-[34px]" />
+            <div className="border-t border-[#1a2744] pt-1">
+              <div className="font-bold text-[#1a2744]">DIRECTOR ADMIN</div>
+              <div className="text-gray-500">Executive Committee</div>
+            </div>
           </div>
 
-          <div className="border-t border-[#1a2744] pt-4 text-center">
-            <div className="font-bold text-[#1a2744]">SECRETARY GENERAL</div>
-            <div className="text-gray-500">Executive Secretariat</div>
+          <div className="text-center">
+            <div className="h-[34px]" />
+            <div className="border-t border-[#1a2744] pt-1">
+              <div className="font-bold text-[#1a2744]">DIRECTOR</div>
+              <div className="text-gray-500">Executive Committee</div>
+            </div>
           </div>
 
-          <div className="border-t border-[#1a2744] pt-4 text-center">
-            <div className="font-bold text-[#1a2744]">PRESIDENT</div>
-            <div className="text-gray-500">Executive Committee</div>
+          <div className="text-center">
+            <div className="h-[34px]" />
+            <div className="border-t border-[#1a2744] pt-1">
+              <div className="font-bold text-[#1a2744]">DIRECTOR</div>
+              <div className="text-gray-500">Executive Committee</div>
+            </div>
           </div>
         </div>
 
         {/* OFFICIAL SEAL BOX */}
         <div className="mt-3 flex justify-center">
-          <div className="border-2 border-dashed border-[#9d7f46] rounded p-2 text-center w-[200px] h-[60px] flex flex-col justify-center items-center">
+          <div className="border-2 border-dashed border-[#9d7f46] rounded p-2 text-center w-[120px] h-[120px] flex flex-col justify-center items-center">
             <div className="text-[8px] font-bold text-[#9d7f46] uppercase tracking-wider">OFFICIAL CLUB SEAL</div>
             <div className="text-[7px] text-gray-400 font-serif">Cox's Bazar Boat Club Ltd.</div>
           </div>
@@ -231,12 +243,14 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
         <div className="footer-left">
           <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
           <br />
-          Marine Drive, Cox's Bazar, People's Republic of Bangladesh
-          <br />
-          Tel: +880 1700-000000 | Email: info@coxsbazarboatclub.com | Web: www.coxsbazarboatclub.com
+          Tel: +880 13328 86688<br />
+          Email: membership@coxsbazarboatclubltd.com<br />
+          info@coxsbazarboatclubltd.com
         </div>
-        <div className="footer-center">Confidential Document</div>
-        <div className="footer-right">Page 7 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+        <div className="footer-right-group">
+          <div className="footer-center">Confidential Document</div>
+          <div className="footer-right">Page 7 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+        </div>
       </div>
     </div>
   );

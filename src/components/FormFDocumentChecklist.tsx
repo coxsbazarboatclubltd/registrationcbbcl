@@ -90,7 +90,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   return (
     <div className="space-y-4">
       {/* WEB APPLICATION FORM VIEW (NO-PRINT) */}
-      <div className="no-print space-y-4 max-w-4xl mx-auto">
+      <div className="no-print space-y-4 max-w-4xl mx-auto bg-[#fffef8] p-4 rounded-lg">
         {/* FORM TITLE BANNER */}
         <div className="bg-white border border-[#9d7f46]/40 rounded-lg p-3.5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -264,28 +264,31 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
           </div>
         </div>
 
-        {/* SECTION 03 – SECRETARIAT OFFICE VERIFICATION CHECKLIST */}
+        {/* SECTION 03 – SECRETARIAT OFFICE VERIFICATION CHECKLIST (office-only; left blank for manual sign-off after printing) */}
         <div className="bg-white border border-[#9d7f46]/40 rounded-lg p-3.5 shadow-xs space-y-2">
           <div className="section-title">
             <div className="section-num">03</div>
             <h2>Office Document Verification Checklist</h2>
           </div>
+          <p className="text-[9px] text-gray-500 italic">
+            For Office Use Only — to be marked by the Secretariat after printing. Not editable by the applicant.
+          </p>
           <div className="bg-white border border-[#c8c8c8] rounded p-3 text-[10px]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={data.kycPhoto} onChange={(e) => onChange('kycPhoto', e.target.checked)} className="accent-[#0f5132]" />
+              <label className="flex items-center gap-2 text-gray-500">
+                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
                 <span>Photograph Specimen &amp; Bio-Data Verified</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={data.kycNid} onChange={(e) => onChange('kycNid', e.target.checked)} className="accent-[#0f5132]" />
+              <label className="flex items-center gap-2 text-gray-500">
+                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
                 <span>National ID / Passport Authenticated</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={data.kycSponsor} onChange={(e) => onChange('kycSponsor', e.target.checked)} className="accent-[#0f5132]" />
+              <label className="flex items-center gap-2 text-gray-500">
+                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
                 <span>Proposer &amp; Seconder Signatures Verified</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={data.kycTin} onChange={(e) => onChange('kycTin', e.target.checked)} className="accent-[#0f5132]" />
+              <label className="flex items-center gap-2 text-gray-500">
+                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
                 <span>Tax / TIN &amp; Professional Documents Cleared</span>
               </label>
             </div>
@@ -305,17 +308,16 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
           <div className="header-left">
             <div className="club-name">
               <div className="est">Established 2026</div>
-              <h1>
-                COX'S BAZAR<br />BOAT CLUB
-              </h1>
+              <h1 className="whitespace-nowrap">COX'S BAZAR BOAT CLUB LTD.</h1>
               <div className="sub">
-                Marine Drive · Cox's Bazar · People's Republic of Bangladesh
+                Level 9, House 28, Block A, Kolatoli R/A.<br />
+                4700, Cox's Bazar, Bangladesh
               </div>
-              <div className="form-title">FORM F · Document Checklist</div>
+              <div className="site-url">www.coxsbazarboatclubltd.com</div>
             </div>
           </div>
           <div className="header-center">
-            <CbbcLogo className="w-[58px] h-[58px]" />
+            <CbbcLogo className="w-[92px] h-[92px]" />
           </div>
           <div className="header-right">
             <table className="doc-table">
@@ -338,6 +340,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                 </tr>
               </tbody>
             </table>
+            <div className="form-title text-[#1a2744]">FORM F · Document Checklist</div>
           </div>
         </div>
 
@@ -433,28 +436,29 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
           </div>
         </div>
 
-        {/* SECTION 03 – SECRETARIAT OFFICE VERIFICATION CHECKLIST */}
+        {/* SECTION 03 – SECRETARIAT OFFICE VERIFICATION CHECKLIST (office-only; left blank for manual sign-off after printing) */}
         <div className="section">
           <div className="section-title">
             <div className="section-num">03</div>
             <h2>Office Document Verification Checklist</h2>
           </div>
+          <p className="text-[8px] text-gray-500 italic mb-1">For Office Use Only — to be marked by the Secretariat after printing.</p>
           <div className="bg-white border border-[#c8c8c8] rounded p-2.5 text-[9px]">
             <div className="grid grid-cols-2 gap-2 mb-2">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={data.kycPhoto} onChange={(e) => onChange('kycPhoto', e.target.checked)} className="accent-[#0f5132]" />
+              <label className="flex items-center gap-2 text-gray-500">
+                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
                 <span>Photograph Specimen &amp; Bio-Data Verified</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={data.kycNid} onChange={(e) => onChange('kycNid', e.target.checked)} className="accent-[#0f5132]" />
+              <label className="flex items-center gap-2 text-gray-500">
+                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
                 <span>National ID / Passport Authenticated</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={data.kycSponsor} onChange={(e) => onChange('kycSponsor', e.target.checked)} className="accent-[#0f5132]" />
+              <label className="flex items-center gap-2 text-gray-500">
+                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
                 <span>Proposer &amp; Seconder Signatures Verified</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={data.kycTin} onChange={(e) => onChange('kycTin', e.target.checked)} className="accent-[#0f5132]" />
+              <label className="flex items-center gap-2 text-gray-500">
+                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
                 <span>Tax / TIN &amp; Professional Documents Cleared</span>
               </label>
             </div>
@@ -477,12 +481,14 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
           <div className="footer-left">
             <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
             <br />
-            Marine Drive, Cox's Bazar, People's Republic of Bangladesh
-            <br />
-            Tel: +880 1700-000000 | Email: info@coxsbazarboatclub.com | Web: www.coxsbazarboatclub.com
+            Tel: +880 13328 86688<br />
+          Email: membership@coxsbazarboatclubltd.com<br />
+          info@coxsbazarboatclubltd.com
           </div>
-          <div className="footer-center">Confidential Document</div>
-          <div className="footer-right">Page 6 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+          <div className="footer-right-group">
+            <div className="footer-center">Confidential Document</div>
+            <div className="footer-right">Page 6 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+          </div>
         </div>
       </div>
     </div>

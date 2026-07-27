@@ -30,17 +30,16 @@ export const FormEReferencesDeclaration: React.FC<FormEProps> = ({
         <div className="header-left">
           <div className="club-name">
             <div className="est">Established 2026</div>
-            <h1>
-              COX'S BAZAR<br />BOAT CLUB
-            </h1>
+            <h1 className="whitespace-nowrap">COX'S BAZAR BOAT CLUB LTD.</h1>
             <div className="sub">
-              Marine Drive · Cox's Bazar · People's Republic of Bangladesh
+              Level 9, House 28, Block A, Kolatoli R/A.<br />
+              4700, Cox's Bazar, Bangladesh
             </div>
-            <div className="form-title">FORM E · References &amp; Legal Declaration</div>
+            <div className="site-url">www.coxsbazarboatclubltd.com</div>
           </div>
         </div>
         <div className="header-center">
-          <CbbcLogo className="w-[58px] h-[58px]" />
+          <CbbcLogo className="w-[92px] h-[92px]" />
         </div>
         <div className="header-right">
           <table className="doc-table">
@@ -63,6 +62,7 @@ export const FormEReferencesDeclaration: React.FC<FormEProps> = ({
               </tr>
             </tbody>
           </table>
+          <div className="form-title text-[#1a2744]">FORM E · References &amp; Legal Declaration</div>
         </div>
       </div>
 
@@ -77,12 +77,14 @@ export const FormEReferencesDeclaration: React.FC<FormEProps> = ({
         <div className="footer-left">
           <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
           <br />
-          Marine Drive, Cox's Bazar, People's Republic of Bangladesh
-          <br />
-          Tel: +880 1700-000000 | Email: info@coxsbazarboatclub.com | Web: www.coxsbazarboatclub.com
+          Tel: +880 13328 86688<br />
+          Email: membership@coxsbazarboatclubltd.com<br />
+          info@coxsbazarboatclubltd.com
         </div>
-        <div className="footer-center">Confidential Document</div>
-        <div className="footer-right">Page 5 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+        <div className="footer-right-group">
+          <div className="footer-center">Confidential Document</div>
+          <div className="footer-right">Page 5 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+        </div>
       </div>
     </div>
   );

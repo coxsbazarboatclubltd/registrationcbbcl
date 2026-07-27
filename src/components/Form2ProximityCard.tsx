@@ -11,12 +11,18 @@ interface Form2Props {
   docDate: string;
 }
 
+const pad2 = (n: number) => String(n).padStart(2, '0');
+const childField = (i: number, suffix: string) => `child${pad2(i)}${suffix}` as keyof MemberFormData;
+
 export const Form2ProximityCard: React.FC<Form2Props> = ({
   data,
   onChange,
   docNo,
   docDate,
 }) => {
+  const childCount = Math.min(Math.max(Number(data.numberOfChildren) || 0, 0), 6);
+  const childIndexes = Array.from({ length: childCount }, (_, i) => i + 1);
+
   return (
     <div className="page" id="form-3-page">
       {/* WATERMARK */}
@@ -29,17 +35,16 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
         <div className="header-left">
           <div className="club-name">
             <div className="est">Established 2026</div>
-            <h1>
-              COX'S BAZAR<br />BOAT CLUB
-            </h1>
+            <h1 className="whitespace-nowrap">COX'S BAZAR BOAT CLUB LTD.</h1>
             <div className="sub">
-              Marine Drive · Cox's Bazar · People's Republic of Bangladesh
+              Level 9, House 28, Block A, Kolatoli R/A.<br />
+              4700, Cox's Bazar, Bangladesh
             </div>
-            <div className="form-title">FORM C · Proximity Access Card Requisition</div>
+            <div className="site-url">www.coxsbazarboatclubltd.com</div>
           </div>
         </div>
         <div className="header-center">
-          <CbbcLogo className="w-[58px] h-[58px]" />
+          <CbbcLogo className="w-[92px] h-[92px]" />
         </div>
         <div className="header-right">
           <table className="doc-table">
@@ -62,6 +67,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               </tr>
             </tbody>
           </table>
+          <div className="form-title text-[#1a2744]">FORM C · Proximity Access Card Requisition</div>
         </div>
       </div>
 
@@ -124,15 +130,28 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
 
       {/* SECTION 01 – DEPENDENT CARDS ENROLLMENT REGISTRY */}
       <div className="section">
-        <div className="section-title">
-          <div className="section-num">01</div>
-          <h2>Dependent Cards Enrollment Registry</h2>
+        <div className="section-title flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="section-num">01</div>
+            <h2>Dependent Cards Enrollment Registry</h2>
+          </div>
+          <div className="field w-28 !mb-0">
+            <label>No. of Children</label>
+            <select
+              value={data.numberOfChildren}
+              onChange={(e) => onChange('numberOfChildren', Number(e.target.value))}
+            >
+              {[0, 1, 2, 3, 4, 5, 6].map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
         </div>
         <p className="text-[7.5px] color-[#6b6b6b] italic mb-[8px] leading-[1.5]">
           The following direct dependents are registered for institutional proximity security cards. Upload or verify physical passports as required by the Club Secretariat.
         </p>
 
-        <div className="dep-grid">
+        <div className={`dep-grid${childCount + 1 > 4 ? ' compact' : ''}`}>
           {/* SPOUSE */}
           <div className="dep-card">
             <div className="dep-type">Spouse</div>
@@ -158,6 +177,14 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               />
             </div>
             <div className="dep-field">
+              <label>Date of Birth</label>
+              <input
+                type="date"
+                value={data.spouseDob}
+                onChange={(e) => onChange('spouseDob', e.target.value)}
+              />
+            </div>
+            <div className="dep-field">
               <label>Blood Group</label>
               <select
                 value={data.spouseBloodGroup}
@@ -176,158 +203,58 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
             </div>
           </div>
 
-          {/* CHILD 01 */}
-          <div className="dep-card">
-            <div className="dep-type">Child 01</div>
-            <div className="dep-photo p-0.5 overflow-hidden">
-              <PhotoUploader
-                label="Child 01 Photo"
-                sublabel="Passport"
-                photoUrl={data.child01PhotoUrl}
-                onPhotoChange={(url) => {
-                  onChange('child01PhotoUrl', url);
-                  if (url) onChange('docChildrenPhoto', true);
-                }}
-                className="w-full h-full border-none bg-transparent"
-              />
+          {/* CHILDREN (dynamic based on No. of Children) */}
+          {childIndexes.map((i) => (
+            <div className="dep-card" key={i}>
+              <div className="dep-type">Child {pad2(i)}</div>
+              <div className="dep-photo p-0.5 overflow-hidden">
+                <PhotoUploader
+                  label={`Child ${pad2(i)} Photo`}
+                  sublabel="Passport"
+                  photoUrl={data[childField(i, 'PhotoUrl')] as string | undefined}
+                  onPhotoChange={(url) => {
+                    onChange(childField(i, 'PhotoUrl'), url);
+                    if (url) onChange('docChildrenPhoto', true);
+                  }}
+                  className="w-full h-full border-none bg-transparent"
+                />
+              </div>
+              <div className="dep-field">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  placeholder="Child name"
+                  value={data[childField(i, 'Name')] as string}
+                  onChange={(e) => onChange(childField(i, 'Name'), e.target.value)}
+                />
+              </div>
+              <div className="dep-field">
+                <label>Date of Birth</label>
+                <input
+                  type="date"
+                  value={data[childField(i, 'Dob')] as string}
+                  onChange={(e) => onChange(childField(i, 'Dob'), e.target.value)}
+                />
+              </div>
+              <div className="dep-field">
+                <label>Blood Group</label>
+                <select
+                  value={data[childField(i, 'BloodGroup')] as string}
+                  onChange={(e) => onChange(childField(i, 'BloodGroup'), e.target.value)}
+                >
+                  <option value="">Select</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+              </div>
             </div>
-            <div className="dep-field">
-              <label>Full Name</label>
-              <input
-                type="text"
-                placeholder="Child name"
-                value={data.child01Name}
-                onChange={(e) => onChange('child01Name', e.target.value)}
-              />
-            </div>
-            <div className="dep-field">
-              <label>Date of Birth</label>
-              <input
-                type="date"
-                value={data.child01Dob}
-                onChange={(e) => onChange('child01Dob', e.target.value)}
-              />
-            </div>
-            <div className="dep-field">
-              <label>Blood Group</label>
-              <select
-                value={data.child01BloodGroup}
-                onChange={(e) => onChange('child01BloodGroup', e.target.value)}
-              >
-                <option value="">Select</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-              </select>
-            </div>
-          </div>
-
-          {/* CHILD 02 */}
-          <div className="dep-card">
-            <div className="dep-type">Child 02</div>
-            <div className="dep-photo p-0.5 overflow-hidden">
-              <PhotoUploader
-                label="Child 02 Photo"
-                sublabel="Passport"
-                photoUrl={data.child02PhotoUrl}
-                onPhotoChange={(url) => {
-                  onChange('child02PhotoUrl', url);
-                  if (url) onChange('docChildrenPhoto', true);
-                }}
-                className="w-full h-full border-none bg-transparent"
-              />
-            </div>
-            <div className="dep-field">
-              <label>Full Name</label>
-              <input
-                type="text"
-                placeholder="Child name"
-                value={data.child02Name}
-                onChange={(e) => onChange('child02Name', e.target.value)}
-              />
-            </div>
-            <div className="dep-field">
-              <label>Date of Birth</label>
-              <input
-                type="date"
-                value={data.child02Dob}
-                onChange={(e) => onChange('child02Dob', e.target.value)}
-              />
-            </div>
-            <div className="dep-field">
-              <label>Blood Group</label>
-              <select
-                value={data.child02BloodGroup}
-                onChange={(e) => onChange('child02BloodGroup', e.target.value)}
-              >
-                <option value="">Select</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-              </select>
-            </div>
-          </div>
-
-          {/* CHILD 03 */}
-          <div className="dep-card">
-            <div className="dep-type">Child 03</div>
-            <div className="dep-photo p-0.5 overflow-hidden">
-              <PhotoUploader
-                label="Child 03 Photo"
-                sublabel="Passport"
-                photoUrl={data.child03PhotoUrl}
-                onPhotoChange={(url) => {
-                  onChange('child03PhotoUrl', url);
-                  if (url) onChange('docChildrenPhoto', true);
-                }}
-                className="w-full h-full border-none bg-transparent"
-              />
-            </div>
-            <div className="dep-field">
-              <label>Full Name</label>
-              <input
-                type="text"
-                placeholder="Child name"
-                value={data.child03Name}
-                onChange={(e) => onChange('child03Name', e.target.value)}
-              />
-            </div>
-            <div className="dep-field">
-              <label>Date of Birth</label>
-              <input
-                type="date"
-                value={data.child03Dob}
-                onChange={(e) => onChange('child03Dob', e.target.value)}
-              />
-            </div>
-            <div className="dep-field">
-              <label>Blood Group</label>
-              <select
-                value={data.child03BloodGroup}
-                onChange={(e) => onChange('child03BloodGroup', e.target.value)}
-              >
-                <option value="">Select</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-              </select>
-            </div>
-          </div>
+          ))}
         </div>
 
         <div className="field-row">
@@ -421,12 +348,14 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
         <div className="footer-left">
           <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
           <br />
-          Marine Drive, Cox's Bazar, People's Republic of Bangladesh
-          <br />
-          Tel: +880 1700-000000 | Email: info@coxsbazarboatclub.com | Web: www.coxsbazarboatclub.com
+          Tel: +880 13328 86688<br />
+          Email: membership@coxsbazarboatclubltd.com<br />
+          info@coxsbazarboatclubltd.com
         </div>
-        <div className="footer-center">Confidential Document</div>
-        <div className="footer-right">Page 3 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+        <div className="footer-right-group">
+          <div className="footer-center">Confidential Document</div>
+          <div className="footer-right">Page 3 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+        </div>
       </div>
     </div>
   );

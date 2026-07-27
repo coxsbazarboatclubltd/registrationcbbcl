@@ -88,6 +88,26 @@ export interface MemberFormData {
   child03SchoolOccupation: string;
   child03BloodGroup: string;
 
+  child04Name: string;
+  child04Dob: string;
+  child04Gender: string;
+  child04SchoolOccupation: string;
+  child04BloodGroup: string;
+
+  child05Name: string;
+  child05Dob: string;
+  child05Gender: string;
+  child05SchoolOccupation: string;
+  child05BloodGroup: string;
+
+  child06Name: string;
+  child06Dob: string;
+  child06Gender: string;
+  child06SchoolOccupation: string;
+  child06BloodGroup: string;
+
+  numberOfChildren: number;
+
   preferredMailingAddress: 'present' | 'office' | 'permanent';
   commPreference: 'sms' | 'email' | 'whatsapp' | 'phone';
   specialInstructions: string;
@@ -100,6 +120,9 @@ export interface MemberFormData {
   child01PhotoUrl?: string;
   child02PhotoUrl?: string;
   child03PhotoUrl?: string;
+  child04PhotoUrl?: string;
+  child05PhotoUrl?: string;
+  child06PhotoUrl?: string;
 
   // Form 2 & 3 specifics
   membershipNo: string;
@@ -238,7 +261,23 @@ export const SAMPLE_MEMBER_DATA: MemberFormData = {
   child03Gender: "",
   child03SchoolOccupation: "",
   child03BloodGroup: "",
-  
+  child04Name: "",
+  child04Dob: "",
+  child04Gender: "",
+  child04SchoolOccupation: "",
+  child04BloodGroup: "",
+  child05Name: "",
+  child05Dob: "",
+  child05Gender: "",
+  child05SchoolOccupation: "",
+  child05BloodGroup: "",
+  child06Name: "",
+  child06Dob: "",
+  child06Gender: "",
+  child06SchoolOccupation: "",
+  child06BloodGroup: "",
+  numberOfChildren: 2,
+
   preferredMailingAddress: "present",
   commPreference: "email",
   specialInstructions: "Please contact prior to mailing official documents.",
@@ -394,7 +433,23 @@ export const EMPTY_MEMBER_DATA: MemberFormData = {
   child03Gender: "",
   child03SchoolOccupation: "",
   child03BloodGroup: "",
-  
+  child04Name: "",
+  child04Dob: "",
+  child04Gender: "",
+  child04SchoolOccupation: "",
+  child04BloodGroup: "",
+  child05Name: "",
+  child05Dob: "",
+  child05Gender: "",
+  child05SchoolOccupation: "",
+  child05BloodGroup: "",
+  child06Name: "",
+  child06Dob: "",
+  child06Gender: "",
+  child06SchoolOccupation: "",
+  child06BloodGroup: "",
+  numberOfChildren: 0,
+
   preferredMailingAddress: "present",
   commPreference: "email",
   specialInstructions: "",

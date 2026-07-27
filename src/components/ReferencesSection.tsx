@@ -125,6 +125,13 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
               />
             </div>
+
+            <div className="pt-3 mt-1 border-t border-dashed border-[#9d7f46]/40 text-center">
+              <div className="h-[26px]" />
+              <div className="border-t border-[#1a2744] pt-1 text-[8px] font-bold uppercase text-[#1a2744]">
+                Signature of Reference 1
+              </div>
+            </div>
           </div>
         </div>
 
@@ -225,6 +232,13 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 onChange={(e) => onChange('ref2Address', e.target.value)}
                 className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
               />
+            </div>
+
+            <div className="pt-3 mt-1 border-t border-dashed border-[#9d7f46]/40 text-center">
+              <div className="h-[26px]" />
+              <div className="border-t border-[#1a2744] pt-1 text-[8px] font-bold uppercase text-[#1a2744]">
+                Signature of Reference 2
+              </div>
             </div>
           </div>
         </div>

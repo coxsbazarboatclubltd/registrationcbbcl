@@ -10,12 +10,18 @@ interface FormBProps {
   docDate: string;
 }
 
+const pad2 = (n: number) => String(n).padStart(2, '0');
+const childField = (i: number, suffix: string) => `child${pad2(i)}${suffix}` as keyof MemberFormData;
+
 export const FormBProfessionalFamily: React.FC<FormBProps> = ({
   data,
   onChange,
   docNo,
   docDate,
 }) => {
+  const childCount = Math.min(Math.max(Number(data.numberOfChildren) || 0, 0), 6);
+  const childIndexes = Array.from({ length: childCount }, (_, i) => i + 1);
+
   return (
     <div className="page" id="form-2-page">
       {/* WATERMARK */}
@@ -28,17 +34,16 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
         <div className="header-left">
           <div className="club-name">
             <div className="est">Established 2026</div>
-            <h1>
-              COX'S BAZAR<br />BOAT CLUB
-            </h1>
+            <h1 className="whitespace-nowrap">COX'S BAZAR BOAT CLUB LTD.</h1>
             <div className="sub">
-              Marine Drive · Cox's Bazar · People's Republic of Bangladesh
+              Level 9, House 28, Block A, Kolatoli R/A.<br />
+              4700, Cox's Bazar, Bangladesh
             </div>
-            <div className="form-title">FORM B · Professional &amp; Family Information</div>
+            <div className="site-url">www.coxsbazarboatclubltd.com</div>
           </div>
         </div>
         <div className="header-center">
-          <CbbcLogo className="w-[58px] h-[58px]" />
+          <CbbcLogo className="w-[92px] h-[92px]" />
         </div>
         <div className="header-right">
           <table className="doc-table">
@@ -61,6 +66,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
               </tr>
             </tbody>
           </table>
+          <div className="form-title text-[#1a2744]">FORM B · Professional &amp; Family Information</div>
         </div>
       </div>
 
@@ -262,126 +268,83 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
 
           {/* Children Information */}
           <div className="col-span-2 border-t border-[#9d7f46]/20 pt-2 mt-1">
-            <label className="block font-bold text-[9px] uppercase tracking-wider text-[#1a2744] mb-1">
-              Children Information
-            </label>
-            
-            {/* Child 1 */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-2 bg-white/60 p-1.5 rounded border border-[#c8c8c8]">
-              <div className="field md:col-span-1">
-                <label>Child 01 – Name</label>
-                <input
-                  type="text"
-                  placeholder="Child 1 Name"
-                  value={data.child01Name}
-                  onChange={(e) => onChange('child01Name', e.target.value)}
-                />
-              </div>
-              <div className="field md:col-span-1">
-                <label>DOB &amp; Gender</label>
-                <div className="flex gap-1">
-                  <input
-                    type="date"
-                    value={data.child01Dob}
-                    onChange={(e) => onChange('child01Dob', e.target.value)}
-                    className="w-2/3"
-                  />
-                  <select
-                    value={data.child01Gender}
-                    onChange={(e) => onChange('child01Gender', e.target.value)}
-                    className="w-1/3"
-                  >
-                    <option value="">Sex</option>
-                    <option value="Male">M</option>
-                    <option value="Female">F</option>
-                  </select>
-                </div>
-              </div>
-              <div className="field md:col-span-1">
-                <label>School / Occupation</label>
-                <input
-                  type="text"
-                  placeholder="School or Work"
-                  value={data.child01SchoolOccupation}
-                  onChange={(e) => onChange('child01SchoolOccupation', e.target.value)}
-                />
-              </div>
-              <div className="field md:col-span-1">
-                <label>Blood Group</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block font-bold text-[9px] uppercase tracking-wider text-[#1a2744]">
+                Children Information
+              </label>
+              <div className="field w-24 !mb-0">
+                <label>No. of Children</label>
                 <select
-                  value={data.child01BloodGroup}
-                  onChange={(e) => onChange('child01BloodGroup', e.target.value)}
+                  value={data.numberOfChildren}
+                  onChange={(e) => onChange('numberOfChildren', Number(e.target.value))}
                 >
-                  <option value="">Select</option>
-                  <option value="A+">A+</option>
-                  <option value="A-">A-</option>
-                  <option value="B+">B+</option>
-                  <option value="B-">B-</option>
-                  <option value="O+">O+</option>
-                  <option value="O-">O-</option>
-                  <option value="AB+">AB+</option>
-                  <option value="AB-">AB-</option>
+                  {[0, 1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n}>{n}</option>
+                  ))}
                 </select>
               </div>
             </div>
 
-            {/* Child 2 */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-2 bg-white/60 p-1.5 rounded border border-[#c8c8c8]">
-              <div className="field md:col-span-1">
-                <label>Child 02 – Name</label>
-                <input
-                  type="text"
-                  placeholder="Child 2 Name"
-                  value={data.child02Name}
-                  onChange={(e) => onChange('child02Name', e.target.value)}
-                />
-              </div>
-              <div className="field md:col-span-1">
-                <label>DOB &amp; Gender</label>
-                <div className="flex gap-1">
+            <div className={childIndexes.length > 3 ? 'compact-child' : undefined}>
+            {childIndexes.map((i) => (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-2 bg-white/60 p-1.5 rounded border border-[#c8c8c8]" key={i}>
+                <div className="field md:col-span-1">
+                  <label>Child {pad2(i)} – Name</label>
                   <input
-                    type="date"
-                    value={data.child02Dob}
-                    onChange={(e) => onChange('child02Dob', e.target.value)}
-                    className="w-2/3"
+                    type="text"
+                    placeholder={`Child ${i} Name`}
+                    value={data[childField(i, 'Name')] as string}
+                    onChange={(e) => onChange(childField(i, 'Name'), e.target.value)}
                   />
+                </div>
+                <div className="field md:col-span-1">
+                  <label>DOB &amp; Gender</label>
+                  <div className="flex gap-1">
+                    <input
+                      type="date"
+                      value={data[childField(i, 'Dob')] as string}
+                      onChange={(e) => onChange(childField(i, 'Dob'), e.target.value)}
+                      className="w-2/3"
+                    />
+                    <select
+                      value={data[childField(i, 'Gender')] as string}
+                      onChange={(e) => onChange(childField(i, 'Gender'), e.target.value)}
+                      className="w-1/3"
+                    >
+                      <option value="">Sex</option>
+                      <option value="Male">M</option>
+                      <option value="Female">F</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="field md:col-span-1">
+                  <label>School / Occupation</label>
+                  <input
+                    type="text"
+                    placeholder="School or Work"
+                    value={data[childField(i, 'SchoolOccupation')] as string}
+                    onChange={(e) => onChange(childField(i, 'SchoolOccupation'), e.target.value)}
+                  />
+                </div>
+                <div className="field md:col-span-1">
+                  <label>Blood Group</label>
                   <select
-                    value={data.child02Gender}
-                    onChange={(e) => onChange('child02Gender', e.target.value)}
-                    className="w-1/3"
+                    value={data[childField(i, 'BloodGroup')] as string}
+                    onChange={(e) => onChange(childField(i, 'BloodGroup'), e.target.value)}
                   >
-                    <option value="">Sex</option>
-                    <option value="Male">M</option>
-                    <option value="Female">F</option>
+                    <option value="">Select</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
                   </select>
                 </div>
               </div>
-              <div className="field md:col-span-1">
-                <label>School / Occupation</label>
-                <input
-                  type="text"
-                  placeholder="School or Work"
-                  value={data.child02SchoolOccupation}
-                  onChange={(e) => onChange('child02SchoolOccupation', e.target.value)}
-                />
-              </div>
-              <div className="field md:col-span-1">
-                <label>Blood Group</label>
-                <select
-                  value={data.child02BloodGroup}
-                  onChange={(e) => onChange('child02BloodGroup', e.target.value)}
-                >
-                  <option value="">Select</option>
-                  <option value="A+">A+</option>
-                  <option value="A-">A-</option>
-                  <option value="B+">B+</option>
-                  <option value="B-">B-</option>
-                  <option value="O+">O+</option>
-                  <option value="O-">O-</option>
-                  <option value="AB+">AB+</option>
-                  <option value="AB-">AB-</option>
-                </select>
-              </div>
+            ))}
             </div>
           </div>
         </div>
@@ -467,12 +430,14 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
         <div className="footer-left">
           <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
           <br />
-          Marine Drive, Cox's Bazar, People's Republic of Bangladesh
-          <br />
-          Tel: +880 1700-000000 | Email: info@coxsbazarboatclub.com | Web: www.coxsbazarboatclub.com
+          Tel: +880 13328 86688<br />
+          Email: membership@coxsbazarboatclubltd.com<br />
+          info@coxsbazarboatclubltd.com
         </div>
-        <div className="footer-center">Confidential Document</div>
-        <div className="footer-right">Page 2 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+        <div className="footer-right-group">
+          <div className="footer-center">Confidential Document</div>
+          <div className="footer-right">Page 2 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+        </div>
       </div>
     </div>
   );

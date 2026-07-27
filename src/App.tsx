@@ -49,13 +49,21 @@ export default function App() {
   // horizontally clipped desktop layout. Exposed as --page-scale/--page-offset
   // and consumed by the .page rule in index.css; never applies to print/PDF
   // output (pdfGenerator.ts resets both before capturing each page).
+  // Manual zoom multiplier layered on top of the auto-fit scale below, so
+  // users can read/edit fine print without depending on viewport width.
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const handleZoomIn = () => setZoomLevel((z) => Math.min(2, +(z + 0.1).toFixed(2)));
+  const handleZoomOut = () => setZoomLevel((z) => Math.max(0.4, +(z - 0.1).toFixed(2)));
+  const handleZoomReset = () => setZoomLevel(1);
+
   useEffect(() => {
     const A4_WIDTH_PX = 210 * (96 / 25.4);
     const VIEWPORT_GUTTER_PX = 16;
 
     const updateScale = () => {
       const rawScale = Math.min(1, (window.innerWidth - VIEWPORT_GUTTER_PX) / A4_WIDTH_PX);
-      const scale = Math.max(rawScale, 0.28);
+      const fitScale = Math.max(rawScale, 0.28);
+      const scale = fitScale * zoomLevel;
       const offsetPx = Math.max(0, (window.innerWidth - A4_WIDTH_PX * scale) / 2);
       document.documentElement.style.setProperty('--page-scale', scale.toFixed(4));
       document.documentElement.style.setProperty('--page-offset', `${offsetPx.toFixed(2)}px`);
@@ -64,7 +72,7 @@ export default function App() {
     updateScale();
     window.addEventListener('resize', updateScale);
     return () => window.removeEventListener('resize', updateScale);
-  }, []);
+  }, [zoomLevel]);
 
   // Submission & Modal States
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -201,6 +209,37 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#e8e8e8]">
+      {/* FLOATING ZOOM CONTROL (Hidden on print, visible on every form page) */}
+      <div className="no-print fixed bottom-4 right-4 z-50 flex items-center gap-1 bg-white border border-[#1a2744]/30 rounded-full shadow-lg px-2 py-1.5">
+        <button
+          type="button"
+          onClick={handleZoomOut}
+          title="Zoom out"
+          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#1a2744] font-bold text-[14px] cursor-pointer"
+        >
+          −
+        </button>
+        <span className="text-[10px] font-bold text-[#1a2744] w-9 text-center select-none">
+          {Math.round(zoomLevel * 100)}%
+        </span>
+        <button
+          type="button"
+          onClick={handleZoomIn}
+          title="Zoom in"
+          className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#1a2744] font-bold text-[14px] cursor-pointer"
+        >
+          +
+        </button>
+        <button
+          type="button"
+          onClick={handleZoomReset}
+          title="Reset zoom"
+          className="ml-1 px-2 h-7 flex items-center justify-center rounded-full hover:bg-gray-100 text-[#1a2744] text-[9px] font-bold uppercase tracking-wider cursor-pointer border-l border-gray-200"
+        >
+          Reset
+        </button>
+      </div>
+
       {/* SECTION A: SITE HEADER (Hidden on print) */}
       <SiteHeader
         onSampleData={() => setFormData(SAMPLE_MEMBER_DATA)}

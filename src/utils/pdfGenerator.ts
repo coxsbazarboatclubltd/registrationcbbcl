@@ -68,11 +68,19 @@ export async function generateFullApplicationPdf(
     elHiddenClass: boolean;
     elTransform: string;
     elMarginBottom: string;
+    elPosition: string;
+    elTop: string;
+    elLeft: string;
   }
   const originalDisplays: DisplayState[] = [];
 
   try {
-    // Unhide parent containers and elements temporarily so html2canvas can capture all form panels
+    // Unhide parent containers and elements temporarily so html2canvas can capture all form panels.
+    // Every page is pulled off-screen (position:fixed, far outside the viewport) while unhidden —
+    // toggling them to display:block in place would visibly shift/resize the page the user is
+    // currently looking at (its scale-to-fit transform gets neutralized below) for the ~100ms+
+    // capture window, producing a jarring "shake". Off-screen positioning keeps layout/capture
+    // correct without ever touching what's on screen.
     for (const el of elements) {
       const parent = el.closest('.form-panel') as HTMLElement | null;
       const elHiddenClass = el.classList.contains('hidden');
@@ -86,6 +94,9 @@ export async function generateFullApplicationPdf(
         elHiddenClass,
         elTransform: el.style.transform,
         elMarginBottom: el.style.marginBottom,
+        elPosition: el.style.position,
+        elTop: el.style.top,
+        elLeft: el.style.left,
       });
 
       if (parent) {
@@ -102,6 +113,9 @@ export async function generateFullApplicationPdf(
       // index.css) so the PDF always captures the page at true A4 size.
       el.style.transform = 'none';
       el.style.marginBottom = '0';
+      el.style.position = 'fixed';
+      el.style.top = '0';
+      el.style.left = '-99999px';
     }
 
     // Small delay to allow browser layout reflow
@@ -141,6 +155,9 @@ export async function generateFullApplicationPdf(
       item.el.style.visibility = item.elVisibility;
       item.el.style.transform = item.elTransform;
       item.el.style.marginBottom = item.elMarginBottom;
+      item.el.style.position = item.elPosition;
+      item.el.style.top = item.elTop;
+      item.el.style.left = item.elLeft;
       if (item.elHiddenClass) {
         item.el.classList.add('hidden');
       }
