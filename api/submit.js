@@ -1,7 +1,6 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { handleSubmission } from './_lib/submissionHandler';
+const { handleSubmission } = require('./_lib/submissionHandler');
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = async function handler(req, res) {
   try {
     if (req.method !== 'POST') {
       res.status(405).json({ success: false, error: 'Method not allowed.' });
@@ -28,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const result = await handleSubmission(body || {}, clientIp);
     res.status(result.status).json(result.body);
-  } catch (error: any) {
+  } catch (error) {
     // Surface the real failure instead of letting Vercel's platform 500
     // handler return a non-JSON error page (which the client then reports
     // as an opaque "Server responded with HTTP 500").
@@ -38,4 +37,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       error: error?.message || 'Unexpected server error while processing submission.',
     });
   }
-}
+};

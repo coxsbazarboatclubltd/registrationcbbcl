@@ -2,7 +2,7 @@
  * Escapes HTML special characters to prevent injection when interpolating
  * applicant-supplied values into email templates.
  */
-export function escapeHtml(value: unknown): string {
+function escapeHtml(value) {
   if (value === null || value === undefined) return '';
   return String(value)
     .replace(/&/g, '&amp;')
@@ -11,3 +11,5 @@ export function escapeHtml(value: unknown): string {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+
+module.exports = { escapeHtml };

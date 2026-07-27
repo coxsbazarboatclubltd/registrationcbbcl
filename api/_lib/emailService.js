@@ -1,25 +1,7 @@
-import type { MemberFormData } from '../../src/types';
-import { createResendClient } from './resend';
-import { escapeHtml } from './escapeHtml';
+const { createResendClient } = require('./resend');
+const { escapeHtml } = require('./escapeHtml');
 
-export interface SendApplicationEmailsParams {
-  resendApiKey: string;
-  fromName: string;
-  fromEmail: string;
-  officeEmail: string;
-  referenceNumber: string;
-  documentNumber: string;
-  submissionDate: string;
-  data: MemberFormData;
-  pdfBase64?: string;
-}
-
-export interface SendApplicationEmailsResult {
-  officeResult: Awaited<ReturnType<ReturnType<typeof createResendClient>['emails']['send']>>;
-  applicantResult: Awaited<ReturnType<ReturnType<typeof createResendClient>['emails']['send']>>;
-}
-
-function buildOfficeEmailHtml(params: SendApplicationEmailsParams, formattedCategory: string): string {
+function buildOfficeEmailHtml(params, formattedCategory) {
   const { data, referenceNumber, documentNumber, submissionDate } = params;
 
   const nomineeSummary = [
@@ -74,11 +56,7 @@ function buildOfficeEmailHtml(params: SendApplicationEmailsParams, formattedCate
   `;
 }
 
-function buildApplicantEmailHtml(
-  params: SendApplicationEmailsParams,
-  formattedCategory: string,
-  officeEmail: string
-): string {
+function buildApplicantEmailHtml(params, formattedCategory, officeEmail) {
   const { data, referenceNumber, submissionDate } = params;
 
   return `
@@ -118,14 +96,12 @@ function buildApplicantEmailHtml(
   `;
 }
 
-export async function sendApplicationEmails(
-  params: SendApplicationEmailsParams
-): Promise<SendApplicationEmailsResult> {
+async function sendApplicationEmails(params) {
   const resend = createResendClient(params.resendApiKey);
   const primaryFrom = `${params.fromName} <${params.fromEmail}>`;
   const fallbackFrom = `${params.fromName} <onboarding@resend.dev>`;
 
-  const attachments: { filename: string; content: Buffer }[] = [];
+  const attachments = [];
   if (params.pdfBase64) {
     const cleanBase64 = params.pdfBase64.replace(/^data:application\/pdf;base64,/, '');
     const pdfBuffer = Buffer.from(cleanBase64, 'base64');
@@ -137,7 +113,7 @@ export async function sendApplicationEmails(
 
   const formattedCategory = (params.data.membershipCategory || 'Permanent').toUpperCase() + ' MEMBERSHIP';
 
-  const sendWithFallback = async (toEmail: string, subject: string, htmlContent: string) => {
+  const sendWithFallback = async (toEmail, subject, htmlContent) => {
     let sendRes = await resend.emails.send({
       from: primaryFrom,
       to: [toEmail],
@@ -195,3 +171,5 @@ export async function sendApplicationEmails(
 
   return { officeResult, applicantResult };
 }
+
+module.exports = { sendApplicationEmails };

@@ -1,13 +1,13 @@
-import { sendApplicationEmails } from './emailService';
+const { sendApplicationEmails } = require('./emailService');
 
 const DEFAULT_OFFICE_EMAIL = 'membership@coxsbazarboatclubltd.com';
 
 // Simple In-Memory Rate Limiter (Max 5 submissions per 15 mins per IP).
 // Best-effort only: on serverless platforms this map is scoped to a single
 // warm function instance and is not shared across concurrent instances.
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const rateLimitMap = new Map();
 
-function checkRateLimit(ip: string): { allowed: boolean; retryAfterMs?: number } {
+function checkRateLimit(ip) {
   const now = Date.now();
   const windowMs = 15 * 60 * 1000; // 15 minutes
   const maxRequests = 5;
@@ -26,29 +26,12 @@ function checkRateLimit(ip: string): { allowed: boolean; retryAfterMs?: number }
   return { allowed: true };
 }
 
-export interface SubmitRequestBody {
-  data?: any;
-  refNo?: string;
-  docNo?: string;
-  submissionDate?: string;
-  pdfBase64?: string;
-  turnstileToken?: string;
-}
-
-export interface HandlerResult {
-  status: number;
-  body: Record<string, unknown>;
-}
-
 /**
  * Framework-agnostic handler for POST /api/submit — shared between the local
- * Express dev server (server.ts) and the Vercel Serverless Function (api/submit.ts)
+ * Express dev server (server.ts) and the Vercel Serverless Function (api/submit.js)
  * so both environments run identical validation, rate-limiting, and email logic.
  */
-export async function handleSubmission(
-  body: SubmitRequestBody,
-  clientIp: string
-): Promise<HandlerResult> {
+async function handleSubmission(body, clientIp) {
   // 1. Rate Limiting Check
   const rateCheck = checkRateLimit(clientIp);
   if (!rateCheck.allowed) {
@@ -178,7 +161,7 @@ export async function handleSubmission(
         message: 'Application submitted and emails dispatched successfully.',
       },
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error(`[SUBMISSION_ERROR] RefNo: ${referenceNumber}`, error);
     return {
       status: 500,
@@ -189,3 +172,5 @@ export async function handleSubmission(
     };
   }
 }
+
+module.exports = { handleSubmission };
