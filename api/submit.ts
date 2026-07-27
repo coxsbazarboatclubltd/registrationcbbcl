@@ -1,8 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { handleSubmission } from '../server/services/submissionHandler';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    // Imported lazily (inside the try) rather than at module top-level: if
+    // this chain (which pulls in the resend SDK) fails to resolve on Vercel's
+    // Node runtime, a top-level import crashes the whole function before our
+    // try/catch can run, producing an opaque platform "FUNCTION_INVOCATION_
+    // FAILED" instead of a real, catchable error.
+    const { handleSubmission } = await import('../server/services/submissionHandler');
+
     if (req.method !== 'POST') {
       res.status(405).json({ success: false, error: 'Method not allowed.' });
       return;
