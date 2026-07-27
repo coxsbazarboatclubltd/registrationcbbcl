@@ -11,7 +11,7 @@
   --border: #c8c8c8;
   --field-bg: #f7f8f9;
   --label: #7a5c1e;
-  --page-bg: #ffffff;
+  --page-bg: #fffff0;
   --warn-bg: #fffbe6;
   --warn-border: #e0c060;
   --green: #2e7d32;
@@ -293,6 +293,7 @@ body {
   border-radius: 2px;
   padding: 4px 6px;
   font-size: 9.5px;
+  line-height: 2.8;
   font-family: 'Lato', sans-serif;
   color: var(--text);
   outline: none;
@@ -455,6 +456,7 @@ body {
 .dep-card .dep-field select {
   width: 100%;
   font-size: 8px;
+  line-height: 2.8;
   padding: 3px 4px;
   background: var(--field-bg);
   border: 1px solid var(--border);
@@ -556,6 +558,7 @@ body {
 
 .reg-num-box input {
   font-size: 11px;
+  line-height: 2.8;
   padding: 4px 8px;
   border: 1.5px solid var(--gold);
   border-radius: 2px;
@@ -616,6 +619,7 @@ body {
   border-radius: 2px;
   padding: 4px 6px;
   font-size: 9.5px;
+  line-height: 2.8;
   font-family: 'Lato', sans-serif;
   outline: none;
   width: 100%;
