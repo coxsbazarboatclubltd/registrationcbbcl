@@ -43,7 +43,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="Full name of Reference 1"
                   value={data.ref1Name}
                   onChange={(e) => onChange('ref1Name', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
               <div>
@@ -53,7 +53,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="e.g. P-0112 (optional)"
                   value={data.ref1MemNo}
                   onChange={(e) => onChange('ref1MemNo', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
             </div>
@@ -66,7 +66,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="e.g. Business Associate"
                   value={data.ref1Relationship}
                   onChange={(e) => onChange('ref1Relationship', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
               <div>
@@ -76,7 +76,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="Company / Organization"
                   value={data.ref1Organization}
                   onChange={(e) => onChange('ref1Organization', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
             </div>
@@ -89,7 +89,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="Job Title"
                   value={data.ref1Designation}
                   onChange={(e) => onChange('ref1Designation', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
               <div>
@@ -99,7 +99,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="+880"
                   value={data.ref1Phone}
                   onChange={(e) => onChange('ref1Phone', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
             </div>
@@ -111,7 +111,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 placeholder="ref1@example.com"
                 value={data.ref1Email}
                 onChange={(e) => onChange('ref1Email', e.target.value)}
-                className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
               />
             </div>
 
@@ -122,7 +122,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 placeholder="Office or official address"
                 value={data.ref1Address}
                 onChange={(e) => onChange('ref1Address', e.target.value)}
-                className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
               />
             </div>
 
@@ -151,7 +151,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="Full name of Reference 2"
                   value={data.ref2Name}
                   onChange={(e) => onChange('ref2Name', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
               <div>
@@ -161,7 +161,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="e.g. P-0488 (optional)"
                   value={data.ref2MemNo}
                   onChange={(e) => onChange('ref2MemNo', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
             </div>
@@ -174,7 +174,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="e.g. Professional Senior"
                   value={data.ref2Relationship}
                   onChange={(e) => onChange('ref2Relationship', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
               <div>
@@ -184,7 +184,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="Company / Organization"
                   value={data.ref2Organization}
                   onChange={(e) => onChange('ref2Organization', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
             </div>
@@ -197,7 +197,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="Job Title"
                   value={data.ref2Designation}
                   onChange={(e) => onChange('ref2Designation', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
               <div>
@@ -207,7 +207,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                   placeholder="+880"
                   value={data.ref2Phone}
                   onChange={(e) => onChange('ref2Phone', e.target.value)}
-                  className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                  className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
                 />
               </div>
             </div>
@@ -219,7 +219,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 placeholder="ref2@example.com"
                 value={data.ref2Email}
                 onChange={(e) => onChange('ref2Email', e.target.value)}
-                className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
               />
             </div>
 
@@ -230,7 +230,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 placeholder="Office or official address"
                 value={data.ref2Address}
                 onChange={(e) => onChange('ref2Address', e.target.value)}
-                className="w-full text-[10px] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
+                className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
               />
             </div>
 
