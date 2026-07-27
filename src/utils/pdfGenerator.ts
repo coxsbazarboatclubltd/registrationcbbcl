@@ -52,7 +52,6 @@ export async function generateFullApplicationPdf(
     orientation: 'portrait',
     unit: 'mm',
     format: 'a4',
-    compress: true,
   });
 
   const pdfWidth = 210; // A4 width in mm
