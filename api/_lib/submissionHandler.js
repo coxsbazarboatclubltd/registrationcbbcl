@@ -159,7 +159,6 @@ async function handleSubmission(body, clientIp) {
         submissionDate: submissionDate || new Date().toISOString().split('T')[0],
         membershipType: formattedCategory,
         message: 'Application submitted and emails dispatched successfully.',
-        _diagPdfBase64Length: (pdfBase64 || '').length,
       },
     };
   } catch (error) {
