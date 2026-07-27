@@ -34,10 +34,10 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
             Reference 1
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Full Name</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Full Name</label>
                 <input
                   type="text"
                   placeholder="Full name of Reference 1"
@@ -47,7 +47,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Club Member No. (if member)</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Club Member No. (if member)</label>
                 <input
                   type="text"
                   placeholder="e.g. P-0112 (optional)"
@@ -60,7 +60,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Relationship</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Relationship</label>
                 <input
                   type="text"
                   placeholder="e.g. Business Associate"
@@ -70,7 +70,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Organization</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Organization</label>
                 <input
                   type="text"
                   placeholder="Company / Organization"
@@ -83,7 +83,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Designation</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Designation</label>
                 <input
                   type="text"
                   placeholder="Job Title"
@@ -93,7 +93,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Phone Number</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Phone Number</label>
                 <input
                   type="tel"
                   placeholder="+880"
@@ -105,7 +105,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
             </div>
 
             <div>
-              <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Email Address</label>
+              <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Email Address</label>
               <input
                 type="email"
                 placeholder="ref1@example.com"
@@ -116,7 +116,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
             </div>
 
             <div>
-              <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Address</label>
+              <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Address</label>
               <input
                 type="text"
                 placeholder="Office or official address"
@@ -142,10 +142,10 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
             Reference 2
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Full Name</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Full Name</label>
                 <input
                   type="text"
                   placeholder="Full name of Reference 2"
@@ -155,7 +155,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Club Member No. (if member)</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Club Member No. (if member)</label>
                 <input
                   type="text"
                   placeholder="e.g. P-0488 (optional)"
@@ -168,7 +168,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Relationship</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Relationship</label>
                 <input
                   type="text"
                   placeholder="e.g. Professional Senior"
@@ -178,7 +178,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Organization</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Organization</label>
                 <input
                   type="text"
                   placeholder="Company / Organization"
@@ -191,7 +191,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Designation</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Designation</label>
                 <input
                   type="text"
                   placeholder="Job Title"
@@ -201,7 +201,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Phone Number</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Phone Number</label>
                 <input
                   type="tel"
                   placeholder="+880"
@@ -213,7 +213,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
             </div>
 
             <div>
-              <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Email Address</label>
+              <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Email Address</label>
               <input
                 type="email"
                 placeholder="ref2@example.com"
@@ -224,7 +224,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
             </div>
 
             <div>
-              <label className="block text-[8px] font-bold uppercase text-[#1a2744]">Address</label>
+              <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Address</label>
               <input
                 type="text"
                 placeholder="Office or official address"
