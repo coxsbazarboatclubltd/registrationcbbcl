@@ -103,11 +103,16 @@ async function sendApplicationEmails(params) {
 
   const attachments = [];
   if (params.pdfBase64) {
+    // Resend's Node SDK types accept a Buffer for `content`, but its
+    // parseAttachments() passes it straight into the JSON request body
+    // unconverted — JSON.stringify(buffer) produces {"type":"Buffer","data":
+    // [...]}, not a base64 string, corrupting the attachment down to a few
+    // bytes. Passing the base64 string directly (which the API actually
+    // expects) avoids that Buffer round-trip entirely.
     const cleanBase64 = params.pdfBase64.replace(/^data:application\/pdf;base64,/, '');
-    const pdfBuffer = Buffer.from(cleanBase64, 'base64');
     attachments.push({
       filename: `${params.referenceNumber}_Membership_Application.pdf`,
-      content: pdfBuffer,
+      content: cleanBase64,
     });
   }
 
