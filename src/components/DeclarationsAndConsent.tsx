@@ -77,7 +77,7 @@ export const DeclarationsAndConsent: React.FC<DeclarationsAndConsentProps> = ({
               type="date"
               value={docDate}
               readOnly
-              className="w-full text-[10px] leading-[2.8] px-2 py-1 border border-[#c8c8c8] rounded bg-gray-50 text-[#2c2c2c]"
+              className="w-full text-[10px] leading-[3.2] px-2 py-1 border border-[#c8c8c8] rounded bg-gray-50 text-[#2c2c2c]"
             />
           </div>
           <div className="field w2">
