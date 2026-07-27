@@ -1,6 +1,6 @@
 import type { MemberFormData } from '../../src/types';
-import { createResendClient } from '../lib/resend';
-import { escapeHtml } from '../lib/escapeHtml';
+import { createResendClient } from './resend';
+import { escapeHtml } from './escapeHtml';
 
 export interface SendApplicationEmailsParams {
   resendApiKey: string;

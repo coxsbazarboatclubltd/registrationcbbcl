@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
-import { handleSubmission } from './server/services/submissionHandler';
+import { handleSubmission } from './api/_lib/submissionHandler';
 
 const app = express();
 const PORT = 3000;
@@ -31,7 +31,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 /**
  * POST /api/submit - Application submission endpoint (local dev / Node deployments).
  * Shares its logic with the Vercel Serverless Function at api/submit.ts via
- * server/services/submissionHandler.ts.
+ * api/_lib/submissionHandler.ts.
  */
 app.post('/api/submit', async (req: Request, res: Response): Promise<void> => {
   const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';

@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { handleSubmission } from '../server/services/submissionHandler';
+import { handleSubmission } from './_lib/submissionHandler';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
