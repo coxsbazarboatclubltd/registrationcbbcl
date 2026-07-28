@@ -15,10 +15,26 @@ import { validateMemberForm, ValidationError } from './utils/formValidation';
 import { generateFullApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
 import { ReferenceService } from './services/referenceService';
 import { SubmissionService } from './services/submissionService';
+import { EmailGate } from './components/EmailGate';
 
 const LOCAL_STORAGE_KEY = 'cbbc_membership_form_data_v1';
+const OTP_SESSION_KEY = 'cbbc_otp_session_v1';
+
+interface OtpSession {
+  email: string;
+  token: string;
+}
 
 export default function App() {
+  const [otpSession, setOtpSession] = useState<OtpSession | null>(() => {
+    try {
+      const saved = sessionStorage.getItem(OTP_SESSION_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
   const [activeTab, setActiveTab] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1);
 
   // Initialize state from local storage or sample data
@@ -102,6 +118,13 @@ export default function App() {
     };
   }, []);
 
+  const handleVerified = (verifiedEmail: string, token: string) => {
+    const session: OtpSession = { email: verifiedEmail, token };
+    setOtpSession(session);
+    sessionStorage.setItem(OTP_SESSION_KEY, JSON.stringify(session));
+    setFormData((prev) => ({ ...prev, email: verifiedEmail }));
+  };
+
   const handleFieldChange = (field: keyof MemberFormData, value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -156,8 +179,12 @@ export default function App() {
     const refNo = referenceNumber || ReferenceService.generateReferenceNumber();
     setReferenceNumber(refNo);
 
-    // Update registration number in formData
-    const updatedFormData = { ...formData, registrationNumber: refNo };
+    // Update registration number in formData. Pin email to the verified OTP
+    // session as a final safeguard — the field is meant to be locked, but
+    // Sample Data/Clear Form/stale local storage could otherwise desync it
+    // from the address that was actually verified, breaking the submit-time
+    // token check.
+    const updatedFormData = { ...formData, email: otpSession?.email || formData.email, registrationNumber: refNo };
     setFormData(updatedFormData);
 
     // 1. Validate form fields, formats, uploads & declarations across all pages
@@ -189,13 +216,18 @@ export default function App() {
         dateStr,
         generated?.dataUri || '',
         turnstileToken,
-        docNo
+        docNo,
+        otpSession?.token
       );
 
       if (submitRes.success) {
         setModalStatus('success');
         setIsSubmitting(false);
       } else {
+        if (submitRes.errorDetails?.includes('Email verification session')) {
+          setOtpSession(null);
+          sessionStorage.removeItem(OTP_SESSION_KEY);
+        }
         setErrorDetails(submitRes.errorDetails || submitRes.message);
         setModalStatus('error');
         setIsSubmitting(false);
@@ -206,6 +238,10 @@ export default function App() {
       setIsSubmitting(false);
     }
   };
+
+  if (!otpSession) {
+    return <EmailGate onVerified={handleVerified} />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#e8e8e8]">
@@ -242,8 +278,8 @@ export default function App() {
 
       {/* SECTION A: SITE HEADER (Hidden on print) */}
       <SiteHeader
-        onSampleData={() => setFormData(SAMPLE_MEMBER_DATA)}
-        onClearForm={() => setFormData(EMPTY_MEMBER_DATA)}
+        onSampleData={() => setFormData({ ...SAMPLE_MEMBER_DATA, email: otpSession?.email || SAMPLE_MEMBER_DATA.email })}
+        onClearForm={() => setFormData({ ...EMPTY_MEMBER_DATA, email: otpSession?.email || EMPTY_MEMBER_DATA.email })}
       />
 
       {/* SEVEN TAB NAVIGATION (Hidden on print) */}
@@ -301,6 +337,7 @@ export default function App() {
             onChange={handleFieldChange}
             docNo={docNo}
             docDate={dateStr}
+            lockedEmail={otpSession?.email}
           />
           <PageNavigationFooter
             currentPage={1}
@@ -425,7 +462,7 @@ export default function App() {
         onTurnstileVerify={(token) => setTurnstileToken(token)}
         onRetry={handleSubmit}
         onClose={() => setIsModalOpen(false)}
-        onReset={() => setFormData(EMPTY_MEMBER_DATA)}
+        onReset={() => setFormData({ ...EMPTY_MEMBER_DATA, email: otpSession?.email || EMPTY_MEMBER_DATA.email })}
       />
     </div>
   );

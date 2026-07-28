@@ -96,6 +96,66 @@ function buildApplicantEmailHtml(params, formattedCategory, officeEmail) {
   `;
 }
 
+function buildOtpEmailHtml(code) {
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; color: #1a2744; border: 1px solid #c8c8c8; padding: 24px; border-radius: 8px;">
+      <div style="background-color: #1a2744; padding: 16px; border-radius: 6px; text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #c4a56a; margin: 0; font-family: Georgia, serif;">COX'S BAZAR BOAT CLUB LTD.</h2>
+        <p style="color: #ffffff; margin: 4px 0 0 0; font-size: 12px; letter-spacing: 1px;">MEMBERSHIP APPLICATION ACCESS</p>
+      </div>
+
+      <p>Your one-time verification code to access the membership application form is:</p>
+
+      <div style="background-color: #f4f6f9; border-left: 4px solid #1a2744; padding: 16px; margin: 18px 0; border-radius: 0 6px 6px 0; text-align: center;">
+        <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #1a2744;">${escapeHtml(code)}</span>
+      </div>
+
+      <p style="font-size: 13px; color: #555555;">This code expires in 10 minutes. If you did not request this code, you can safely ignore this email.</p>
+
+      <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;" />
+
+      <div style="font-size: 12px; color: #666666;">
+        <p style="margin: 0 0 4px 0; font-weight: bold; color: #1a2744;">Membership Secretariat</p>
+        <p style="margin: 0;">Cox's Bazar Boat Club Ltd.</p>
+      </div>
+    </div>
+  `;
+}
+
+async function sendOtpEmail(params) {
+  const resend = createResendClient(params.resendApiKey);
+  const primaryFrom = `${params.fromName} <${params.fromEmail}>`;
+  const fallbackFrom = `${params.fromName} <onboarding@resend.dev>`;
+
+  let sendRes = await resend.emails.send({
+    from: primaryFrom,
+    to: [params.toEmail],
+    subject: 'Your Verification Code — CBBCL Membership Application',
+    html: buildOtpEmailHtml(params.code),
+  });
+
+  if (sendRes.error) {
+    console.warn(`[RESEND_PRIMARY_FAILED] Target: ${params.toEmail} Error: ${sendRes.error.name} - ${sendRes.error.message}`);
+    if (sendRes.error.name === 'validation_error' || sendRes.error.message?.includes('domain') || sendRes.error.message?.includes('verify')) {
+      console.log(`[RESEND_RETRYING] Retrying with default onboarding address: ${fallbackFrom}`);
+      sendRes = await resend.emails.send({
+        from: fallbackFrom,
+        to: [params.toEmail],
+        subject: 'Your Verification Code — CBBCL Membership Application',
+        html: buildOtpEmailHtml(params.code),
+      });
+    }
+  }
+
+  if (sendRes.error) {
+    console.warn(`[OTP_EMAIL_WARNING] Could not dispatch verification email: ${sendRes.error.message}`);
+  } else {
+    console.log(`[OTP_EMAIL_SENT] To: ${params.toEmail} ID: ${sendRes.data?.id}`);
+  }
+
+  return sendRes;
+}
+
 async function sendApplicationEmails(params) {
   const resend = createResendClient(params.resendApiKey);
   const primaryFrom = `${params.fromName} <${params.fromEmail}>`;
@@ -177,4 +237,4 @@ async function sendApplicationEmails(params) {
   return { officeResult, applicantResult };
 }
 
-module.exports = { sendApplicationEmails };
+module.exports = { sendApplicationEmails, sendOtpEmail };

@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { handleSubmission } from './api/_lib/submissionHandler.js';
+import { handleOtpRequest, handleOtpVerify } from './api/_lib/otpHandler.js';
 
 const app = express();
 const PORT = 3000;
@@ -36,6 +37,24 @@ app.get('/api/health', (req: Request, res: Response) => {
 app.post('/api/submit', async (req: Request, res: Response): Promise<void> => {
   const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
   const result = await handleSubmission(req.body || {}, clientIp);
+  res.status(result.status).json(result.body);
+});
+
+/**
+ * POST /api/otp/request - Send a one-time verification code to an applicant's email.
+ */
+app.post('/api/otp/request', async (req: Request, res: Response): Promise<void> => {
+  const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
+  const result = await handleOtpRequest(req.body || {}, clientIp);
+  res.status(result.status).json(result.body);
+});
+
+/**
+ * POST /api/otp/verify - Verify a one-time code and issue a short-lived session token.
+ */
+app.post('/api/otp/verify', async (req: Request, res: Response): Promise<void> => {
+  const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
+  const result = await handleOtpVerify(req.body || {}, clientIp);
   res.status(result.status).json(result.body);
 });
 

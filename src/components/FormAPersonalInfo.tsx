@@ -10,6 +10,7 @@ interface FormAProps {
   onChange: (field: keyof MemberFormData, value: any) => void;
   docNo: string;
   docDate: string;
+  lockedEmail?: string;
 }
 
 export const FormAPersonalInfo: React.FC<FormAProps> = ({
@@ -17,6 +18,7 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
   onChange,
   docNo,
   docDate,
+  lockedEmail,
 }) => {
   return (
     <div className="page" id="form-1-page">
@@ -319,6 +321,9 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
               placeholder="email@example.com"
               value={data.email}
               onChange={(e) => onChange('email', e.target.value)}
+              readOnly={Boolean(lockedEmail)}
+              title={lockedEmail ? 'Verified email address (locked)' : undefined}
+              className={lockedEmail ? 'bg-gray-100 cursor-not-allowed' : undefined}
             />
           </div>
         </div>

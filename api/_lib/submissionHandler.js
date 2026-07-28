@@ -1,4 +1,5 @@
 const { sendApplicationEmails } = require('./emailService');
+const { verifySessionToken } = require('./otpStore');
 
 const DEFAULT_OFFICE_EMAIL = 'membership@coxsbazarboatclubltd.com';
 
@@ -45,7 +46,7 @@ async function handleSubmission(body, clientIp) {
     };
   }
 
-  const { data, refNo, docNo, submissionDate, pdfBase64, turnstileToken } = body || {};
+  const { data, refNo, docNo, submissionDate, pdfBase64, turnstileToken, otpSessionToken } = body || {};
 
   // 2. Validate input data
   if (!data || !data.candidateName || !data.email) {
@@ -54,6 +55,18 @@ async function handleSubmission(body, clientIp) {
       body: {
         success: false,
         error: 'Invalid request: Candidate name and email address are required.',
+      },
+    };
+  }
+
+  // 2b. Require a verified OTP session token matching the applicant's own email,
+  // so only applicants who've confirmed access to their inbox can submit.
+  if (!verifySessionToken(otpSessionToken, data.email)) {
+    return {
+      status: 403,
+      body: {
+        success: false,
+        error: 'Email verification session is missing or has expired. Please verify your email again.',
       },
     };
   }
