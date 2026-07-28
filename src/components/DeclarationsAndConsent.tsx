@@ -37,12 +37,12 @@ export const DeclarationsAndConsent: React.FC<DeclarationsAndConsentProps> = ({
         <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#9d7f46]/30 text-[#1a2744]">
           <span className="text-sm">🔒</span>
           <h3 className="font-['Cinzel'] font-bold text-xs uppercase tracking-wider text-[#1a2744]">
-            Confidentiality &amp; Data Privacy Consent
+            Confidentiality &amp; Data Protection Declaration
           </h3>
         </div>
 
         <p className="text-[8.5px] text-[#2c2c2c] leading-relaxed mb-3">
-          "I understand that the information and documents submitted in this application will be collected, processed, and securely stored by Cox's Bazar Boat Club Ltd. solely for membership administration, verification, legal compliance, and club operations. My personal information will be treated confidentially and will not be disclosed to unauthorized third parties except where required by law."
+          "I understand that, as part of my membership with Cox's Bazar Boat Club Ltd., I may have access to confidential information, documents, records, communications, or personal data relating to the Club, its members, guests, employees, and operations. I hereby agree to maintain the confidentiality of such information and to protect it from unauthorized access, use, disclosure, copying, distribution, or misuse. I further undertake not to intentionally or negligently compromise the privacy, security, or reputation of Cox's Bazar Boat Club Ltd. or its members. I acknowledge that any breach of this declaration may result in disciplinary action, suspension or termination of my membership, and any legal action permitted under applicable laws."
         </p>
 
         {/* Mandatory Consent Checkbox */}
@@ -57,7 +57,7 @@ export const DeclarationsAndConsent: React.FC<DeclarationsAndConsentProps> = ({
             className="mt-0.5 h-3.5 w-3.5 rounded border-gray-300 text-[#1a2744] focus:ring-[#1a2744]"
           />
           <span className="text-[9.5px] font-bold text-[#1a2744] leading-snug">
-            I have read and agree to the Confidentiality and Data Privacy Statement. <span className="text-red-600">*</span>
+            I have read and agree to the Confidentiality and Data Protection Declaration. <span className="text-red-600">*</span>
           </span>
         </label>
       </div>
