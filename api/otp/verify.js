@@ -1,4 +1,4 @@
-const { handleOtpRequest } = require('./_lib/otpHandler');
+const { handleOtpVerify } = require('../_lib/otpHandler');
 
 module.exports = async function handler(req, res) {
   try {
@@ -23,13 +23,13 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    const result = await handleOtpRequest(body || {}, clientIp);
+    const result = await handleOtpVerify(body || {}, clientIp);
     res.status(result.status).json(result.body);
   } catch (error) {
-    console.error('[API_OTP_REQUEST_CRASH]', error);
+    console.error('[API_OTP_VERIFY_CRASH]', error);
     res.status(500).json({
       success: false,
-      error: error?.message || 'Unexpected server error while requesting verification code.',
+      error: error?.message || 'Unexpected server error while verifying code.',
     });
   }
 };
