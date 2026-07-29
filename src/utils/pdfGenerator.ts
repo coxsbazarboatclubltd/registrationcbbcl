@@ -128,7 +128,7 @@ export async function generateFullApplicationPdf(
     const canvases = await Promise.all(
       elements.map((element) =>
         html2canvas(element, {
-          scale: 2,
+          scale: 1.5,
           useCORS: true,
           logging: false,
           backgroundColor: '#ffffff',
@@ -138,7 +138,7 @@ export async function generateFullApplicationPdf(
     );
 
     canvases.forEach((canvas, i) => {
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const imgData = canvas.toDataURL('image/jpeg', 0.8);
       if (i > 0) {
         pdf.addPage();
       }

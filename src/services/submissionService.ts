@@ -23,13 +23,40 @@ export class SubmissionService {
     otpSessionToken?: string
   ): Promise<SubmissionResponse> {
     try {
+      // Photo fields are already rendered into the generated PDF's page images,
+      // and uploadedDocs' fileDataUrls are only ever used to render a checklist
+      // checkmark/filename in that same PDF — the server/email layer reads
+      // neither. Sending them again as raw data URLs only bloats the request
+      // body toward Vercel's 4.5 MB function limit (uploadedDocs entries can be
+      // up to 10 MB each, uncompressed).
+      const {
+        candidatePhotoUrl,
+        spousePhotoUrl,
+        familyPhotoUrl,
+        child01PhotoUrl,
+        child02PhotoUrl,
+        child03PhotoUrl,
+        child04PhotoUrl,
+        child05PhotoUrl,
+        child06PhotoUrl,
+        uploadedDocs,
+        ...dataWithoutPhotos
+      } = data;
+
+      const strippedUploadedDocs = Object.fromEntries(
+        Object.entries(uploadedDocs || {}).map(([docName, meta]) => [
+          docName,
+          { ...meta, fileDataUrl: '' },
+        ])
+      );
+
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          data,
+          data: { ...dataWithoutPhotos, uploadedDocs: strippedUploadedDocs },
           refNo,
           docNo,
           submissionDate: docDate,
