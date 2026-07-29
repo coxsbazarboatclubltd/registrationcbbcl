@@ -5,10 +5,6 @@ const OTP_MAX_ATTEMPTS = 5;
 const REQUEST_COOLDOWN_MS = 60 * 1000; // 1 min between resend requests per email
 const SESSION_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
 
-// Best-effort only: on serverless platforms this map is scoped to a single
-// warm function instance and is not shared across concurrent instances.
-const otpMap = new Map(); // normalizedEmail -> { codeHash, expiresAt, attempts, lastSentAt }
-
 function getSecret() {
   return process.env.OTP_TOKEN_SECRET || process.env.RESEND_API_KEY || 'cbbcl-otp-dev-secret';
 }
@@ -21,49 +17,74 @@ function hashCode(normalizedEmail, code) {
   return crypto.createHmac('sha256', getSecret()).update(`${normalizedEmail}:${code}`).digest('hex');
 }
 
-function generateOtp(email) {
+// OTP state travels with the client as a signed "ticket" rather than living in
+// server memory, since Vercel serverless functions don't share memory across
+// instances and the /request and /verify calls can land on different ones.
+function signTicket(payload) {
+  const encoded = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const signature = crypto.createHmac('sha256', getSecret()).update(encoded).digest('hex');
+  return `${encoded}.${signature}`;
+}
+
+function readTicket(ticket) {
+  if (!ticket || typeof ticket !== 'string' || !ticket.includes('.')) return null;
+
+  const [encoded, signature] = ticket.split('.');
+  const expectedSignature = crypto.createHmac('sha256', getSecret()).update(encoded).digest('hex');
+
+  const sigBuf = Buffer.from(signature || '', 'hex');
+  const expectedBuf = Buffer.from(expectedSignature, 'hex');
+  if (sigBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(sigBuf, expectedBuf)) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(Buffer.from(encoded, 'base64url').toString('utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function generateOtp(email, previousTicket) {
   const normalizedEmail = normalizeEmail(email);
   const now = Date.now();
-  const existing = otpMap.get(normalizedEmail);
+  const existing = readTicket(previousTicket);
 
-  if (existing && now - existing.lastSentAt < REQUEST_COOLDOWN_MS) {
+  if (existing && existing.email === normalizedEmail && now - existing.lastSentAt < REQUEST_COOLDOWN_MS) {
     return { throttled: true, retryAfterMs: REQUEST_COOLDOWN_MS - (now - existing.lastSentAt) };
   }
 
   const code = String(crypto.randomInt(0, 1000000)).padStart(6, '0');
-  otpMap.set(normalizedEmail, {
+  const ticket = signTicket({
+    email: normalizedEmail,
     codeHash: hashCode(normalizedEmail, code),
     expiresAt: now + OTP_TTL_MS,
     attempts: 0,
     lastSentAt: now,
   });
 
-  return { throttled: false, code };
+  return { throttled: false, code, ticket };
 }
 
-function verifyOtp(email, code) {
+function verifyOtp(email, code, ticket) {
   const normalizedEmail = normalizeEmail(email);
-  const record = otpMap.get(normalizedEmail);
+  const record = readTicket(ticket);
 
-  if (!record) {
+  if (!record || record.email !== normalizedEmail) {
     return { success: false, error: 'No verification code was requested for this email. Please request a new code.' };
   }
   if (Date.now() > record.expiresAt) {
-    otpMap.delete(normalizedEmail);
     return { success: false, error: 'Verification code has expired. Please request a new code.' };
   }
   if (record.attempts >= OTP_MAX_ATTEMPTS) {
-    otpMap.delete(normalizedEmail);
     return { success: false, error: 'Too many incorrect attempts. Please request a new code.' };
   }
 
-  record.attempts += 1;
-
   if (hashCode(normalizedEmail, code) !== record.codeHash) {
-    return { success: false, error: 'Incorrect verification code.' };
+    const updatedTicket = signTicket({ ...record, attempts: record.attempts + 1 });
+    return { success: false, error: 'Incorrect verification code.', ticket: updatedTicket };
   }
 
-  otpMap.delete(normalizedEmail);
   return { success: true };
 }
 

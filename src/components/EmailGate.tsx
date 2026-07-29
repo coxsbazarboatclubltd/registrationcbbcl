@@ -12,6 +12,7 @@ export const EmailGate: React.FC<EmailGateProps> = ({ onVerified }) => {
   const [step, setStep] = useState<'email' | 'code'>('email');
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
+  const [ticket, setTicket] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -27,7 +28,7 @@ export const EmailGate: React.FC<EmailGateProps> = ({ onVerified }) => {
     }
 
     setIsSubmitting(true);
-    const result = await OtpService.requestCode(email.trim());
+    const result = await OtpService.requestCode(email.trim(), ticket || undefined);
     setIsSubmitting(false);
 
     if (!result.success) {
@@ -35,6 +36,7 @@ export const EmailGate: React.FC<EmailGateProps> = ({ onVerified }) => {
       return;
     }
 
+    setTicket(result.ticket || null);
     setStep('code');
     setInfo(
       result.devCode
@@ -52,11 +54,18 @@ export const EmailGate: React.FC<EmailGateProps> = ({ onVerified }) => {
       return;
     }
 
+    if (!ticket) {
+      setError('No verification code was requested for this email. Please request a new code.');
+      setStep('email');
+      return;
+    }
+
     setIsSubmitting(true);
-    const result = await OtpService.verifyCode(email.trim(), code.trim());
+    const result = await OtpService.verifyCode(email.trim(), code.trim(), ticket);
     setIsSubmitting(false);
 
     if (!result.success || !result.token) {
+      if (result.ticket) setTicket(result.ticket);
       setError(result.error || 'Verification failed.');
       return;
     }
@@ -147,6 +156,7 @@ export const EmailGate: React.FC<EmailGateProps> = ({ onVerified }) => {
                 onClick={() => {
                   setStep('email');
                   setCode('');
+                  setTicket(null);
                   setError(null);
                   setInfo(null);
                 }}

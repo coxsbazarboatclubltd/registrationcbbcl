@@ -46,7 +46,7 @@ async function handleOtpRequest(body, clientIp) {
     return { status: 400, body: { success: false, error: 'Please provide a valid email address.' } };
   }
 
-  const result = generateOtp(email);
+  const result = generateOtp(email, body?.ticket);
   if (result.throttled) {
     return {
       status: 429,
@@ -66,6 +66,7 @@ async function handleOtpRequest(body, clientIp) {
         success: true,
         message: 'Verification code generated (Development Simulation Mode — check server logs).',
         devCode: result.code,
+        ticket: result.ticket,
       },
     };
   }
@@ -86,7 +87,10 @@ async function handleOtpRequest(body, clientIp) {
       };
     }
 
-    return { status: 200, body: { success: true, message: 'Verification code sent to your email address.' } };
+    return {
+      status: 200,
+      body: { success: true, message: 'Verification code sent to your email address.', ticket: result.ticket },
+    };
   } catch (error) {
     console.error('[OTP_SEND_ERROR]', error);
     return {
@@ -107,9 +111,9 @@ async function handleOtpVerify(body, clientIp) {
     return { status: 400, body: { success: false, error: 'Invalid email or verification code format.' } };
   }
 
-  const result = verifyOtp(email, code);
+  const result = verifyOtp(email, code, body?.ticket);
   if (!result.success) {
-    return { status: 400, body: { success: false, error: result.error } };
+    return { status: 400, body: { success: false, error: result.error, ticket: result.ticket } };
   }
 
   const token = issueSessionToken(email);
