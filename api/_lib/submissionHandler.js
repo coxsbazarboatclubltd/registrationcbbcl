@@ -1,7 +1,7 @@
 const { sendApplicationEmails } = require('./emailService');
 const { verifySessionToken } = require('./otpStore');
 
-const DEFAULT_OFFICE_EMAIL = 'membership@coxsbazarboatclubltd.com';
+const DEFAULT_OFFICE_EMAIL = 'registration@cbbcl.org';
 
 // Simple In-Memory Rate Limiter (Max 5 submissions per 15 mins per IP).
 // Best-effort only: on serverless platforms this map is scoped to a single
