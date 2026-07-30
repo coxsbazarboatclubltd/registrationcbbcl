@@ -176,7 +176,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
                 </p>
                 <p className="text-xs text-emerald-800 font-medium bg-emerald-50 py-2.5 px-3 rounded border border-emerald-200">
                   🏢 Office Notified at{' '}
-                  <span className="font-bold">membership@coxsbazarboatclubltd.com</span>.
+                  <span className="font-bold">registration@cbbcl.org</span>.
                 </p>
                 <p className="text-xs text-gray-600 leading-relaxed pt-1">
                   The Membership Office will review your application package and notify you regarding executive committee approval.
