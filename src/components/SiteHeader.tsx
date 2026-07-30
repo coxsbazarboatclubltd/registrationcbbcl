@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { CbbcLogo } from './CbbcLogo';
 
-const SITE_URL = 'https://cbbcl.org';
+const SITE_URL = 'https://www.cbbcl.org';
 
 interface NavDropdownItem {
   label: string;

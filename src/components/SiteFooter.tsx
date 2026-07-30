@@ -2,7 +2,7 @@ import React from 'react';
 import { Facebook, Twitter, Linkedin, Instagram, Youtube, ShieldCheck } from 'lucide-react';
 import { CbbcLogo } from './CbbcLogo';
 
-const SITE_URL = 'https://cbbcl.org';
+const SITE_URL = 'https://www.cbbcl.org';
 
 const exploreLinks = [
   { label: 'Home Base', href: `${SITE_URL}/` },
