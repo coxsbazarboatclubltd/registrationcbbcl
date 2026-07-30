@@ -90,6 +90,28 @@ export default function App() {
     return () => window.removeEventListener('resize', updateScale);
   }, [zoomLevel]);
 
+  // The margin-bottom compensation for the scale transform (see .page/.zoom-scale
+  // in index.css) needs the ACTIVE page's real unscaled height, since content
+  // can run longer than the nominal 297mm (min-height is a floor, not a cap).
+  // A stale/fixed height there is why the page-navigation footer could hide
+  // under the visually-scaled page on longer pages. offsetHeight is a layout
+  // property and ignores the CSS transform, so it's always the true height.
+  useEffect(() => {
+    const activeEl = document.getElementById(
+      activeTab === 6 ? 'form-6-onscreen' : `form-${activeTab}-page`
+    );
+    if (!activeEl) return;
+
+    const updateNaturalHeight = () => {
+      document.documentElement.style.setProperty('--page-natural-height', `${activeEl.offsetHeight}px`);
+    };
+
+    updateNaturalHeight();
+    const observer = new ResizeObserver(updateNaturalHeight);
+    observer.observe(activeEl);
+    return () => observer.disconnect();
+  }, [activeTab]);
+
   // Submission & Modal States
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSavingPdf, setIsSavingPdf] = useState(false);

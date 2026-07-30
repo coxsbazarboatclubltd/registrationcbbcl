@@ -42,8 +42,10 @@ export const PageNavigationFooter: React.FC<PageNavigationFooterProps> = ({
     }
   };
 
-  // For Pages 1 to 5
-  if (currentPage < 6) {
+  // For Pages 1 to 6 (Document Checklist keeps simple pagination — the
+  // submit/print/PDF action bar belongs only on the final, read-only
+  // Official Use Only page)
+  if (currentPage < 7) {
     return (
       <div className="no-print my-6 p-3.5 bg-white border border-[#9d7f46]/40 rounded-lg shadow-sm flex items-center justify-between max-w-4xl mx-auto">
         {/* Previous Button (Hidden on Page 1) */}
@@ -78,10 +80,10 @@ export const PageNavigationFooter: React.FC<PageNavigationFooterProps> = ({
     );
   }
 
-  // For Pages 6 and 7 (Action Bar & Navigation)
+  // For Page 7 only (Action Bar & Navigation)
   return (
     <div className="no-print my-6 p-4 bg-[#faf8f5] border-2 border-[#1a2744] rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between gap-3 max-w-4xl mx-auto">
-      {/* Left: Previous / Next Navigation Group */}
+      {/* Left: Previous Navigation */}
       <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-start">
         <button
           type="button"
@@ -91,17 +93,6 @@ export const PageNavigationFooter: React.FC<PageNavigationFooterProps> = ({
           <span>←</span>
           <span>Previous</span>
         </button>
-
-        {currentPage < 7 && (
-          <button
-            type="button"
-            onClick={onNext}
-            className="px-4 py-2.5 bg-[#1a2744] hover:bg-[#25365d] text-[#c4a56a] font-bold text-[11px] uppercase tracking-wider rounded border border-[#9d7f46] shadow-sm transition-colors flex items-center gap-1.5 cursor-pointer"
-          >
-            <span>Next (Official Use)</span>
-            <span>→</span>
-          </button>
-        )}
       </div>
 
       {/* Right Action Group: Save as PDF, Print Application, Submit Application */}

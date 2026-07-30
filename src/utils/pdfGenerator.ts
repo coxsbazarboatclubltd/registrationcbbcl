@@ -8,6 +8,97 @@ export interface GeneratedPdfResult {
   filename: string;
 }
 
+const PLACEHOLDER_COLOR = '#757575';
+
+// Formats a native <input type="date"> ISO value (YYYY-MM-DD) the same way
+// Chromium displays it (M/D/YYYY), since we're about to render the raw
+// value as plain text rather than through the native date control.
+function formatDateForDisplay(isoValue: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoValue);
+  if (!match) return isoValue;
+  const [, year, month, day] = match;
+  return `${month}/${day}/${year}`;
+}
+
+// ROOT CAUSE (full writeup): html2canvas-pro rasterizes the DOM instead of
+// laying out real text, and <input>/<select> values go through a
+// special-cased renderer (render/canvas/content-renderer.js) that:
+//   - for <input>: computes verticalOffset = (contentBoxHeight - fontSize) / 2
+//     and draws the value at contentBox.top + verticalOffset + baselineMetric.
+//     That's the textbook CSS half-leading formula and would be correct,
+//     except baselineMetric (html2canvas's own measured approximation of
+//     this webfont's ascent) doesn't exactly match the font's real metrics.
+//     Algebraically, that mismatch is a CONSTANT pixel error that is
+//     independent of both line-height and padding — proven two ways: (1)
+//     deriving the offset equation shows contentBox.top cancels out of the
+//     error entirely, so no padding value changes it, and (2) confirmed by
+//     directly rendering a real `.field input` through html2canvas-pro at
+//     seven different padding values (at the exact scale:1.5 this file
+//     captures at) and reading back the rasterized pixels — the error was
+//     ~5.1-5.5px every time depending on font-size, never zero, never
+//     changed by padding or line-height.
+//   - for <select>: SelectElementContainer doesn't extend
+//     InputElementContainer in this library, so verticalOffset is never
+//     computed at all — its text always starts at the literal top of the
+//     content box, with no line-height value able to fix it without
+//     coincidentally matching one specific font/size-dependent equation.
+// Native browser inputs/selects center their value in their own UA shadow
+// DOM, entirely independent of line-height, so none of this is ever visible
+// on screen — only in the rasterized PDF.
+// Since the bug lives in that one special-cased code path, the correct
+// fix is to make html2canvas never use it: replace every <input>/<select>
+// with a plain <div> using the SAME computed styles plus
+// `display:flex;align-items:center`, which routes through html2canvas's
+// normal (and correctly-centering) flex/text layout instead. This only
+// touches the temporary DOM clone html2canvas hands to the onclone hook —
+// the live, interactive form the user actually edits is never modified.
+function replaceFormControlsForCapture(root: HTMLElement): void {
+  const controls = root.querySelectorAll('input, select');
+
+  controls.forEach((control) => {
+    if (control instanceof HTMLInputElement && (control.type === 'checkbox' || control.type === 'radio')) {
+      // Unaffected by this bug (rendered via a separate, correct code path)
+      // — leave them as real inputs.
+      return;
+    }
+
+    let text = '';
+    let isPlaceholder = false;
+
+    if (control instanceof HTMLInputElement) {
+      if (control.value) {
+        text = control.type === 'date' ? formatDateForDisplay(control.value) : control.value;
+      } else {
+        text = control.placeholder || '';
+        isPlaceholder = true;
+      }
+    } else if (control instanceof HTMLSelectElement) {
+      const selected = control.options[control.selectedIndex];
+      text = selected ? selected.text : '';
+    }
+
+    const computed = getComputedStyle(control);
+    const replacement = document.createElement('div');
+    replacement.textContent = text;
+    replacement.style.display = 'flex';
+    replacement.style.alignItems = 'center';
+    replacement.style.boxSizing = computed.boxSizing;
+    replacement.style.width = computed.width;
+    replacement.style.height = computed.height;
+    replacement.style.padding = computed.padding;
+    replacement.style.border = computed.border;
+    replacement.style.borderRadius = computed.borderRadius;
+    replacement.style.background = computed.backgroundColor;
+    replacement.style.fontFamily = computed.fontFamily;
+    replacement.style.fontSize = computed.fontSize;
+    replacement.style.fontWeight = computed.fontWeight;
+    replacement.style.textAlign = computed.textAlign;
+    replacement.style.color = isPlaceholder ? PLACEHOLDER_COLOR : computed.color;
+
+    control.replaceWith(replacement);
+  });
+}
+
 /**
  * Generates a complete 7-page A4 PDF package containing all registration forms:
  * 1. Form A: Membership Application
@@ -133,6 +224,9 @@ export async function generateFullApplicationPdf(
           logging: false,
           backgroundColor: '#ffffff',
           windowWidth: 1200,
+          onclone: (_clonedDocument: Document, clonedElement: HTMLElement) => {
+            replaceFormControlsForCapture(clonedElement);
+          },
         })
       )
     );

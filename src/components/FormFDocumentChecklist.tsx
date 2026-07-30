@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { CbbcLogo } from './CbbcLogo';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 
@@ -90,7 +89,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   return (
     <div className="space-y-4">
       {/* WEB APPLICATION FORM VIEW (NO-PRINT) */}
-      <div className="no-print space-y-4 max-w-4xl mx-auto bg-[#fffef8] p-4 rounded-lg">
+      <div id="form-6-onscreen" className="no-print zoom-scale space-y-4 max-w-4xl mx-auto bg-[#fffef8] p-4 rounded-lg">
         {/* FORM TITLE BANNER */}
         <div className="bg-white border border-[#9d7f46]/40 rounded-lg p-3.5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -317,7 +316,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
             </div>
           </div>
           <div className="header-center">
-            <CbbcLogo className="w-[92px] h-[92px]" />
+            <CbbcWatermarkLogo className="w-[92px] h-[92px]" />
           </div>
           <div className="header-right">
             <table className="doc-table">

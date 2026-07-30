@@ -1,5 +1,4 @@
 import React from 'react';
-import { CbbcLogo } from './CbbcLogo';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 
@@ -43,7 +42,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           </div>
         </div>
         <div className="header-center">
-          <CbbcLogo className="w-[92px] h-[92px]" />
+          <CbbcWatermarkLogo className="w-[92px] h-[92px]" />
         </div>
         <div className="header-right">
           <table className="doc-table">
@@ -219,31 +218,31 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           </div>
 
           <div className="field">
-            <label>Spouse Blood Group &amp; NID / Passport</label>
-            <div className="flex gap-2">
-              <select
-                value={data.spouseBloodGroup}
-                onChange={(e) => onChange('spouseBloodGroup', e.target.value)}
-                className="w-24"
-              >
-                <option value="">Blood</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-              </select>
-              <input
-                type="text"
-                placeholder="Spouse NID / Passport"
-                value={data.spouseNidPassport}
-                onChange={(e) => onChange('spouseNidPassport', e.target.value)}
-                className="flex-1"
-              />
-            </div>
+            <label>Spouse Blood Group</label>
+            <select
+              value={data.spouseBloodGroup}
+              onChange={(e) => onChange('spouseBloodGroup', e.target.value)}
+            >
+              <option value="">Blood Group</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+
+          <div className="field">
+            <label>Spouse NID / Passport</label>
+            <input
+              type="text"
+              placeholder="Spouse NID / Passport"
+              value={data.spouseNidPassport}
+              onChange={(e) => onChange('spouseNidPassport', e.target.value)}
+            />
           </div>
 
           <div className="field">

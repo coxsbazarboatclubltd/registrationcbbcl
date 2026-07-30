@@ -1,5 +1,4 @@
 import React from 'react';
-import { CbbcLogo } from './CbbcLogo';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
@@ -44,7 +43,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           </div>
         </div>
         <div className="header-center">
-          <CbbcLogo className="w-[92px] h-[92px]" />
+          <CbbcWatermarkLogo className="w-[92px] h-[92px]" />
         </div>
         <div className="header-right">
           <table className="doc-table">

@@ -30,8 +30,8 @@ const socialLinks = [
 
 export const SiteFooter: React.FC = () => {
   return (
-    <footer className="no-print bg-[#0f1a30] text-white">
-      <div className="max-w-6xl mx-auto px-8 py-14 grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <footer id="cbbcl-footer" className="no-print relative overflow-hidden bg-[#1a2744] text-white">
+      <div className="relative z-10 max-w-6xl mx-auto px-8 py-14 grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* COLUMN 1: BRAND + EXPLORE + TIERS */}
         <div>
           <h3 className="font-['Cinzel'] text-lg font-bold tracking-[2px] text-[#c4a56a] uppercase mb-4">
@@ -100,25 +100,26 @@ export const SiteFooter: React.FC = () => {
 
           <div className="mb-4">
             <div className="text-[10px] font-bold uppercase tracking-wider text-[#c4a56a] mb-1">
-              Clubspace Secretariat
+              Club House Land Mark
             </div>
-            <div className="text-[11px] text-gray-300">
-              Coastal Point Bypass, Marine Drive Boulevard, Cox's Bazar, Bangladesh
+            <div className="text-[11px] text-gray-300 whitespace-pre-line">
+              Level 9, House 28, Block A, Kolatoli R/A.{'\n'}4700, Cox's Bazar, Bangladesh{'\n'}www.cbbcl.org
             </div>
           </div>
 
           <div className="mb-4">
             <div className="text-[10px] font-bold uppercase tracking-wider text-[#c4a56a] mb-1">
-              Registry Email
+              Official Email
             </div>
-            <div className="text-[11px] text-gray-300">registry@cbbcl.org, admin@cbbcl.org</div>
+            <div className="text-[11px] text-gray-300">info@cbbcl.org</div>
+            <div className="text-[11px] text-gray-300">registration@cbbcl.org</div>
           </div>
 
           <div className="mb-5">
             <div className="text-[10px] font-bold uppercase tracking-wider text-[#c4a56a] mb-1">
-              Reservation Hotline
+              Secretariat Hotline
             </div>
-            <div className="text-[11px] text-gray-300">+880 1711-223344</div>
+            <div className="text-[11px] text-gray-300">+880 13328 86688</div>
           </div>
 
           <div className="flex gap-2 lg:justify-end">

@@ -63,6 +63,20 @@ const NavDropdown: React.FC<{ label: string; items: NavDropdownItem[] }> = ({ la
 export const SiteHeader: React.FC<SiteHeaderProps> = ({ onSampleData, onClearForm }) => {
   return (
     <header className="no-print">
+      {/* TOP INFO BAR — mirrors the CBBCL.WEB header topbar */}
+      <div className="bg-[#1a2744] py-2 px-6 text-slate-300 font-sans tracking-wide text-[11px] border-b border-[#263a6b] hidden md:block">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 flex justify-between items-center">
+          <div className="flex items-center space-x-6">
+            <span>📍 Level 9, House 28, Block A, Kolatoli R/A., 4700 Cox's Bazar, Bangladesh</span>
+            <span>📞 +880 13328 86688</span>
+          </div>
+          <div className="flex items-center space-x-6">
+            <span>✉️ registration@cbbcl.org, info@cbbcl.org</span>
+            <span>🌐 www.cbbcl.org</span>
+          </div>
+        </div>
+      </div>
+
       {/* MAIN MARKETING NAVBAR */}
       <nav className="bg-[#1a2744] border-b-2 border-[#c4a56a] px-6 py-3 flex items-center justify-between flex-wrap gap-y-2">
         {/* LEFT NAV GROUP */}
