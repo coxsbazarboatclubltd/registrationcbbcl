@@ -432,7 +432,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           <br />
           Tel: +880 13328 86688<br />
           Email: registration@cbbcl.org<br />
-          info@coxsbazarboatclubltd.com
+          info@cbbcl.org
         </div>
         <div className="footer-right-group">
           <div className="footer-center">Confidential Document</div>
