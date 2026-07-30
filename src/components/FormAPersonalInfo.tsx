@@ -37,7 +37,7 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
               Level 9, House 28, Block A, Kolatoli R/A.<br />
               4700, Cox's Bazar, Bangladesh
             </div>
-            <div className="site-url">www.coxsbazarboatclubltd.com</div>
+            <div className="site-url">www.cbbcl.org</div>
           </div>
         </div>
         <div className="header-center">
