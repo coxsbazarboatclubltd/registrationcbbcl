@@ -349,7 +349,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
           <br />
           Tel: +880 13328 86688<br />
-          Email: membership@coxsbazarboatclubltd.com<br />
+          Email: registration@cbbcl.org<br />
           info@coxsbazarboatclubltd.com
         </div>
         <div className="footer-right-group">
