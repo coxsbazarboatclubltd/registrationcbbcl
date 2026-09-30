@@ -77,7 +77,7 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm }) => {
       </div>
 
       {/* MAIN MARKETING NAVBAR */}
-      <nav className="bg-[#1a2744] border-b-2 border-[#c4a56a] px-6 py-3 flex items-center justify-between flex-wrap gap-y-2">
+      <nav className="bg-[#1a2744] border-b-2 border-[#c4a56a] px-6 py-2 flex items-center justify-between flex-wrap gap-y-2">
         {/* LEFT NAV GROUP */}
         <div className="hidden lg:flex items-center gap-6">
           <a href={`${SITE_URL}/`} className="text-[11px] font-bold uppercase tracking-wider text-[#c4a56a] border-b-2 border-[#c4a56a] pb-0.5">
@@ -120,7 +120,7 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm }) => {
 
         {/* CENTER LOGO */}
         <a href={`${SITE_URL}/`} className="mx-auto lg:mx-0" title="Cox's Bazar Boat Club Ltd. — Home">
-          <CbbcLogo clipPathId="clippath-nav" className="w-[46px] h-[46px]" />
+          <CbbcLogo clipPathId="clippath-nav" className="w-[60px] h-[60px] lg:w-[76px] lg:h-[76px]" />
         </a>
 
         {/* RIGHT NAV GROUP */}
