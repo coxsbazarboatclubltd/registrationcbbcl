@@ -70,7 +70,7 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm }) => {
             <span>📞 +880 13328 86688</span>
           </div>
           <div className="flex items-center space-x-6">
-            <span>✉️ membership@cbbcl.org</span>
+            <span>✉️ registration@cbbcl.org</span>
             <span>🌐 www.cbbcl.org</span>
           </div>
         </div>

@@ -16,6 +16,7 @@ import { generateFullApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from 
 import { ReferenceService } from './services/referenceService';
 import { SubmissionService } from './services/submissionService';
 import { EmailGate } from './components/EmailGate';
+import { installUppercaseInputs } from './utils/forceUppercase';
 
 const LOCAL_STORAGE_KEY = 'cbbc_membership_form_data_v1';
 const OTP_SESSION_KEY = 'cbbc_otp_session_v1';
@@ -63,6 +64,9 @@ export default function App() {
       console.warn('Could not save form data to local storage:', e);
     }
   }, [formData]);
+
+  // All free-text fields are captured in CAPITAL LETTERS (emails excluded)
+  useEffect(() => installUppercaseInputs(), []);
 
   // Scale + re-center the fixed A4-width (210mm) page canvas to fit any
   // viewport so mobile users see a shrunk-but-readable page instead of a
