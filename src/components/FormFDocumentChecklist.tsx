@@ -22,6 +22,12 @@ const CHECKLIST_ITEMS = [
   { field: 'docOtherAttachments', name: 'Supporting Documents & Other Attachments', note: 'Utility Bill, Organization Letter, Recommendation' },
 ] as const;
 
+// Secretariat verification list: every checklist document, plus reference signatures
+const OFFICE_VERIFICATION_ITEMS = [
+  ...CHECKLIST_ITEMS.map((item) => item.name),
+  'Proposer & Seconder (Reference) Signatures',
+];
+
 export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   data,
   onChange,
@@ -149,22 +155,12 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
           </p>
           <div className="bg-white border border-[#c8c8c8] rounded p-3 text-[10px]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
-              <label className="flex items-center gap-2 text-gray-500">
-                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
-                <span>Photograph Specimen &amp; Bio-Data Verified</span>
-              </label>
-              <label className="flex items-center gap-2 text-gray-500">
-                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
-                <span>National ID / Passport Authenticated</span>
-              </label>
-              <label className="flex items-center gap-2 text-gray-500">
-                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
-                <span>Proposer &amp; Seconder Signatures Verified</span>
-              </label>
-              <label className="flex items-center gap-2 text-gray-500">
-                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
-                <span>Tax / TIN &amp; Professional Documents Cleared</span>
-              </label>
+              {OFFICE_VERIFICATION_ITEMS.map((label) => (
+                <label key={label} className="flex items-center gap-2 text-gray-500">
+                  <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
+                  <span>{label}</span>
+                </label>
+              ))}
             </div>
           </div>
         </div>
@@ -242,7 +238,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                   const isChecked = !!data[item.field as keyof MemberFormData] || !!uploadedDocs[item.name];
                   return (
                     <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#faf8f5]'}>
-                      <td className="p-2 border-r border-[#c8c8c8] text-center">
+                      <td className="px-2 py-1.5 border-r border-[#c8c8c8] text-center">
                         <input
                           type="checkbox"
                           checked={isChecked}
@@ -250,10 +246,10 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                           className="w-4 h-4 accent-[#0f5132] cursor-pointer"
                         />
                       </td>
-                      <td className="p-2 border-r border-[#c8c8c8]">
+                      <td className="px-2 py-1.5 border-r border-[#c8c8c8]">
                         <span className="font-bold text-[#1a2744]">{item.name}</span>
                       </td>
-                      <td className="p-2 text-gray-600">
+                      <td className="px-2 py-1.5 text-gray-600">
                         {item.note}
                       </td>
                     </tr>
@@ -318,23 +314,13 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
           </div>
           <p className="text-[8px] text-gray-500 italic mb-1">For Office Use Only — to be marked by the Secretariat after printing.</p>
           <div className="bg-white border border-[#c8c8c8] rounded p-2.5 text-[9px]">
-            <div className="grid grid-cols-2 gap-2 mb-2">
-              <label className="flex items-center gap-2 text-gray-500">
-                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
-                <span>Photograph Specimen &amp; Bio-Data Verified</span>
-              </label>
-              <label className="flex items-center gap-2 text-gray-500">
-                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
-                <span>National ID / Passport Authenticated</span>
-              </label>
-              <label className="flex items-center gap-2 text-gray-500">
-                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
-                <span>Proposer &amp; Seconder Signatures Verified</span>
-              </label>
-              <label className="flex items-center gap-2 text-gray-500">
-                <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
-                <span>Tax / TIN &amp; Professional Documents Cleared</span>
-              </label>
+            <div className="grid grid-cols-3 gap-x-3 gap-y-1.5 mb-2">
+              {OFFICE_VERIFICATION_ITEMS.map((label) => (
+                <label key={label} className="flex items-center gap-2 text-gray-500">
+                  <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />
+                  <span>{label}</span>
+                </label>
+              ))}
             </div>
 
             <div className="grid grid-cols-2 gap-3 mt-2 pt-2 border-t border-[#c8c8c8] text-[9px]">
