@@ -309,8 +309,8 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               <div className="est">Established 2026</div>
               <h1 className="whitespace-nowrap">COX'S BAZAR BOAT CLUB LTD.</h1>
               <div className="sub">
-                Level 9, House 28, Block A, Kolatoli R/A.<br />
-                4700, Cox's Bazar, Bangladesh
+                Anderson Road,<br />
+                Cox's Bazar 4700. Bangladesh.
               </div>
               <div className="site-url">www.cbbcl.org</div>
             </div>

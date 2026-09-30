@@ -103,7 +103,7 @@ export const SiteFooter: React.FC = () => {
               Club House Land Mark
             </div>
             <div className="text-[11px] text-gray-300 whitespace-pre-line">
-              Level 9, House 28, Block A, Kolatoli R/A.{'\n'}4700, Cox's Bazar, Bangladesh{'\n'}www.cbbcl.org
+              Anderson Road,{'\n'}Cox's Bazar 4700. Bangladesh.{'\n'}www.cbbcl.org
             </div>
           </div>
 
