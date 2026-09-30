@@ -283,7 +283,7 @@ export const EMPTY_MEMBER_DATA: MemberFormData = {
   specialInstructions: "",
   preferredCardName: "",
   
-  membershipNo: "P-0000",
+  membershipNo: "",
   emergencyContactName: "",
   emergencyMobile: "+880",
   emergencyRelationship: "",

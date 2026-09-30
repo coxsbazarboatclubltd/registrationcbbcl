@@ -78,19 +78,20 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               <label>Primary Member Name</label>
               <input
                 type="text"
-                placeholder="Full Name"
+                readOnly
+                title="Filled automatically from Form A"
                 value={data.candidateName}
-                onChange={(e) => onChange('candidateName', e.target.value)}
+                className="bg-gray-100 cursor-not-allowed"
               />
             </div>
             <div className="field flex-1">
               <label>Name to appear on Proximity Card</label>
               <input
                 type="text"
-                placeholder="e.g. S. R. CHOWDHURY"
-                value={data.preferredCardName || data.candidateName}
-                onChange={(e) => onChange('preferredCardName', e.target.value)}
-                className="font-bold uppercase tracking-wider text-[#0f5132]"
+                readOnly
+                title="Filled automatically from Form A"
+                value={data.candidateName}
+                className="bg-gray-100 cursor-not-allowed font-bold uppercase tracking-wider text-[#0f5132]"
               />
             </div>
             <div className="field w-28">
@@ -104,11 +105,13 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
             </div>
             <div className="field w-28">
               <label>Membership No.</label>
+              {/* Assigned by the Secretariat after approval — never applicant-editable */}
               <input
                 type="text"
-                placeholder="P-0000"
-                value={data.membershipNo}
-                onChange={(e) => onChange('membershipNo', e.target.value)}
+                readOnly
+                title="Assigned by the Club Secretariat after approval"
+                value=""
+                className="bg-gray-100 cursor-not-allowed"
               />
             </div>
           </div>

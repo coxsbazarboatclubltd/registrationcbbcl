@@ -210,7 +210,15 @@ export default function App() {
     // Clear Form/stale local storage could otherwise desync it
     // from the address that was actually verified, breaking the submit-time
     // token check.
-    const updatedFormData = { ...formData, email: otpSession?.email || formData.email, registrationNumber: refNo };
+    // Card name mirrors the candidate name and the membership number is
+    // assigned by the Secretariat, so neither is taken from stale drafts.
+    const updatedFormData = {
+      ...formData,
+      email: otpSession?.email || formData.email,
+      registrationNumber: refNo,
+      preferredCardName: formData.candidateName,
+      membershipNo: '',
+    };
     setFormData(updatedFormData);
 
     // 1. Validate form fields, formats, uploads & declarations across all pages
