@@ -130,7 +130,8 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
             <div className="pt-3 mt-1 border-t border-dashed border-[#9d7f46]/40 text-center">
               <div className="h-[26px]" />
               <div className="border-t border-[#1a2744] pt-1 text-[8px] font-bold uppercase text-[#1a2744]">
-                Signature of Reference 1
+                Signature of Reference 1{' '}
+                <span className="normal-case font-normal italic text-gray-500">(to be signed at the Club after submission)</span>
               </div>
             </div>
           </div>
@@ -238,7 +239,8 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
             <div className="pt-3 mt-1 border-t border-dashed border-[#9d7f46]/40 text-center">
               <div className="h-[26px]" />
               <div className="border-t border-[#1a2744] pt-1 text-[8px] font-bold uppercase text-[#1a2744]">
-                Signature of Reference 2
+                Signature of Reference 2{' '}
+                <span className="normal-case font-normal italic text-gray-500">(to be signed at the Club after submission)</span>
               </div>
             </div>
           </div>

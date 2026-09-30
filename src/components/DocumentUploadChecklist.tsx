@@ -12,7 +12,6 @@ const REQUIRED_DOCUMENTS = [
   { name: 'Passport (if applicable)', note: 'For foreign or diplomat members or dual national', required: false },
   { name: 'Signature', note: 'Specimen signature on white paper', required: true },
   { name: 'Birth Certificate (if applicable)', note: 'For dependent children or verification', required: false },
-  { name: 'Marriage Certificate (if applicable)', note: 'For spouse membership card registration', required: false },
   { name: 'Company ID (if applicable)', note: 'Corporate / Official ID card copy', required: false },
   { name: 'Trade License (Corporate Members)', note: 'Mandatory for Corporate & Business members', required: false },
   { name: 'Supporting Documents', note: 'TIN Certificate, Utility Bill, or Recommendation Letter', required: false },

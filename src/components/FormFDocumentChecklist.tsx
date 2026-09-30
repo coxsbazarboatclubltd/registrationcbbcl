@@ -15,7 +15,6 @@ const CHECKLIST_ITEMS = [
   { field: 'docPassportCopy', name: 'Passport Copy', note: 'For foreign / diplomat / dual national members' },
   { field: 'docSpecimenSignature', name: 'Specimen Signature', note: 'Signature on white paper (Mandatory)' },
   { field: 'docBirthCertificate', name: 'Birth Certificate', note: 'Children / dependent birth certificate copies' },
-  { field: 'docMarriageCertificate', name: 'Marriage Certificate', note: 'For spouse card registration' },
   { field: 'docTradeLicense', name: 'Trade License / Employment ID', note: 'Mandatory for Corporate & Business members' },
   { field: 'docCompanyId', name: 'Company ID / Official Card', note: 'Official ID card or employment proof' },
   { field: 'docTinCertificate', name: 'TIN Certificate', note: 'Tax identification certificate copy' },
@@ -35,6 +34,10 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   docDate,
 }) => {
   const uploadedDocs = data.uploadedDocs || {};
+  const isEnclosed = (item: (typeof CHECKLIST_ITEMS)[number]) =>
+    !!data[item.field as keyof MemberFormData] || !!uploadedDocs[item.name];
+  const enclosedCount = CHECKLIST_ITEMS.filter(isEnclosed).length;
+  const enclosedCountLabel = `${enclosedCount} Document${enclosedCount === 1 ? '' : 's'}`;
 
   return (
     <div className="space-y-4">
@@ -73,7 +76,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               </thead>
               <tbody className="divide-y divide-[#c8c8c8]">
                 {CHECKLIST_ITEMS.map((item, idx) => {
-                  const isChecked = !!data[item.field as keyof MemberFormData] || !!uploadedDocs[item.name];
+                  const isChecked = isEnclosed(item);
                   return (
                     <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#faf8f5]'}>
                       <td className="p-2 border-r border-[#c8c8c8] text-center">
@@ -112,10 +115,10 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               <label className="block font-bold text-[#1a2744] mb-1">Total Number of Attachments Enclosed:</label>
               <input
                 type="text"
-                placeholder="e.g. 4 Documents"
-                value={data.totalAttachments || ''}
-                onChange={(e) => onChange('totalAttachments', e.target.value)}
-                className="w-full border border-[#c8c8c8] rounded px-2.5 py-1.5 text-[10px] bg-white text-[#1a2744]"
+                readOnly
+                title="Counted automatically from the documents ticked above"
+                value={enclosedCountLabel}
+                className="w-full border border-[#c8c8c8] rounded px-2.5 py-1.5 text-[10px] bg-gray-100 cursor-not-allowed font-semibold text-[#1a2744]"
               />
             </div>
           </div>
@@ -134,7 +137,11 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
             <div className="grid grid-cols-2 gap-4 mt-3 pt-2.5 border-t border-[#9d7f46]/30 text-[10px]">
               <div>
                 <span className="font-bold text-[#1a2744] block">Applicant Full Name:</span>
-                <span className="font-semibold text-[#0f5132]">{data.candidateName || '________________________'}</span>
+                {data.candidateName ? (
+                  <span className="font-semibold text-[#0f5132]">{data.candidateName}</span>
+                ) : (
+                  <span className="italic text-gray-400">Filled automatically from Candidate Full Name on Page 1</span>
+                )}
               </div>
               <div>
                 <span className="font-bold text-[#1a2744] block">Date of Declaration:</span>
@@ -235,7 +242,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               </thead>
               <tbody className="divide-y divide-[#c8c8c8]">
                 {CHECKLIST_ITEMS.map((item, idx) => {
-                  const isChecked = !!data[item.field as keyof MemberFormData] || !!uploadedDocs[item.name];
+                  const isChecked = isEnclosed(item);
                   return (
                     <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#faf8f5]'}>
                       <td className="px-2 py-1.5 border-r border-[#c8c8c8] text-center">
@@ -274,10 +281,10 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               <label className="block font-bold text-[#1a2744] mb-0.5">Total Number of Attachments Enclosed:</label>
               <input
                 type="text"
-                placeholder="e.g. 4 Documents"
-                value={data.totalAttachments || ''}
-                onChange={(e) => onChange('totalAttachments', e.target.value)}
-                className="w-full border border-[#c8c8c8] rounded px-2 py-1 text-[9px] bg-white text-[#1a2744]"
+                readOnly
+                title="Counted automatically from the documents ticked above"
+                value={enclosedCountLabel}
+                className="w-full border border-[#c8c8c8] rounded px-2 py-1 text-[9px] bg-gray-100 cursor-not-allowed font-semibold text-[#1a2744]"
               />
             </div>
           </div>
