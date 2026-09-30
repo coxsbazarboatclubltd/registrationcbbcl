@@ -88,7 +88,7 @@ export const SiteFooter: React.FC = () => {
         {/* COLUMN 2: CENTERED SEAL LOGO */}
         <div className="flex items-center justify-center">
           <a href={`${SITE_URL}/`} title="Cox's Bazar Boat Club Ltd. — Home">
-            <CbbcLogo clipPathId="clippath-footer" className="w-[170px] h-[170px]" />
+            <CbbcLogo clipPathId="clippath-footer" className="w-[200px] h-[200px]" />
           </a>
         </div>
 
