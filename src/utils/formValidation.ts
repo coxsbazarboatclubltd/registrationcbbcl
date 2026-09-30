@@ -1,4 +1,5 @@
 import { MemberFormData } from '../types';
+import { CHECKLIST_ITEMS, isDocumentEnclosed } from './documentChecklist';
 
 export interface ValidationError {
   field: keyof MemberFormData | 'general' | 'checklist' | 'declaration' | 'uploads';
@@ -117,6 +118,16 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
   const memNo1 = (data.ref1MemNo || '').trim().toUpperCase();
   if (memNo1 && memNo1 === (data.ref2MemNo || '').trim().toUpperCase()) {
     errors.push({ field: 'ref2MemNo', message: 'Reference 1 and Reference 2 must be two different Club members.' });
+  }
+
+  // 6c. Document checklist — every mandatory document must be confirmed as enclosed
+  for (const item of CHECKLIST_ITEMS) {
+    if (item.required && !isDocumentEnclosed(data, item)) {
+      errors.push({
+        field: 'checklist',
+        message: `Document Checklist: "${item.name}" is mandatory — please tick it as enclosed on Page 6.`,
+      });
+    }
   }
 
   // 7. Required Photo Upload

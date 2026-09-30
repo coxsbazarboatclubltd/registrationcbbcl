@@ -1,6 +1,7 @@
 import React from 'react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
+import { CHECKLIST_ITEMS, isDocumentEnclosed } from '../utils/documentChecklist';
 
 interface FormFProps {
   data: MemberFormData;
@@ -8,18 +9,6 @@ interface FormFProps {
   docNo: string;
   docDate: string;
 }
-
-const CHECKLIST_ITEMS = [
-  { field: 'docPassportPhoto', name: 'Passport Size Photograph', note: '2 inch × 2 inch, recent clear photo (Mandatory)' },
-  { field: 'docNidCopy', name: 'National ID (NID)', note: 'Smart NID or 10/13/17 digit clear copy (Mandatory)' },
-  { field: 'docPassportCopy', name: 'Passport Copy', note: 'For foreign / diplomat / dual national members' },
-  { field: 'docSpecimenSignature', name: 'Specimen Signature', note: 'Signature on white paper (Mandatory)' },
-  { field: 'docBirthCertificate', name: 'Birth Certificate', note: 'Children / dependent birth certificate copies' },
-  { field: 'docTradeLicense', name: 'Trade License / Employment ID', note: 'Mandatory for Corporate & Business members' },
-  { field: 'docCompanyId', name: 'Company ID / Official Card', note: 'Official ID card or employment proof' },
-  { field: 'docTinCertificate', name: 'TIN Certificate', note: 'Tax identification certificate copy' },
-  { field: 'docOtherAttachments', name: 'Supporting Documents & Other Attachments', note: 'Utility Bill, Organization Letter, Recommendation' },
-] as const;
 
 // Secretariat verification list: every checklist document, plus reference signatures
 const OFFICE_VERIFICATION_ITEMS = [
@@ -34,8 +23,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   docDate,
 }) => {
   const uploadedDocs = data.uploadedDocs || {};
-  const isEnclosed = (item: (typeof CHECKLIST_ITEMS)[number]) =>
-    !!data[item.field as keyof MemberFormData] || !!uploadedDocs[item.name];
+  const isEnclosed = (item: (typeof CHECKLIST_ITEMS)[number]) => isDocumentEnclosed(data, item);
   const enclosedCount = CHECKLIST_ITEMS.filter(isEnclosed).length;
   const enclosedCountLabel = `${enclosedCount} Document${enclosedCount === 1 ? '' : 's'}`;
 
@@ -62,7 +50,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
             <h2>Declaration of Enclosed Documents</h2>
           </div>
           <p className="text-[10px] text-gray-600 italic">
-            Please indicate with a check mark (✓) the documents enclosed with this membership application package:
+            Please indicate with a check mark (✓) the documents enclosed with this membership application package. Items marked <span className="text-red-600 font-bold not-italic">*</span> are mandatory.
           </p>
 
           <div className="border border-[#9d7f46]/40 rounded overflow-hidden">
@@ -89,6 +77,11 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                       </td>
                       <td className="p-2 border-r border-[#c8c8c8]">
                         <span className="font-bold text-[#1a2744]">{item.name}</span>
+                        {item.required ? (
+                          <span className="text-red-600 font-bold"> *</span>
+                        ) : (
+                          <span className="ml-1 text-[8px] italic text-gray-500">(Optional)</span>
+                        )}
                       </td>
                       <td className="p-2 text-gray-600">
                         {item.note}
@@ -228,7 +221,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
             <h2>Declaration of Enclosed Documents</h2>
           </div>
           <p className="text-[9px] text-gray-600 mb-2 italic">
-            Please indicate with a check mark (✓) the documents enclosed with this membership application package:
+            Please indicate with a check mark (✓) the documents enclosed with this membership application package. Items marked <span className="text-red-600 font-bold not-italic">*</span> are mandatory.
           </p>
 
           <div className="border border-[#9d7f46]/40 rounded overflow-hidden">
@@ -255,6 +248,11 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                       </td>
                       <td className="px-2 py-1.5 border-r border-[#c8c8c8]">
                         <span className="font-bold text-[#1a2744]">{item.name}</span>
+                        {item.required ? (
+                          <span className="text-red-600 font-bold"> *</span>
+                        ) : (
+                          <span className="ml-1 text-[8px] italic text-gray-500">(Optional)</span>
+                        )}
                       </td>
                       <td className="px-2 py-1.5 text-gray-600">
                         {item.note}
