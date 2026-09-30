@@ -180,9 +180,9 @@ body {
    fluid width, so --page-offset (computed for the fixed 210mm A4 page) does
    not apply here — only the scale does. */
 .zoom-scale {
-  transform: scale(var(--page-scale, 1));
+  transform: scale(var(--fluid-scale, var(--page-scale, 1)));
   transform-origin: top center;
-  margin-bottom: calc((var(--page-scale, 1) - 1) * var(--page-natural-height, 0px));
+  margin-bottom: calc((var(--fluid-scale, var(--page-scale, 1)) - 1) * var(--page-natural-height, 0px));
 }
 
 /* ── WATERMARK ── */

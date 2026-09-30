@@ -107,14 +107,24 @@ export default function App() {
   useEffect(() => {
     const A4_WIDTH_PX = 210 * (96 / 25.4);
     const VIEWPORT_GUTTER_PX = 16;
+    // The A4 canvas uses print-size type (8–10px); on wide screens enlarge it
+    // up to this factor so the text is comfortably readable.
+    const MAX_AUTO_SCALE = 1.5;
+    // Natural max width of the fluid (non-A4) Document Checklist editor (max-w-4xl)
+    const FLUID_CONTENT_WIDTH_PX = 896;
 
     const updateScale = () => {
-      const rawScale = Math.min(1, (window.innerWidth - VIEWPORT_GUTTER_PX) / A4_WIDTH_PX);
+      const available = window.innerWidth - VIEWPORT_GUTTER_PX;
+      const rawScale = Math.min(MAX_AUTO_SCALE, available / A4_WIDTH_PX);
       const fitScale = Math.max(rawScale, 0.28);
       const scale = fitScale * zoomLevel;
       const offsetPx = Math.max(0, (window.innerWidth - A4_WIDTH_PX * scale) / 2);
+      // Fluid content is wider than A4, so cap its enlargement separately to
+      // keep it inside the viewport (identical to --page-scale when shrinking).
+      const fluidScale = Math.min(scale, Math.max(1, available / FLUID_CONTENT_WIDTH_PX) * zoomLevel);
       document.documentElement.style.setProperty('--page-scale', scale.toFixed(4));
       document.documentElement.style.setProperty('--page-offset', `${offsetPx.toFixed(2)}px`);
+      document.documentElement.style.setProperty('--fluid-scale', fluidScale.toFixed(4));
     };
 
     updateScale();

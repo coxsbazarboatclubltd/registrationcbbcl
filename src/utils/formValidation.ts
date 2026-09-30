@@ -92,6 +92,33 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
     });
   }
 
+  // 6b. References — both mandatory, and both must be existing Club members
+  const references = [
+    { n: 1, name: data.ref1Name, memNo: data.ref1MemNo, relationship: data.ref1Relationship, phone: data.ref1Phone },
+    { n: 2, name: data.ref2Name, memNo: data.ref2MemNo, relationship: data.ref2Relationship, phone: data.ref2Phone },
+  ] as const;
+  for (const ref of references) {
+    if (!ref.name || ref.name.trim().length < 2) {
+      errors.push({ field: `ref${ref.n}Name`, message: `Reference ${ref.n}: Full Name is required.` });
+    }
+    if (!ref.memNo || ref.memNo.trim() === '') {
+      errors.push({
+        field: `ref${ref.n}MemNo`,
+        message: `Reference ${ref.n}: Club Member No. is required — references must be existing Club members.`,
+      });
+    }
+    if (!ref.relationship || ref.relationship.trim() === '') {
+      errors.push({ field: `ref${ref.n}Relationship`, message: `Reference ${ref.n}: Relationship is required.` });
+    }
+    if ((ref.phone || '').replace(/[\s\-\+\(\)]/g, '').length < 8) {
+      errors.push({ field: `ref${ref.n}Phone`, message: `Reference ${ref.n}: a valid Phone Number is required.` });
+    }
+  }
+  const memNo1 = (data.ref1MemNo || '').trim().toUpperCase();
+  if (memNo1 && memNo1 === (data.ref2MemNo || '').trim().toUpperCase()) {
+    errors.push({ field: 'ref2MemNo', message: 'Reference 1 and Reference 2 must be two different Club members.' });
+  }
+
   // 7. Required Photo Upload
   if (!data.candidatePhotoUrl && !data.docPassportPhoto) {
     errors.push({

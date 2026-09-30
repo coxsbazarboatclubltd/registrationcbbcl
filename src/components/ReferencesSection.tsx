@@ -15,15 +15,16 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
       <div className="section-title flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="section-num">06</div>
-          <h2>Reference Information</h2>
+          <h2>Reference Information <span className="text-red-600">*</span></h2>
         </div>
         <span className="text-[8px] text-[#9d7f46] font-semibold italic bg-[#f8f5ee] px-2 py-0.5 rounded border border-[#9d7f46]/30">
-          * References should not be immediate family members
+          * Both references must be existing Club members
         </span>
       </div>
 
       <p className="text-[8px] text-[#6b6b6b] mb-3 leading-relaxed">
-        Please provide details of two reputable references who can vouch for your character and standing. Note: References must not be immediate family members.
+        Both references are mandatory. Each reference must be an existing member of Cox's Bazar Boat Club Ltd. with a valid
+        Club Member No. — references from non-members will not be accepted. References must not be immediate family members.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -37,7 +38,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Full Name</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Full Name <span className="text-red-600">*</span></label>
                 <input
                   type="text"
                   placeholder="Full name of Reference 1"
@@ -47,10 +48,10 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Club Member No. (if member)</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Club Member No. <span className="text-red-600">*</span></label>
                 <input
                   type="text"
-                  placeholder="e.g. P-0112 (optional)"
+                  placeholder="e.g. P-0112"
                   value={data.ref1MemNo}
                   onChange={(e) => onChange('ref1MemNo', e.target.value)}
                   className="w-full text-[10px] leading-[3.2] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
@@ -60,7 +61,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Relationship</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Relationship <span className="text-red-600">*</span></label>
                 <input
                   type="text"
                   placeholder="e.g. Business Associate"
@@ -93,7 +94,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Phone Number</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Phone Number <span className="text-red-600">*</span></label>
                 <input
                   type="tel"
                   placeholder="+880"
@@ -145,7 +146,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Full Name</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Full Name <span className="text-red-600">*</span></label>
                 <input
                   type="text"
                   placeholder="Full name of Reference 2"
@@ -155,10 +156,10 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Club Member No. (if member)</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Club Member No. <span className="text-red-600">*</span></label>
                 <input
                   type="text"
-                  placeholder="e.g. P-0488 (optional)"
+                  placeholder="e.g. P-0488"
                   value={data.ref2MemNo}
                   onChange={(e) => onChange('ref2MemNo', e.target.value)}
                   className="w-full text-[10px] leading-[3.2] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
@@ -168,7 +169,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Relationship</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Relationship <span className="text-red-600">*</span></label>
                 <input
                   type="text"
                   placeholder="e.g. Professional Senior"
@@ -201,7 +202,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Phone Number</label>
+                <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Phone Number <span className="text-red-600">*</span></label>
                 <input
                   type="tel"
                   placeholder="+880"

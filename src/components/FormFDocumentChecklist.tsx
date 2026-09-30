@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 
@@ -22,69 +22,13 @@ const CHECKLIST_ITEMS = [
   { field: 'docOtherAttachments', name: 'Supporting Documents & Other Attachments', note: 'Utility Bill, Organization Letter, Recommendation' },
 ] as const;
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
-const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
-
 export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   data,
   onChange,
   docNo,
   docDate,
 }) => {
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
-
   const uploadedDocs = data.uploadedDocs || {};
-
-  const handleFileSelect = (docKey: string, fieldName: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrorMsg(null);
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > MAX_FILE_SIZE) {
-      setErrorMsg(`"${file.name}" exceeds the maximum 10 MB limit.`);
-      return;
-    }
-
-    if (!ALLOWED_TYPES.includes(file.type.toLowerCase()) && !file.name.match(/\.(pdf|jpg|jpeg|png)$/i)) {
-      setErrorMsg(`Invalid file format. Please upload PDF, JPG, or PNG.`);
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
-      const formattedSize = file.size >= 1024 * 1024
-        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
-        : `${Math.round(file.size / 1024)} KB`;
-
-      const updated = {
-        ...uploadedDocs,
-        [docKey]: {
-          fileName: file.name,
-          fileSize: formattedSize,
-          fileType: file.type,
-          fileDataUrl: dataUrl,
-          uploadedAt: new Date().toISOString().split('T')[0],
-        },
-      };
-      onChange('uploadedDocs', updated);
-      // Auto-check corresponding checkbox field
-      if (fieldName) {
-        onChange(fieldName as keyof MemberFormData, true);
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleRemove = (docKey: string) => {
-    const updated = { ...uploadedDocs };
-    delete updated[docKey];
-    onChange('uploadedDocs', updated);
-    if (fileInputRefs.current[docKey]) {
-      fileInputRefs.current[docKey]!.value = '';
-    }
-  };
 
   return (
     <div className="space-y-4">
@@ -94,80 +38,11 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
         <div className="bg-white border border-[#9d7f46]/40 rounded-lg p-3.5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-sm font-bold text-[#1a2744] font-['Cinzel'] tracking-wider uppercase flex items-center gap-2">
-              <span>📋</span> FORM F · Document Checklist &amp; Attachments
+              <span>📋</span> FORM F · Document Checklist
             </h2>
             <p className="text-[10px] text-gray-600 mt-0.5">
-              Confirm enclosed physical documents and attach digital copies (PDF, JPG, PNG up to 10MB each) for online submission.
+              Confirm the physical documents enclosed with your membership application package.
             </p>
-          </div>
-          <div className="text-[10px] font-bold text-[#0f5132] bg-green-50 border border-green-200 px-3 py-1 rounded-md shrink-0">
-            {Object.keys(uploadedDocs).length} File(s) Attached
-          </div>
-        </div>
-
-        {/* DIGITAL ATTACHMENTS & FILE UPLOADS */}
-        <div className="bg-white border border-[#9d7f46]/40 rounded-lg p-3.5 shadow-xs">
-          <div className="flex items-center justify-between mb-2 pb-2 border-b border-[#9d7f46]/20">
-            <h3 className="text-xs font-bold text-[#1a2744] uppercase tracking-wider font-['Cinzel'] flex items-center gap-1.5">
-              <span>📎</span> Optional Digital Document Attachments
-            </h3>
-            <span className="text-[9px] text-gray-500">Supported: PDF, JPG, PNG (Max 10MB)</span>
-          </div>
-
-          {errorMsg && (
-            <div className="mb-2.5 p-2 bg-red-50 border border-red-200 text-red-700 text-[10px] rounded flex items-center justify-between">
-              <span>⚠️ {errorMsg}</span>
-              <button onClick={() => setErrorMsg(null)} className="text-red-800 font-bold ml-2 text-xs">×</button>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-            {CHECKLIST_ITEMS.map((item, idx) => {
-              const uploaded = uploadedDocs[item.name];
-              return (
-                <div key={idx} className="p-2 border border-gray-200 rounded bg-[#faf8f5] flex items-center justify-between text-[9px]">
-                  <div className="truncate pr-2">
-                    <span className="font-bold text-[#1a2744] block truncate">{item.name}</span>
-                    {uploaded ? (
-                      <span className="text-green-700 font-mono text-[8px] truncate block">
-                        ✓ {uploaded.fileName} ({uploaded.fileSize})
-                      </span>
-                    ) : (
-                      <span className="text-gray-400 text-[8px]">Not attached</span>
-                    )}
-                  </div>
-                  <div>
-                    {uploaded ? (
-                      <button
-                        type="button"
-                        onClick={() => handleRemove(item.name)}
-                        className="text-red-600 hover:text-red-800 text-[9px] font-bold px-1.5 py-0.5 bg-red-50 border border-red-200 rounded cursor-pointer"
-                        title="Remove file"
-                      >
-                        Remove
-                      </button>
-                    ) : (
-                      <>
-                        <input
-                          type="file"
-                          ref={(el) => (fileInputRefs.current[item.name] = el)}
-                          onChange={(e) => handleFileSelect(item.name, item.field, e)}
-                          accept=".pdf,.jpg,.jpeg,.png"
-                          className="hidden"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => fileInputRefs.current[item.name]?.click()}
-                          className="text-[8px] font-bold text-[#1a2744] bg-white border border-[#9d7f46]/50 hover:bg-[#1a2744] hover:text-white px-2 py-0.5 rounded transition-colors cursor-pointer"
-                        >
-                          Upload
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
 
