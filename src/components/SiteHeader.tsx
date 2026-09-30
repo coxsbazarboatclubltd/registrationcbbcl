@@ -11,6 +11,7 @@ interface NavDropdownItem {
 
 interface SiteHeaderProps {
   onClearForm: () => void;
+  draftSavedAt?: number | null;
 }
 
 const membershipItems: NavDropdownItem[] = [
@@ -59,7 +60,7 @@ const NavDropdown: React.FC<{ label: string; items: NavDropdownItem[] }> = ({ la
   );
 };
 
-export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm }) => {
+export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm, draftSavedAt }) => {
   return (
     <header className="no-print">
       {/* TOP INFO BAR — mirrors the CBBCL.WEB header topbar */}
@@ -164,10 +165,15 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm }) => {
           </span>
         </div>
         <div className="flex items-center gap-3">
+          {draftSavedAt && (
+            <span className="text-[9px] uppercase tracking-wider text-emerald-300" title="Your application is saved on this device and will survive refreshes or a lost connection">
+              ✓ Draft saved {new Date(draftSavedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          )}
           <button
             onClick={onClearForm}
             className="text-[9px] uppercase tracking-wider text-gray-400 hover:text-white underline transition-colors cursor-pointer"
-            title="Reset form fields"
+            title="Discard this draft and start over"
           >
             Clear Form
           </button>

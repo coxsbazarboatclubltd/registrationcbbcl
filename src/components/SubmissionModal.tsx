@@ -17,7 +17,7 @@ interface SubmissionModalProps {
   onTurnstileVerify: (token: string) => void;
   onRetry: () => void;
   onClose: () => void;
-  onReset: () => void;
+  onReset: () => void | Promise<void>;
 }
 
 export const SubmissionModal: React.FC<SubmissionModalProps> = ({
@@ -194,8 +194,8 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
                   </button>
                 )}
                 <button
-                  onClick={() => {
-                    onReset();
+                  onClick={async () => {
+                    await onReset();
                     window.location.href = 'https://www.cbbcl.org/';
                   }}
                   className="flex-1 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[#1a2744] bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded transition-all"

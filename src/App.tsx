@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { FormAPersonalInfo } from './components/FormAPersonalInfo';
 import { FormBProfessionalFamily } from './components/FormBProfessionalFamily';
 import { Form2ProximityCard } from './components/Form2ProximityCard';
@@ -17,9 +17,12 @@ import { ReferenceService } from './services/referenceService';
 import { SubmissionService } from './services/submissionService';
 import { EmailGate } from './components/EmailGate';
 import { installUppercaseInputs } from './utils/forceUppercase';
+import { loadDraft, saveDraft, clearDraft, requestPersistentStorage } from './utils/draftStore';
 
-const LOCAL_STORAGE_KEY = 'cbbc_membership_form_data_v1';
 const OTP_SESSION_KEY = 'cbbc_otp_session_v1';
+const DRAFT_SAVE_DELAY_MS = 300;
+
+type TabNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 interface OtpSession {
   email: string;
@@ -27,43 +30,64 @@ interface OtpSession {
 }
 
 export default function App() {
+  // Kept in localStorage (not sessionStorage) so a browser crash or power cut
+  // doesn't force the applicant to re-verify; the token itself expires server-side.
   const [otpSession, setOtpSession] = useState<OtpSession | null>(() => {
     try {
-      const saved = sessionStorage.getItem(OTP_SESSION_KEY);
+      const saved = localStorage.getItem(OTP_SESSION_KEY) || sessionStorage.getItem(OTP_SESSION_KEY);
       return saved ? JSON.parse(saved) : null;
     } catch (e) {
       return null;
     }
   });
 
-  const [activeTab, setActiveTab] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1);
+  const [activeTab, setActiveTab] = useState<TabNumber>(1);
+  const [formData, setFormData] = useState<MemberFormData>(EMPTY_MEMBER_DATA);
+  const [draftReady, setDraftReady] = useState(false);
+  const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
+  // Set once the application is submitted so the draft isn't re-saved afterwards
+  const draftClosedRef = useRef(false);
 
-  // Initialize state from local storage or an empty form
-  const [formData, setFormData] = useState<MemberFormData>(() => {
-    try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        // Earlier builds pre-filled a sample profile and persisted it; discard
-        // those drafts so returning visitors start from a clean form.
-        if (parsed?.candidateName !== 'SAYEED REZA CHOWDHURY') {
-          return { ...EMPTY_MEMBER_DATA, ...parsed };
-        }
-      }
-    } catch (e) {
-      console.warn('Could not parse saved local storage form data:', e);
-    }
-    return EMPTY_MEMBER_DATA;
-  });
-
-  // Save to local storage on changes
+  // Restore the saved draft (form fields, photos, uploads and current page)
   useEffect(() => {
-    try {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formData));
-    } catch (e) {
-      console.warn('Could not save form data to local storage:', e);
-    }
-  }, [formData]);
+    requestPersistentStorage();
+    loadDraft().then((draft) => {
+      // Earlier builds pre-filled a sample profile and persisted it; discard
+      // those drafts so returning visitors start from a clean form.
+      if (draft && draft.formData?.candidateName !== 'SAYEED REZA CHOWDHURY') {
+        setFormData((prev) => ({ ...EMPTY_MEMBER_DATA, ...draft.formData, email: prev.email || draft.formData.email || '' }));
+        if (draft.activeTab >= 1 && draft.activeTab <= 7) setActiveTab(draft.activeTab as TabNumber);
+        if (draft.savedAt) setDraftSavedAt(draft.savedAt);
+      }
+      setDraftReady(true);
+    });
+  }, []);
+
+  // Auto-save the draft shortly after every change
+  useEffect(() => {
+    if (!draftReady || draftClosedRef.current) return;
+    const timer = setTimeout(() => {
+      const savedAt = Date.now();
+      saveDraft({ formData, activeTab, savedAt })
+        .then(() => setDraftSavedAt(savedAt))
+        .catch((e) => console.warn('Could not save draft:', e));
+    }, DRAFT_SAVE_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [formData, activeTab, draftReady]);
+
+  const discardDraft = async () => {
+    setFormData({ ...EMPTY_MEMBER_DATA, email: otpSession?.email || EMPTY_MEMBER_DATA.email });
+    setActiveTab(1);
+    setDraftSavedAt(null);
+    await clearDraft();
+  };
+
+  const handleClearForm = () => {
+    const confirmed = window.confirm(
+      'Discard this application draft?\n\nAll information, photos and documents you have entered will be permanently erased. This cannot be undone.'
+    );
+    if (confirmed) discardDraft();
+  };
 
   // All free-text fields are captured in CAPITAL LETTERS (emails excluded)
   useEffect(() => installUppercaseInputs(), []);
@@ -151,7 +175,7 @@ export default function App() {
   const handleVerified = (verifiedEmail: string, token: string) => {
     const session: OtpSession = { email: verifiedEmail, token };
     setOtpSession(session);
-    sessionStorage.setItem(OTP_SESSION_KEY, JSON.stringify(session));
+    localStorage.setItem(OTP_SESSION_KEY, JSON.stringify(session));
     setFormData((prev) => ({ ...prev, email: verifiedEmail }));
   };
 
@@ -261,9 +285,13 @@ export default function App() {
       if (submitRes.success) {
         setModalStatus('success');
         setIsSubmitting(false);
+        // Application is submitted — stop auto-saving and remove the draft
+        draftClosedRef.current = true;
+        clearDraft();
       } else {
         if (submitRes.errorDetails?.includes('Email verification session')) {
           setOtpSession(null);
+          localStorage.removeItem(OTP_SESSION_KEY);
           sessionStorage.removeItem(OTP_SESSION_KEY);
         }
         setErrorDetails(submitRes.errorDetails || submitRes.message);
@@ -279,6 +307,14 @@ export default function App() {
 
   if (!otpSession) {
     return <EmailGate onVerified={handleVerified} />;
+  }
+
+  if (!draftReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#e8e8e8] text-[#1a2744] text-sm font-semibold uppercase tracking-wider">
+        Restoring your saved application…
+      </div>
+    );
   }
 
   return (
@@ -316,7 +352,8 @@ export default function App() {
 
       {/* SECTION A: SITE HEADER (Hidden on print) */}
       <SiteHeader
-        onClearForm={() => setFormData({ ...EMPTY_MEMBER_DATA, email: otpSession?.email || EMPTY_MEMBER_DATA.email })}
+        onClearForm={handleClearForm}
+        draftSavedAt={draftSavedAt}
       />
 
       {/* SEVEN TAB NAVIGATION (Hidden on print) */}
@@ -499,7 +536,7 @@ export default function App() {
         onTurnstileVerify={(token) => setTurnstileToken(token)}
         onRetry={handleSubmit}
         onClose={() => setIsModalOpen(false)}
-        onReset={() => setFormData({ ...EMPTY_MEMBER_DATA, email: otpSession?.email || EMPTY_MEMBER_DATA.email })}
+        onReset={discardDraft}
       />
     </div>
   );

@@ -21,7 +21,11 @@ function handleInput(e: Event) {
   if (upper === el.value) return;
 
   const { selectionStart, selectionEnd } = el;
-  el.value = upper;
+  // Write through the native prototype setter: assigning `el.value` directly
+  // would also update React's internal value tracker, making React think
+  // nothing changed and silently skip this keystroke's onChange.
+  const proto = el instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+  Object.getOwnPropertyDescriptor(proto, 'value')?.set?.call(el, upper);
   if (selectionStart !== null && selectionEnd !== null) {
     el.setSelectionRange(selectionStart, selectionEnd);
   }
