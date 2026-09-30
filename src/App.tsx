@@ -9,7 +9,7 @@ import { FormGOfficialUseOnlyPage } from './components/FormGOfficialUseOnlyPage'
 import { PageNavigationFooter } from './components/PageNavigationFooter';
 import { SiteHeader } from './components/SiteHeader';
 import { SiteFooter } from './components/SiteFooter';
-import { MemberFormData, SAMPLE_MEMBER_DATA, EMPTY_MEMBER_DATA } from './types';
+import { MemberFormData, EMPTY_MEMBER_DATA } from './types';
 import { SubmissionModal } from './components/SubmissionModal';
 import { validateMemberForm, ValidationError } from './utils/formValidation';
 import { generateFullApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
@@ -37,18 +37,22 @@ export default function App() {
 
   const [activeTab, setActiveTab] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1);
 
-  // Initialize state from local storage or sample data
+  // Initialize state from local storage or an empty form
   const [formData, setFormData] = useState<MemberFormData>(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        return { ...SAMPLE_MEMBER_DATA, ...parsed };
+        // Earlier builds pre-filled a sample profile and persisted it; discard
+        // those drafts so returning visitors start from a clean form.
+        if (parsed?.candidateName !== 'SAYEED REZA CHOWDHURY') {
+          return { ...EMPTY_MEMBER_DATA, ...parsed };
+        }
       }
     } catch (e) {
       console.warn('Could not parse saved local storage form data:', e);
     }
-    return SAMPLE_MEMBER_DATA;
+    return EMPTY_MEMBER_DATA;
   });
 
   // Save to local storage on changes
@@ -203,7 +207,7 @@ export default function App() {
 
     // Update registration number in formData. Pin email to the verified OTP
     // session as a final safeguard — the field is meant to be locked, but
-    // Sample Data/Clear Form/stale local storage could otherwise desync it
+    // Clear Form/stale local storage could otherwise desync it
     // from the address that was actually verified, breaking the submit-time
     // token check.
     const updatedFormData = { ...formData, email: otpSession?.email || formData.email, registrationNumber: refNo };
@@ -300,7 +304,6 @@ export default function App() {
 
       {/* SECTION A: SITE HEADER (Hidden on print) */}
       <SiteHeader
-        onSampleData={() => setFormData({ ...SAMPLE_MEMBER_DATA, email: otpSession?.email || SAMPLE_MEMBER_DATA.email })}
         onClearForm={() => setFormData({ ...EMPTY_MEMBER_DATA, email: otpSession?.email || EMPTY_MEMBER_DATA.email })}
       />
 

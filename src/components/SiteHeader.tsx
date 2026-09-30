@@ -10,7 +10,6 @@ interface NavDropdownItem {
 }
 
 interface SiteHeaderProps {
-  onSampleData: () => void;
   onClearForm: () => void;
 }
 
@@ -60,7 +59,7 @@ const NavDropdown: React.FC<{ label: string; items: NavDropdownItem[] }> = ({ la
   );
 };
 
-export const SiteHeader: React.FC<SiteHeaderProps> = ({ onSampleData, onClearForm }) => {
+export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm }) => {
   return (
     <header className="no-print">
       {/* TOP INFO BAR — mirrors the CBBCL.WEB header topbar */}
@@ -165,13 +164,6 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ onSampleData, onClearFor
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={onSampleData}
-            className="text-[9px] uppercase tracking-wider text-[#c4a56a] hover:text-white underline transition-colors cursor-pointer"
-            title="Pre-fill with sample member profile"
-          >
-            Sample Data
-          </button>
           <button
             onClick={onClearForm}
             className="text-[9px] uppercase tracking-wider text-gray-400 hover:text-white underline transition-colors cursor-pointer"

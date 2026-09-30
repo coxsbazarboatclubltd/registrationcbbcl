@@ -230,10 +230,7 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
 
         {/* OFFICIAL SEAL BOX */}
         <div className="mt-3 flex justify-center">
-          <div className="border-2 border-dashed border-[#9d7f46] rounded p-2 text-center w-[120px] h-[120px] flex flex-col justify-center items-center">
-            <div className="text-[8px] font-bold text-[#9d7f46] uppercase tracking-wider">OFFICIAL CLUB SEAL</div>
-            <div className="text-[7px] text-gray-400 font-serif">Cox's Bazar Boat Club Ltd.</div>
-          </div>
+          <div className="border-2 border-dashed border-[#9d7f46] rounded w-[120px] h-[120px]" />
         </div>
       </div>
 
