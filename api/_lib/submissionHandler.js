@@ -138,7 +138,7 @@ async function handleSubmission(body, clientIp) {
 
   try {
     const fromName = process.env.FROM_NAME || "Cox's Bazar Boat Club";
-    const fromEmail = process.env.FROM_EMAIL || 'no-reply@coxsbazarboatclubltd.com';
+    const fromEmail = process.env.FROM_EMAIL || 'no-reply@cbbcl.org';
 
     const { officeResult, applicantResult } = await sendApplicationEmails({
       resendApiKey,
