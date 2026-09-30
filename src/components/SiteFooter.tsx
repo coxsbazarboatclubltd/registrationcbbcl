@@ -111,8 +111,7 @@ export const SiteFooter: React.FC = () => {
             <div className="text-[10px] font-bold uppercase tracking-wider text-[#c4a56a] mb-1">
               Official Email
             </div>
-            <div className="text-[11px] text-gray-300">info@cbbcl.org</div>
-            <div className="text-[11px] text-gray-300">registration@cbbcl.org</div>
+            <div className="text-[11px] text-gray-300">membership@cbbcl.org</div>
           </div>
 
           <div className="mb-5">

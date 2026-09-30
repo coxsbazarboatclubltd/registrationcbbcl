@@ -481,8 +481,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
             <strong>COX'S BAZAR BOAT CLUB LTD.</strong>
             <br />
             Tel: +880 13328 86688<br />
-          Email: registration@cbbcl.org<br />
-          info@cbbcl.org
+          Email: membership@cbbcl.org
           </div>
           <div className="footer-right-group">
             <div className="footer-center">Confidential Document</div>
