@@ -62,26 +62,30 @@ export const DeclarationsAndConsent: React.FC<DeclarationsAndConsentProps> = ({
         </label>
       </div>
 
-      {/* SIGNATURE SECTION */}
+      {/* SIGNATURE SECTION — signatures are made by hand on the final printed copy after submission */}
       <div className="section pt-2">
         <div className="field-row mt-2">
           <div className="field w2">
-            <label className="text-[8px] font-bold uppercase text-[#1a2744]">Applicant's Signature</label>
-            <div className="border-b border-[#c8c8c8] h-8 flex items-end pb-1 text-[10px] font-serif italic text-gray-700">
-              {data.candidateName ? `Signed electronically by: ${data.candidateName}` : ''}
-            </div>
+            <label className="text-[8px] font-bold uppercase text-[#1a2744]">
+              Applicant's Signature{' '}
+              <span className="normal-case font-normal italic text-gray-500">(sign on final printed copy)</span>
+            </label>
+            <div className="border-b border-[#c8c8c8] h-8"></div>
           </div>
           <div className="field">
             <label className="text-[8px] font-bold uppercase text-[#1a2744]">Date</label>
-            <input
-              type="date"
-              value={docDate}
-              readOnly
-              className="w-full text-[10px] leading-[3.2] px-2 py-1 border border-[#c8c8c8] rounded bg-gray-50 text-[#2c2c2c]"
-            />
+            <div
+              title="Filled automatically with the application date"
+              className="w-full text-[10px] leading-[3.2] px-2 py-1 border border-[#c8c8c8] rounded bg-gray-100 text-[#2c2c2c] font-semibold"
+            >
+              {docDate}
+            </div>
           </div>
           <div className="field w2">
-            <label className="text-[8px] font-bold uppercase text-[#1a2744]">Proposer's Name &amp; Signature</label>
+            <label className="text-[8px] font-bold uppercase text-[#1a2744]">
+              Proposer's Name &amp; Signature{' '}
+              <span className="normal-case font-normal italic text-gray-500">(sign on final printed copy)</span>
+            </label>
             <div className="border-b border-[#c8c8c8] h-8"></div>
           </div>
         </div>
