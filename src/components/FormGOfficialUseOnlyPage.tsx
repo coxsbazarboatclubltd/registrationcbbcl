@@ -107,26 +107,22 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
           <div className="border border-[#c8c8c8] p-2 rounded bg-white">
             <div className="font-bold text-[#1a2744] border-b border-[#c8c8c8] pb-1 mb-1">Document Verification Status</div>
             <div className="space-y-1">
-              <div className="flex justify-between">
-                <span>NID / Passport Check:</span>
-                <span className="font-bold text-[#0f5132]">✓ Verified</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Specimen Photo &amp; Signature:</span>
-                <span className="font-bold text-[#0f5132]">✓ Authenticated</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Reference Person Verification:</span>
-                <span className="font-bold text-[#0f5132]">✓ Contacted &amp; Cleared</span>
-              </div>
+              {['NID / Passport Check:', 'Specimen Photo & Signature:', 'Reference Person Verification:'].map((label) => (
+                <div key={label} className="flex items-end gap-2">
+                  <span className="shrink-0">{label}</span>
+                  <span className="flex-1 border-b border-dotted border-gray-400 h-[12px]" />
+                </div>
+              ))}
             </div>
           </div>
 
           <div className="border border-[#c8c8c8] p-2 rounded bg-white">
             <div className="font-bold text-[#1a2744] border-b border-[#c8c8c8] pb-1 mb-1">Background Verification Remarks</div>
-            <p className="text-[8.5px] text-gray-600 italic">
-              Candidate background, financial status, and professional standing reviewed. No adverse security record identified. Recommended for Executive Board balloting.
-            </p>
+            <div className="space-y-1">
+              <div className="border-b border-dotted border-gray-400 h-[12px]" />
+              <div className="border-b border-dotted border-gray-400 h-[12px]" />
+              <div className="border-b border-dotted border-gray-400 h-[12px]" />
+            </div>
           </div>
         </div>
       </div>
@@ -176,7 +172,8 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
           <h2>Approval Signatures &amp; Official Seal</h2>
         </div>
 
-        <div className="grid grid-cols-3 gap-x-3 gap-y-8 mt-8 text-[8.5px]">
+        <div className="flex items-end gap-4 mt-6">
+        <div className="grid grid-cols-3 gap-x-3 gap-y-6 flex-1 text-[8.5px]">
           {/* Row 1 Signatures */}
           <div className="text-center">
             <div className="h-[34px]" />
@@ -228,9 +225,8 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
           </div>
         </div>
 
-        {/* OFFICIAL SEAL BOX */}
-        <div className="mt-3 flex justify-center">
-          <div className="border-2 border-dashed border-[#9d7f46] rounded w-[120px] h-[120px]" />
+        {/* OFFICIAL SEAL BOX — beside the signatures so the page stays within A4 */}
+        <div className="border-2 border-dashed border-[#9d7f46] rounded w-[120px] h-[120px] shrink-0" />
         </div>
       </div>
 
@@ -244,7 +240,7 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
         </div>
         <div className="footer-right-group">
           <div className="footer-center">Confidential Document</div>
-          <div className="footer-right">Page 7 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+          <div className="footer-right">Page 7 of 7 &nbsp;|&nbsp; Official Registration Form</div>
         </div>
       </div>
     </div>

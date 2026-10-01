@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 :root {
   --gold: #9d7f46;
@@ -42,7 +42,7 @@
 }
 
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background: #e8e8e8;
   color: var(--text);
   font-size: 11px;
@@ -67,7 +67,7 @@ body {
   border: none;
   border-bottom: 1px solid;
   border-image: var(--gold-gradient) 1;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 11px;
   letter-spacing: 1px;
@@ -129,7 +129,7 @@ body {
   color: #ffffff;
   border: none;
   border-radius: 4px;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
@@ -284,7 +284,7 @@ body {
 
 /* ── SECTIONS ── */
 .section {
-  margin-bottom: 10px;
+  margin-bottom: 7px;
 }
 
 .section-title {
@@ -294,7 +294,7 @@ body {
   border-bottom: 1.5px solid;
   border-image: var(--gold-gradient) 1;
   padding-bottom: 3px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .section-num {
@@ -302,7 +302,7 @@ body {
   color: #ffffff;
   font-size: 8px;
   font-weight: 700;
-  font-family: 'Cinzel', serif;
+  font-family: 'Montserrat', sans-serif;
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -313,7 +313,7 @@ body {
 }
 
 .section-title h2 {
-  font-family: 'Cinzel', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 10px;
   letter-spacing: 2px;
   color: var(--navy);
@@ -352,15 +352,36 @@ body {
   border-radius: 2px;
   /* Plain, symmetric, sensible values — the actual PDF-centering fix lives
      in pdfGenerator.ts (see the comment there), not in this CSS. */
-  padding: 12.075px 6px;
+  padding: 8px 6px;
   font-size: 9.5px;
   line-height: 1.5;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: var(--text);
   outline: none;
   width: 100%;
   box-sizing: border-box;
   transition: border-color 0.2s;
+}
+
+/* Fields mirrored from an earlier page: shown read-only so the same answer
+   can't diverge between pages. Kept dark enough to stay legible in print/PDF. */
+.page .locked-field,
+.page .field input.locked-field,
+.page .field select.locked-field {
+  background: #eef0f3 !important;
+  color: var(--text) !important;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* Static (non-input) value box styled like the inputs above */
+.field .date-display {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 8px 6px;
+  font-size: 9.5px;
+  line-height: 1.5;
+  font-weight: 600;
 }
 
 /* When a field packs multiple controls into one flex row (e.g. spouse blood
@@ -398,7 +419,7 @@ body {
   background: var(--field-bg);
   border: 1px solid var(--border);
   border-radius: 2px;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: var(--text);
   outline: none;
   width: 100%;
@@ -406,8 +427,8 @@ body {
   transition: border-color 0.2s;
   font-size: 9.5px;
   line-height: 1.5;
-  padding-top: 12.075px;
-  padding-bottom: 12.075px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   padding-left: 6px;
   appearance: none;
   -webkit-appearance: none;
@@ -584,7 +605,7 @@ body {
 
 .compact-child > div {
   padding: 3px !important;
-  margin-bottom: 3px !important;
+  margin-bottom: 2px !important;
   gap: 3px !important;
 }
 
@@ -642,7 +663,7 @@ body {
   background: var(--field-bg);
   border: 1px solid var(--border);
   border-radius: 2px;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   outline: none;
   box-sizing: border-box;
 }
@@ -746,7 +767,7 @@ body {
   padding: 18.35px 8px;
   border: 1.5px solid var(--gold);
   border-radius: 2px;
-  font-family: 'Cinzel', serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   color: var(--navy);
   background: #fffdf7;
@@ -807,7 +828,7 @@ body {
   padding: 18.075px 6px;
   font-size: 9.5px;
   line-height: 1.5;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   outline: none;
   width: 100%;
   box-sizing: border-box;
@@ -986,4 +1007,25 @@ body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+}
+
+/* Placeholder text inside the small compact dependent photo boxes */
+.dep-grid.compact .dep-card .dep-photo div {
+  font-size: 5px !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0 !important;
+}
+
+
+/* Free-text profession shown inline when "Other" is selected (Form D) */
+.prof-other-input {
+  width: 150px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 2px 6px;
+  font-size: 9px;
+  line-height: 1.4;
+  background: var(--field-bg);
+  color: var(--text);
+  outline: none;
 }

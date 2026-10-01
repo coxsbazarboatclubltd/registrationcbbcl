@@ -63,7 +63,7 @@ export const PageNavigationFooter: React.FC<PageNavigationFooterProps> = ({
         )}
 
         {/* Center Page Title */}
-        <div className="text-[11px] font-bold text-[#1a2744] uppercase tracking-wider font-['Cinzel'] hidden sm:block">
+        <div className="text-[11px] font-bold text-[#1a2744] uppercase tracking-wider font-['Montserrat'] hidden sm:block">
           {getPageTitle(currentPage)}
         </div>
 

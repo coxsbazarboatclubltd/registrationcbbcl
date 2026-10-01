@@ -34,7 +34,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
         {/* FORM TITLE BANNER */}
         <div className="bg-white border border-[#9d7f46]/40 rounded-lg p-3.5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-bold text-[#1a2744] font-['Cinzel'] tracking-wider uppercase flex items-center gap-2">
+            <h2 className="text-sm font-bold text-[#1a2744] font-['Montserrat'] tracking-wider uppercase flex items-center gap-2">
               <span>📋</span> FORM F · Document Checklist
             </h2>
             <p className="text-[10px] text-gray-600 mt-0.5">
@@ -351,7 +351,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
           </div>
           <div className="footer-right-group">
             <div className="footer-center">Confidential Document</div>
-            <div className="footer-right">Page 6 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+            <div className="footer-right">Page 6 of 7 &nbsp;|&nbsp; Official Registration Form</div>
           </div>
         </div>
       </div>

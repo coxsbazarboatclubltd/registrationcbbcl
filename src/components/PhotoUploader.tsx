@@ -8,6 +8,8 @@ interface PhotoUploaderProps {
   className?: string;
   aspectRatio?: string; // e.g., 'aspect-[3/4]' or custom styles
   maxDim?: number; // max width/height for compression
+  /** Display-only: mirrors a photo uploaded on an earlier page */
+  locked?: boolean;
 }
 
 export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
@@ -18,6 +20,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
   className = '',
   aspectRatio = 'aspect-[3/4]',
   maxDim = 800,
+  locked = false,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -86,6 +89,25 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
       fileInputRef.current.value = '';
     }
   };
+
+  if (locked) {
+    return (
+      <div
+        className={`relative border-2 border-dashed border-[#1a2744]/30 rounded-md bg-[#f8fafc] overflow-hidden flex flex-col items-center justify-center text-center cursor-not-allowed ${aspectRatio} ${className}`}
+        title="Uses the photo uploaded on Form A"
+      >
+        {photoUrl ? (
+          <img src={photoUrl} alt={label} className="w-full h-full object-cover rounded-sm" />
+        ) : (
+          <div className="p-2 flex flex-col items-center justify-center gap-1 text-[#1a2744]">
+            <div className="text-[9px] font-bold uppercase tracking-wider leading-tight">{label}</div>
+            {sublabel && <div className="text-[7.5px] text-[#6b6b6b] leading-tight whitespace-pre-line">{sublabel}</div>}
+            <span className="text-[7px] text-gray-500 italic mt-0.5 no-print">Upload on Form A</span>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div

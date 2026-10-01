@@ -81,7 +81,7 @@ export const FormEReferencesDeclaration: React.FC<FormEProps> = ({
         </div>
         <div className="footer-right-group">
           <div className="footer-center">Confidential Document</div>
-          <div className="footer-right">Page 5 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+          <div className="footer-right">Page 5 of 7 &nbsp;|&nbsp; Official Registration Form</div>
         </div>
       </div>
     </div>

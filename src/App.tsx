@@ -12,7 +12,8 @@ import { SiteFooter } from './components/SiteFooter';
 import { MemberFormData, EMPTY_MEMBER_DATA } from './types';
 import { SubmissionModal } from './components/SubmissionModal';
 import { validateMemberForm, ValidationError } from './utils/formValidation';
-import { generateFullApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
+import { generateApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
+import { buildPrintSnapshot } from './utils/pdfSnapshot';
 import { ReferenceService } from './services/referenceService';
 import { SubmissionService } from './services/submissionService';
 import { EmailGate } from './components/EmailGate';
@@ -210,13 +211,25 @@ export default function App() {
     }
   };
 
+  // Same completeness check as Submit; shows the validation list and returns
+  // false when anything required is missing.
+  const ensureFormComplete = (): boolean => {
+    const errors = validateMemberForm({ ...formData, email: otpSession?.email || formData.email });
+    if (errors.length === 0) return true;
+    setValidationErrors(errors);
+    setModalStatus('validation_error');
+    setIsModalOpen(true);
+    return false;
+  };
+
   const handleSaveAsPdf = async () => {
     if (isSavingPdf || isSubmitting) return;
+    if (!ensureFormComplete()) return;
     setIsSavingPdf(true);
 
     try {
       const tempRefNo = formData.registrationNumber || referenceNumber || 'CBBCL-2026-000001';
-      const result = await generateFullApplicationPdf(formData, tempRefNo, dateStr);
+      const result = await generateApplicationPdf(formData, tempRefNo, dateStr, otpSession?.token);
       downloadPdfBlob(result.blob, result.filename);
     } catch (err) {
       console.error('Save as PDF error:', err);
@@ -226,8 +239,27 @@ export default function App() {
     }
   };
 
+  // Prints the same A4 snapshot the PDF uses (one sheet per page, no
+  // on-screen scaling), via a hidden iframe so the app UI isn't printed.
   const handlePrint = () => {
-    window.print();
+    if (!ensureFormComplete()) return;
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+    iframe.onload = async () => {
+      const win = iframe.contentWindow;
+      if (!win) return;
+      try {
+        await win.document.fonts.ready;
+      } catch {
+        // print anyway
+      }
+      win.focus();
+      win.print();
+      setTimeout(() => iframe.remove(), 60_000);
+    };
+    iframe.srcdoc = buildPrintSnapshot();
+    document.body.appendChild(iframe);
   };
 
   const handleSubmit = async () => {
@@ -272,7 +304,10 @@ export default function App() {
     let generated: GeneratedPdfResult | null = null;
     try {
       setModalStatus('generating_pdf');
-      generated = await generateFullApplicationPdf(updatedFormData, refNo, dateStr);
+      // Let React render the final values (reference number, pinned email)
+      // into the pages before they're snapshotted for the PDF.
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      generated = await generateApplicationPdf(updatedFormData, refNo, dateStr, otpSession?.token);
       setPdfResult(generated);
     } catch (pdfErr: any) {
       console.warn('PDF generation error:', pdfErr);
@@ -531,6 +566,24 @@ export default function App() {
       </main>
 
       <SiteFooter />
+
+      {/* PDF GENERATION OVERLAY */}
+      {isSavingPdf && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="no-print fixed inset-0 z-[60] flex items-center justify-center bg-black/55 backdrop-blur-sm p-4"
+        >
+          <div className="bg-white rounded-lg shadow-2xl px-8 py-6 max-w-sm w-full text-center border-t-4 border-[#c4a56a]">
+            <div className="mx-auto mb-4 h-10 w-10 rounded-full border-4 border-[#1a2744]/15 border-t-[#1a2744] animate-spin" />
+            <p className="text-sm font-bold uppercase tracking-wider text-[#1a2744]">Generating your PDF…</p>
+            <p className="mt-2 text-xs text-gray-600 leading-relaxed">
+              Please wait while your 7-page application is prepared. This can take up to 20 seconds — the download will
+              start automatically.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* SUBMISSION MODAL */}
       <SubmissionModal

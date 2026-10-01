@@ -160,7 +160,7 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm, draftSavedA
           <span className="text-[7px] text-gray-400 tracking-[1.5px] uppercase block sm:inline sm:mr-2">
             Established 2026
           </span>
-          <span className="font-['Cinzel'] text-[11px] font-bold text-[#c4a56a] tracking-[1px]">
+          <span className="font-['Montserrat'] text-[11px] font-bold text-[#c4a56a] tracking-[1px]">
             COX'S BAZAR BOAT CLUB — Member Registration Portal
           </span>
         </div>

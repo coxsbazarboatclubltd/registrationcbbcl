@@ -53,7 +53,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
         <div className="bg-[#1a2744] px-6 py-4 border-b border-[#9d7f46] flex items-center justify-between text-white">
           <div className="flex items-center gap-2.5">
             <CbbcLogo clipPathId="clippath-modal" className="w-[32px] h-[32px]" />
-            <h3 className="font-['Cinzel'] font-bold text-sm sm:text-base tracking-wider text-[#c4a56a]">
+            <h3 className="font-['Montserrat'] font-bold text-sm sm:text-base tracking-wider text-[#c4a56a]">
               COX'S BAZAR BOAT CLUB LTD.
             </h3>
           </div>
@@ -80,7 +80,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
                 </h4>
                 <p className="text-xs text-gray-600">
                   {status === 'validating' && 'Validating applicant profile, required uploads & declarations...'}
-                  {status === 'generating_pdf' && 'Compiling 4-page registration package PDF...'}
+                  {status === 'generating_pdf' && 'Compiling 7-page registration form PDF...'}
                   {status === 'sending_email' && 'Transmitting request & emails via /api/submit serverless service...'}
                 </p>
               </div>
@@ -145,7 +145,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
               </div>
 
               <div className="space-y-2">
-                <h3 className="font-['Cinzel'] text-lg font-bold text-[#1a2744]">
+                <h3 className="font-['Montserrat'] text-lg font-bold text-[#1a2744]">
                   Registration Submitted Successfully
                 </h3>
                 <p className="text-xs text-gray-700 leading-relaxed">

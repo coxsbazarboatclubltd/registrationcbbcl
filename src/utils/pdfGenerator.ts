@@ -1,6 +1,7 @@
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
 import { MemberFormData } from '../types';
+import { buildPrintSnapshot } from './pdfSnapshot';
 
 export interface GeneratedPdfResult {
   blob: Blob;
@@ -305,4 +306,39 @@ export function downloadPdfBlob(blob: Blob, filename: string): void {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+/**
+ * Produces the application PDF. Prefers the server-side Chromium renderer
+ * (/api/pdf), which outputs sharp vector text laid out exactly as on screen;
+ * falls back to the in-browser html2canvas capture above if the server is
+ * unreachable, so a PDF is always produced.
+ */
+export async function generateApplicationPdf(
+  data: MemberFormData,
+  refNo: string,
+  docDate: string,
+  otpSessionToken?: string
+): Promise<GeneratedPdfResult> {
+  try {
+    const html = buildPrintSnapshot();
+    const response = await fetch('/api/pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ html, otpSessionToken }),
+    });
+    if (!response.ok || !response.headers.get('content-type')?.includes('application/pdf')) {
+      throw new Error(`PDF service responded with HTTP ${response.status}`);
+    }
+    const blob = await response.blob();
+    const cleanName = (data.candidateName || 'Applicant').replace(/[^a-zA-Z0-9_-]/g, '_');
+    return {
+      blob,
+      dataUri: await blobToDataUri(blob),
+      filename: `${refNo}_${cleanName}_Membership_Application.pdf`,
+    };
+  } catch (err) {
+    console.warn('Server PDF rendering unavailable, using in-browser fallback:', err);
+    return generateFullApplicationPdf(data, refNo, docDate);
+  }
 }

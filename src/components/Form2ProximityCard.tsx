@@ -118,6 +118,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
         </div>
         <div className="photo-box p-1 flex items-center justify-center">
           <PhotoUploader
+                  locked
             label="Member Photo"
             sublabel="Passport Size"
             photoUrl={data.candidatePhotoUrl}
@@ -137,16 +138,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
             <div className="section-num">01</div>
             <h2>Dependent Cards Enrollment Registry</h2>
           </div>
-          <div className="field w-28 !mb-0">
-            <label>No. of Children</label>
-            <select
-              value={data.numberOfChildren}
-              onChange={(e) => onChange('numberOfChildren', Number(e.target.value))}
-            >
-              {[0, 1, 2, 3, 4, 5, 6].map((n) => (
-                <option key={n} value={n}>{n}</option>
-              ))}
-            </select>
+          <div className="flex items-center gap-1.5 text-[7px] font-bold uppercase tracking-[1px] text-[var(--label)]" title="Filled automatically from an earlier page">
+            No. of Children:
+            <span className="locked-field px-2 py-0.5 rounded border border-[var(--border)] text-[9px] text-[var(--text)]">{data.numberOfChildren}</span>
           </div>
         </div>
         <p className="text-[7.5px] color-[#6b6b6b] italic mb-[8px] leading-[1.5]">
@@ -175,7 +169,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
                 type="text"
                 placeholder="Spouse name"
                 value={data.spouseName}
-                onChange={(e) => onChange('spouseName', e.target.value)}
+                readOnly
+                className="locked-field"
+                title="Filled automatically from an earlier page"
               />
             </div>
             <div className="dep-field">
@@ -183,14 +179,18 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               <input
                 type="date"
                 value={data.spouseDob}
-                onChange={(e) => onChange('spouseDob', e.target.value)}
+                readOnly
+                className="locked-field"
+                title="Filled automatically from an earlier page"
               />
             </div>
             <div className="dep-field">
               <label>Blood Group</label>
               <select
                 value={data.spouseBloodGroup}
-                onChange={(e) => onChange('spouseBloodGroup', e.target.value)}
+                disabled
+                className="locked-field"
+                title="Filled automatically from an earlier page"
               >
                 <option value="">Select</option>
                 <option value="A+">A+</option>
@@ -227,7 +227,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
                   type="text"
                   placeholder="Child name"
                   value={data[childField(i, 'Name')] as string}
-                  onChange={(e) => onChange(childField(i, 'Name'), e.target.value)}
+                  readOnly
+                  className="locked-field"
+                  title="Filled automatically from an earlier page"
                 />
               </div>
               <div className="dep-field">
@@ -235,14 +237,18 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
                 <input
                   type="date"
                   value={data[childField(i, 'Dob')] as string}
-                  onChange={(e) => onChange(childField(i, 'Dob'), e.target.value)}
+                  readOnly
+                  className="locked-field"
+                  title="Filled automatically from an earlier page"
                 />
               </div>
               <div className="dep-field">
                 <label>Blood Group</label>
                 <select
                   value={data[childField(i, 'BloodGroup')] as string}
-                  onChange={(e) => onChange(childField(i, 'BloodGroup'), e.target.value)}
+                  disabled
+                  className="locked-field"
+                  title="Filled automatically from an earlier page"
                 >
                   <option value="">Select</option>
                   <option value="A+">A+</option>
@@ -266,7 +272,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               type="text"
               placeholder="NID or Passport Number"
               value={data.spouseNidPassport}
-              onChange={(e) => onChange('spouseNidPassport', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
           <div className="field w15">
@@ -275,7 +283,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               type="tel"
               placeholder="+880"
               value={data.spouseMobile}
-              onChange={(e) => onChange('spouseMobile', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
         </div>
@@ -294,7 +304,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               type="text"
               placeholder="Emergency contact person"
               value={data.emergencyContactName}
-              onChange={(e) => onChange('emergencyContactName', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
           <div className="field w15">
@@ -303,27 +315,22 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               type="tel"
               placeholder="+880"
               value={data.emergencyMobile}
-              onChange={(e) => onChange('emergencyMobile', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
         </div>
         <div className="field-row">
           <div className="field">
             <label>Relationship</label>
-            <select
+            <input
+              type="text"
               value={data.emergencyRelationship}
-              onChange={(e) => onChange('emergencyRelationship', e.target.value)}
-            >
-              <option value="">Select</option>
-              <option value="Spouse">Spouse</option>
-              <option value="Parent">Parent</option>
-              <option value="Sibling">Sibling</option>
-              <option value="Child">Child</option>
-              <option value="Colleague & Close Friend">
-                Colleague &amp; Close Friend
-              </option>
-              <option value="Other">Other</option>
-            </select>
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
+            />
           </div>
           <div className="field w15">
             <label>Alternative Tel.</label>
@@ -331,7 +338,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               type="tel"
               placeholder="+880"
               value={data.emergencyAltTel}
-              onChange={(e) => onChange('emergencyAltTel', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
         </div>
@@ -355,7 +364,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
         </div>
         <div className="footer-right-group">
           <div className="footer-center">Confidential Document</div>
-          <div className="footer-right">Page 3 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+          <div className="footer-right">Page 3 of 7 &nbsp;|&nbsp; Official Registration Form</div>
         </div>
       </div>
     </div>

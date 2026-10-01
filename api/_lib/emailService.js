@@ -14,9 +14,9 @@ function buildOfficeEmailHtml(params, formattedCategory) {
     .join('; ') || 'N/A';
 
   return `
-    <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto; color: #1a2744; border: 1px solid #c8c8c8; padding: 24px; border-radius: 8px;">
+    <div style="font-family: Montserrat, Arial, sans-serif; max-width: 650px; margin: 0 auto; color: #1a2744; border: 1px solid #c8c8c8; padding: 24px; border-radius: 8px;">
       <div style="background-color: #1a2744; padding: 16px; border-radius: 6px; text-align: center; margin-bottom: 20px;">
-        <h2 style="color: #c4a56a; margin: 0; font-family: Georgia, serif;">COX'S BAZAR BOAT CLUB LTD.</h2>
+        <h2 style="color: #c4a56a; margin: 0; font-family: Montserrat, Arial, sans-serif;">COX'S BAZAR BOAT CLUB LTD.</h2>
         <p style="color: #ffffff; margin: 4px 0 0 0; font-size: 12px; letter-spacing: 1px;">MEMBERSHIP OFFICE APPLICATION NOTIFICATION</p>
       </div>
 
@@ -60,9 +60,9 @@ function buildApplicantEmailHtml(params, formattedCategory, officeEmail) {
   const { data, referenceNumber, submissionDate } = params;
 
   return `
-    <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto; color: #1a2744; border: 1px solid #c8c8c8; padding: 24px; border-radius: 8px;">
+    <div style="font-family: Montserrat, Arial, sans-serif; max-width: 650px; margin: 0 auto; color: #1a2744; border: 1px solid #c8c8c8; padding: 24px; border-radius: 8px;">
       <div style="background-color: #1a2744; padding: 16px; border-radius: 6px; text-align: center; margin-bottom: 20px;">
-        <h2 style="color: #c4a56a; margin: 0; font-family: Georgia, serif;">COX'S BAZAR BOAT CLUB LTD.</h2>
+        <h2 style="color: #c4a56a; margin: 0; font-family: Montserrat, Arial, sans-serif;">COX'S BAZAR BOAT CLUB LTD.</h2>
         <p style="color: #ffffff; margin: 4px 0 0 0; font-size: 11px; letter-spacing: 1px;">COX'S BAZAR, BANGLADESH</p>
       </div>
 
@@ -71,7 +71,7 @@ function buildApplicantEmailHtml(params, formattedCategory, officeEmail) {
       <p>Dear <strong>${escapeHtml(data.candidateName)}</strong>,</p>
 
       <p>
-        Thank you for applying for membership at <strong>Cox's Bazar Boat Club Ltd.</strong> We have successfully received your registration package.
+        Thank you for applying for membership at <strong>Cox's Bazar Boat Club Ltd.</strong> We have successfully received your registration form.
       </p>
 
       <div style="background-color: #f4f6f9; border-left: 4px solid #1a2744; padding: 14px; margin: 18px 0; border-radius: 0 6px 6px 0;">
@@ -98,9 +98,9 @@ function buildApplicantEmailHtml(params, formattedCategory, officeEmail) {
 
 function buildOtpEmailHtml(code) {
   return `
-    <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; color: #1a2744; border: 1px solid #c8c8c8; padding: 24px; border-radius: 8px;">
+    <div style="font-family: Montserrat, Arial, sans-serif; max-width: 480px; margin: 0 auto; color: #1a2744; border: 1px solid #c8c8c8; padding: 24px; border-radius: 8px;">
       <div style="background-color: #1a2744; padding: 16px; border-radius: 6px; text-align: center; margin-bottom: 20px;">
-        <h2 style="color: #c4a56a; margin: 0; font-family: Georgia, serif;">COX'S BAZAR BOAT CLUB LTD.</h2>
+        <h2 style="color: #c4a56a; margin: 0; font-family: Montserrat, Arial, sans-serif;">COX'S BAZAR BOAT CLUB LTD.</h2>
         <p style="color: #ffffff; margin: 4px 0 0 0; font-size: 12px; letter-spacing: 1px;">MEMBERSHIP APPLICATION ACCESS</p>
       </div>
 

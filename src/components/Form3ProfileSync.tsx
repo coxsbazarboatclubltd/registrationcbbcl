@@ -70,6 +70,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
         <SearchableCategorySelect
           value={data.membershipCategory}
           onChange={(cat) => onChange('membershipCategory', cat)}
+          locked
         />
       </div>
 
@@ -85,9 +86,10 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               <span className="tl">Title</span>
               <div className="title-opts">
                 <select
-                  className="title-select border border-[#9d7f46]/50 rounded px-2 py-1 text-[10px] bg-white text-[#1a2744] font-semibold h-[26px]"
+                  className="title-select locked-field border border-[#9d7f46]/50 rounded px-2 py-1 text-[10px] bg-white text-[#1a2744] font-semibold h-[26px]"
                   value={data.title}
-                  onChange={(e) => onChange('title', e.target.value)}
+                  disabled
+                  title="Filled automatically from an earlier page"
                 >
                   <option value="mr">Mr.</option>
                   <option value="mrs">Mrs.</option>
@@ -108,7 +110,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
                   type="text"
                   placeholder="Full Name as per NID / Passport"
                   value={data.candidateName}
-                  onChange={(e) => onChange('candidateName', e.target.value)}
+                  readOnly
+                  className="locked-field"
+                  title="Filled automatically from an earlier page"
                 />
               </div>
             </div>
@@ -118,14 +122,18 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
                 <input
                   type="date"
                   value={data.dob}
-                  onChange={(e) => onChange('dob', e.target.value)}
+                  readOnly
+                  className="locked-field"
+                  title="Filled automatically from an earlier page"
                 />
               </div>
               <div className="field">
                 <label>Blood Group</label>
                 <select
                   value={data.bloodGroup}
-                  onChange={(e) => onChange('bloodGroup', e.target.value)}
+                  disabled
+                  className="locked-field"
+                  title="Filled automatically from an earlier page"
                 >
                   <option value="">Select</option>
                   <option value="A+">A+</option>
@@ -144,7 +152,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
                   type="text"
                   placeholder="National ID Number"
                   value={data.nid}
-                  onChange={(e) => onChange('nid', e.target.value)}
+                  readOnly
+                  className="locked-field"
+                  title="Filled automatically from an earlier page"
                 />
               </div>
             </div>
@@ -159,6 +169,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
                 if (url) onChange('docPassportPhoto', true);
               }}
               className="w-full h-[135px]"
+              locked
             />
           </div>
         </div>
@@ -213,6 +224,16 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               />{' '}
               Other
             </label>
+            {data.professionType === 'other' && (
+              <input
+                type="text"
+                aria-label="Specify other profession"
+                placeholder="Specify profession"
+                value={data.professionOther || ''}
+                onChange={(e) => onChange('professionOther', e.target.value)}
+                className="prof-other-input"
+              />
+            )}
           </div>
         </div>
         <div className="field-row">
@@ -222,7 +243,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               type="text"
               placeholder="Company / Organization Name"
               value={data.companyName}
-              onChange={(e) => onChange('companyName', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
           <div className="field w2">
@@ -231,7 +254,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               type="text"
               placeholder="Job Title / Designation"
               value={data.designation}
-              onChange={(e) => onChange('designation', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
         </div>
@@ -242,7 +267,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               type="text"
               placeholder="Building, Area, City"
               value={data.officeAddress}
-              onChange={(e) => onChange('officeAddress', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
           <div className="field">
@@ -251,7 +278,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               type="tel"
               placeholder="+880"
               value={data.officeTel}
-              onChange={(e) => onChange('officeTel', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
         </div>
@@ -270,7 +299,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               type="email"
               placeholder="email@example.com"
               value={data.email}
-              onChange={(e) => onChange('email', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
           <div className="field w15">
@@ -290,7 +321,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               type="tel"
               placeholder="+880"
               value={data.mobile}
-              onChange={(e) => onChange('mobile', e.target.value)}
+              readOnly
+              className="locked-field"
+              title="Filled automatically from an earlier page"
             />
           </div>
           <div className="field w15">
@@ -320,7 +353,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
                 type="text"
                 placeholder="Spouse Full Name"
                 value={data.spouseName}
-                onChange={(e) => onChange('spouseName', e.target.value)}
+                readOnly
+                className="locked-field"
+                title="Filled automatically from an earlier page"
               />
             </div>
             <div className="field w15">
@@ -329,7 +364,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
                 type="tel"
                 placeholder="+880"
                 value={data.spouseMobile}
-                onChange={(e) => onChange('spouseMobile', e.target.value)}
+                readOnly
+                className="locked-field"
+                title="Filled automatically from an earlier page"
               />
             </div>
             <div className="field w2">
@@ -338,7 +375,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
                 type="email"
                 placeholder="spouse@email.com"
                 value={data.spouseEmail}
-                onChange={(e) => onChange('spouseEmail', e.target.value)}
+                readOnly
+                className="locked-field"
+                title="Filled automatically from an earlier page"
               />
             </div>
           </div>
@@ -430,16 +469,12 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
       {/* SIGNATURE ROW */}
       <div className="field-row mt-[10px]">
         <div className="field">
-          <label>Member Signature</label>
+          <label title="Sign on the final printed copy">Member Signature</label>
           <div className="border-b border-[#c8c8c8] h-[22px]"></div>
         </div>
         <div className="field">
           <label>Date</label>
-          <input
-            type="date"
-            value={docDate}
-            onChange={(e) => onChange('dob', e.target.value)}
-          />
+          <div className="locked-field date-display" title="Filled automatically with the application date">{docDate}</div>
         </div>
         <div className="field">
           <label>Secretariat Stamp</label>
@@ -461,7 +496,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
         </div>
         <div className="footer-right-group">
           <div className="footer-center">Confidential Document</div>
-          <div className="footer-right">Page 4 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+          <div className="footer-right">Page 4 of 7 &nbsp;|&nbsp; Official Registration Form</div>
         </div>
       </div>
     </div>

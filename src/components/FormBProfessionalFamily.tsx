@@ -75,7 +75,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           <div className="section-num">01</div>
           <h2>Professional &amp; Business Information</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-2 mb-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-2 mb-2">
           {/* Two Column Pair 1: Designation & Company */}
           <div className="field">
             <label>Designation / Job Title</label>
@@ -96,17 +96,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
             />
           </div>
 
-          <div className="field col-span-2">
-            <label>Office / Business Address</label>
-            <input
-              type="text"
-              placeholder="Full office address"
-              value={data.officeAddress}
-              onChange={(e) => onChange('officeAddress', e.target.value)}
-            />
-          </div>
-
-          {/* Two Column Pair 2: Business Nature & Work Phone */}
+          {/* Business Nature */}
           <div className="field">
             <label>Business Nature / Sector</label>
             <input
@@ -114,6 +104,16 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
               placeholder="e.g. Commerce, Trade, Services"
               value={data.businessNature}
               onChange={(e) => onChange('businessNature', e.target.value)}
+            />
+          </div>
+
+          <div className="field col-span-2">
+            <label>Office / Business Address</label>
+            <input
+              type="text"
+              placeholder="Full office address"
+              value={data.officeAddress}
+              onChange={(e) => onChange('officeAddress', e.target.value)}
             />
           </div>
 
@@ -186,7 +186,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           <div className="section-num">02</div>
           <h2>Family &amp; Dependent Information</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-2 mb-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-2 mb-2">
           {/* Spouse Details */}
           <div className="field">
             <label>Spouse Full Name</label>
@@ -245,7 +245,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
             />
           </div>
 
-          <div className="field">
+          <div className="field md:col-span-2">
             <label>Spouse Mobile Contact &amp; Email</label>
             <div className="flex gap-2">
               <input
@@ -266,7 +266,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           </div>
 
           {/* Children Information */}
-          <div className="col-span-2 border-t border-[#9d7f46]/20 pt-2 mt-1">
+          <div className="col-span-full border-t border-[#9d7f46]/20 pt-2 mt-1">
             <div className="flex items-center justify-between mb-1">
               <label className="block font-bold text-[9px] uppercase tracking-wider text-[#1a2744]">
                 Children Information
@@ -286,7 +286,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
 
             <div className={childIndexes.length > 3 ? 'compact-child' : undefined}>
             {childIndexes.map((i) => (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-2 bg-white/60 p-1.5 rounded border border-[#c8c8c8]" key={i}>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-1 bg-white/60 p-1.5 rounded border border-[#c8c8c8]" key={i}>
                 <div className="field md:col-span-1">
                   <label>Child {pad2(i)} – Name</label>
                   <input
@@ -355,7 +355,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           <div className="section-num">03</div>
           <h2>Communication Preferences &amp; Emergency Contact</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-2 mb-2">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-3 gap-y-2 mb-2">
           {/* Preferences */}
           <div className="field">
             <label>Preferred Mailing Address</label>
@@ -382,7 +382,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
             </select>
           </div>
 
-          <div className="field border-t border-[#9d7f46]/20 pt-2 col-span-2 md:col-span-1">
+          <div className="field">
             <label>Emergency Contact Person</label>
             <input
               type="text"
@@ -392,7 +392,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
             />
           </div>
 
-          <div className="field border-t border-[#9d7f46]/20 pt-2 col-span-2 md:col-span-1">
+          <div className="field">
             <label>Relationship</label>
             <input
               type="text"
@@ -434,7 +434,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
         </div>
         <div className="footer-right-group">
           <div className="footer-center">Confidential Document</div>
-          <div className="footer-right">Page 2 of 7 &nbsp;|&nbsp; Official Registration Package</div>
+          <div className="footer-right">Page 2 of 7 &nbsp;|&nbsp; Official Registration Form</div>
         </div>
       </div>
     </div>

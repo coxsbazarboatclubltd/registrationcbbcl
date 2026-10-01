@@ -74,7 +74,7 @@ export const DocumentUploadChecklist: React.FC<DocumentUploadChecklistProps> = (
     <div className="bg-white border border-[#9d7f46]/30 rounded-lg p-3 my-3 shadow-sm">
       <div className="border-b border-[#9d7f46]/30 pb-2 mb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1">
         <div>
-          <h3 className="text-xs font-bold text-[#1a2744] uppercase tracking-wider font-['Cinzel'] flex items-center gap-1.5">
+          <h3 className="text-xs font-bold text-[#1a2744] uppercase tracking-wider font-['Montserrat'] flex items-center gap-1.5">
             <span>📂</span> Document Upload Checklist
           </h3>
           <p className="text-[9px] text-[#6b6b6b]">

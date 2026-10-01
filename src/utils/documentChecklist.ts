@@ -12,8 +12,8 @@ export const CHECKLIST_ITEMS = [
   { field: 'docSpecimenSignature', name: 'Specimen Signature', note: 'Signature on white paper', required: true },
   { field: 'docBirthCertificate', name: 'Birth Certificate', note: 'Applicant and children / dependent birth certificate copies', required: true },
   { field: 'docTradeLicense', name: 'Trade License / Employment ID', note: 'Trade license or employment identification', required: true },
-  { field: 'docCompanyId', name: 'Company ID / Official Card', note: 'Official ID card or employment proof', required: false },
   { field: 'docTinCertificate', name: 'TIN Certificate', note: 'Tax identification certificate copy', required: true },
+  { field: 'docCompanyId', name: 'Company ID / Official Card', note: 'Official ID card or employment proof', required: false },
   { field: 'docOtherAttachments', name: 'Supporting Documents & Other Attachments', note: 'Utility Bill, Organization Letter, Recommendation', required: false },
 ] as const;
 

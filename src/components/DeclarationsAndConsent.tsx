@@ -13,7 +13,7 @@ export const DeclarationsAndConsent: React.FC<DeclarationsAndConsentProps> = ({
   docDate,
 }) => {
   return (
-    <div className="space-y-4 my-4">
+    <div className="space-y-3 my-3">
       {/* SELF DECLARATION SECTION */}
       <div className="section">
         <div className="section-title">
@@ -36,7 +36,7 @@ export const DeclarationsAndConsent: React.FC<DeclarationsAndConsentProps> = ({
       <div className="section bg-[#faf8f5] border border-[#9d7f46]/30 rounded-lg p-3">
         <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#9d7f46]/30 text-[#1a2744]">
           <span className="text-sm">🔒</span>
-          <h3 className="font-['Cinzel'] font-bold text-xs uppercase tracking-wider text-[#1a2744]">
+          <h3 className="font-['Montserrat'] font-bold text-xs uppercase tracking-wider text-[#1a2744]">
             Confidentiality &amp; Data Protection Declaration
           </h3>
         </div>

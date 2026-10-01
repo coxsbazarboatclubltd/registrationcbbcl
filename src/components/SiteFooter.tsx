@@ -34,7 +34,7 @@ export const SiteFooter: React.FC = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-8 py-14 grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* COLUMN 1: BRAND + EXPLORE + TIERS */}
         <div>
-          <h3 className="font-['Cinzel'] text-lg font-bold tracking-[2px] text-[#c4a56a] uppercase mb-4">
+          <h3 className="font-['Montserrat'] text-lg font-bold tracking-[2px] text-[#c4a56a] uppercase mb-4">
             Cox's Bazar Boat Club
           </h3>
           <p className="text-[11px] text-gray-400 leading-relaxed mb-6 max-w-xs">

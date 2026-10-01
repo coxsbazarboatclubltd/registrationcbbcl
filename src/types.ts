@@ -134,6 +134,7 @@ export interface MemberFormData {
   // Form 3 specifics
   title: string;
   professionType: 'business' | 'service' | 'retired' | 'other';
+  professionOther?: string;
   officeTel: string;
   altContact: string;
   residenceTel: string;

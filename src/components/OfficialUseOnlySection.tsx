@@ -13,7 +13,7 @@ export const OfficialUseOnlySection: React.FC<OfficialUseOnlySectionProps> = ({
     <div className="official-use-section border-2 border-[#1a2744] rounded-lg p-3 my-4 bg-[#faf8f5] text-[#1a2744]">
       {/* Title Header */}
       <div className="bg-[#1a2744] text-[#c4a56a] px-3 py-1.5 -mx-3 -mt-3 rounded-t-md flex items-center justify-between border-b border-[#9d7f46]">
-        <h3 className="font-['Cinzel'] font-bold text-xs uppercase tracking-widest flex items-center gap-1.5">
+        <h3 className="font-['Montserrat'] font-bold text-xs uppercase tracking-widest flex items-center gap-1.5">
           <span>🏛️</span> OFFICIAL USE ONLY &nbsp;–&nbsp; SECRETARIAT VERIFICATION
         </h3>
         <span className="text-[8px] text-white/80 uppercase tracking-wider italic">

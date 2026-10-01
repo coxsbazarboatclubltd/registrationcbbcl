@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { handleSubmission } from './api/_lib/submissionHandler.js';
 import { handleOtpRequest, handleOtpVerify } from './api/_lib/otpHandler.js';
+import { renderPdfFromHtml } from './api/_lib/renderPdf.js';
+import { verifySessionToken } from './api/_lib/otpStore.js';
 
 const app = express();
 const PORT = 3000;
@@ -38,6 +40,24 @@ app.post('/api/submit', async (req: Request, res: Response): Promise<void> => {
   const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
   const result = await handleSubmission(req.body || {}, clientIp);
   res.status(result.status).json(result.body);
+});
+
+/**
+ * POST /api/pdf - Print the page snapshot to a vector PDF (mirrors api/pdf.js).
+ */
+app.post('/api/pdf', async (req: Request, res: Response): Promise<void> => {
+  if (!verifySessionToken(req.body?.otpSessionToken)) {
+    res.status(403).json({ success: false, error: 'Email verification session is missing or has expired.' });
+    return;
+  }
+  try {
+    const pdf = await renderPdfFromHtml(req.body?.html);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.send(pdf);
+  } catch (error: any) {
+    console.error('[PDF_RENDER_FAILED]', error);
+    res.status(500).json({ success: false, error: error?.message || 'PDF rendering failed.' });
+  }
 });
 
 /**

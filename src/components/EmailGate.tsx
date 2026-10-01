@@ -78,7 +78,7 @@ export const EmailGate: React.FC<EmailGateProps> = ({ onVerified }) => {
       <div className="w-full max-w-md bg-white border border-[#1a2744]/20 rounded-lg shadow-xl overflow-hidden">
         <div className="bg-[#1a2744] border-b-2 border-[#c4a56a] px-6 py-6 flex flex-col items-center text-center">
           <CbbcLogo className="w-14 h-14 mb-2" />
-          <h1 className="font-['Cinzel'] text-[#c4a56a] text-sm font-bold tracking-[1px]">
+          <h1 className="font-['Montserrat'] text-[#c4a56a] text-sm font-bold tracking-[1px]">
             COX'S BAZAR BOAT CLUB LTD.
           </h1>
           <p className="text-white/80 text-[11px] uppercase tracking-wider mt-1">Member Registration Portal</p>

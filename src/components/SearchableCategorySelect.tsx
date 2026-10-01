@@ -6,6 +6,8 @@ interface SearchableCategorySelectProps {
   onChange: (category: MembershipCategoryType) => void;
   className?: string;
   error?: string;
+  /** Show the value read-only (mirrored from an earlier page) */
+  locked?: boolean;
 }
 
 export const SearchableCategorySelect: React.FC<SearchableCategorySelectProps> = ({
@@ -13,6 +15,7 @@ export const SearchableCategorySelect: React.FC<SearchableCategorySelectProps> =
   onChange,
   className = '',
   error,
+  locked = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,6 +41,22 @@ export const SearchableCategorySelect: React.FC<SearchableCategorySelectProps> =
     setSearchTerm('');
     setIsOpen(false);
   };
+
+  if (locked) {
+    return (
+      <div className={`relative w-full ${className}`}>
+        <label className="block text-[9px] font-bold uppercase tracking-wider text-[#1a2744] mb-1">
+          Membership Category <span className="text-red-600">*</span>
+        </label>
+        <div
+          title="Filled automatically from Form A"
+          className="w-full bg-gray-100 border border-[#9d7f46]/50 rounded-md px-2.5 py-1.5 cursor-not-allowed"
+        >
+          <span className="text-[11px] font-bold text-[#1a2744] tracking-wide">{value || '—'}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`relative w-full ${className}`} ref={containerRef}>
