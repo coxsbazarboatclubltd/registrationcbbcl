@@ -1,6 +1,7 @@
 import React from 'react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
+import { formatLongDate } from '../utils/formatDate';
 
 interface FormBProps {
   data: MemberFormData;
@@ -57,7 +58,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
               </tr>
               <tr>
                 <td>Application Date:</td>
-                <td>{docDate}</td>
+                <td>{formatLongDate(docDate)}</td>
               </tr>
               <tr>
                 <td>Document Version:</td>

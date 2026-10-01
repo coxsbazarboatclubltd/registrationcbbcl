@@ -2,6 +2,7 @@ import React from 'react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { CHECKLIST_ITEMS, isDocumentEnclosed } from '../utils/documentChecklist';
+import { formatLongDate } from '../utils/formatDate';
 
 interface FormFProps {
   data: MemberFormData;
@@ -138,7 +139,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               </div>
               <div>
                 <span className="font-bold text-[#1a2744] block">Date of Declaration:</span>
-                <span className="font-semibold text-[#0f5132]">{docDate}</span>
+                <span className="font-semibold text-[#0f5132]">{formatLongDate(docDate)}</span>
               </div>
             </div>
           </div>
@@ -202,7 +203,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                 </tr>
                 <tr>
                   <td>Application Date:</td>
-                  <td>{docDate}</td>
+                  <td>{formatLongDate(docDate)}</td>
                 </tr>
                 <tr>
                   <td>Document Version:</td>
@@ -305,7 +306,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               </div>
               <div>
                 <span className="font-bold text-[#1a2744] block">Date of Declaration:</span>
-                <span className="font-semibold text-[#0f5132]">{docDate}</span>
+                <span className="font-semibold text-[#0f5132]">{formatLongDate(docDate)}</span>
               </div>
             </div>
           </div>

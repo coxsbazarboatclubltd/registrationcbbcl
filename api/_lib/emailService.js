@@ -1,6 +1,18 @@
 const { createResendClient } = require('./resend');
 const { escapeHtml } = require('./escapeHtml');
 
+// '2026-10-01' -> 'Thursday, October 1st, 2026' (matches the form's date display)
+function formatLongDate(isoDate) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoDate || '');
+  if (!match) return isoDate;
+  const [, y, m, d] = match.map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  const weekday = date.toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' });
+  const month = date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
+  const suffix = d % 100 >= 11 && d % 100 <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[d % 10] || 'th');
+  return weekday + ', ' + month + ' ' + d + suffix + ', ' + y;
+}
+
 function buildOfficeEmailHtml(params, formattedCategory) {
   const { data, referenceNumber, documentNumber, submissionDate } = params;
 
@@ -25,7 +37,7 @@ function buildOfficeEmailHtml(params, formattedCategory) {
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
         <tr><td style="padding: 6px; font-weight: bold; width: 180px;">Reference Number:</td><td style="padding: 6px; color: #0f5132; font-weight: bold;">${escapeHtml(referenceNumber)}</td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">Document Number:</td><td style="padding: 6px;">${escapeHtml(documentNumber)}</td></tr>
-        <tr><td style="padding: 6px; font-weight: bold;">Submission Date:</td><td style="padding: 6px;">${escapeHtml(submissionDate || new Date().toISOString().split('T')[0])}</td></tr>
+        <tr><td style="padding: 6px; font-weight: bold;">Submission Date:</td><td style="padding: 6px;">${escapeHtml(formatLongDate(submissionDate || new Date().toISOString().split('T')[0]))}</td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">Membership Category:</td><td style="padding: 6px;">${escapeHtml(data.membershipCategory || 'Permanent Member')}</td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">Applicant Name:</td><td style="padding: 6px;">${data.title ? escapeHtml(data.title.toUpperCase()) + ' ' : ''}${escapeHtml(data.candidateName)}</td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">Email:</td><td style="padding: 6px;"><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></td></tr>
@@ -76,7 +88,7 @@ function buildApplicantEmailHtml(params, formattedCategory, officeEmail) {
 
       <div style="background-color: #f4f6f9; border-left: 4px solid #1a2744; padding: 14px; margin: 18px 0; border-radius: 0 6px 6px 0;">
         <p style="margin: 0 0 6px 0; font-size: 13px;"><strong>Application Reference Number:</strong> <span style="color: #0f5132; font-weight: bold;">${escapeHtml(referenceNumber)}</span></p>
-        <p style="margin: 0 0 6px 0; font-size: 13px;"><strong>Submission Date:</strong> ${escapeHtml(submissionDate || new Date().toISOString().split('T')[0])}</p>
+        <p style="margin: 0 0 6px 0; font-size: 13px;"><strong>Submission Date:</strong> ${escapeHtml(formatLongDate(submissionDate || new Date().toISOString().split('T')[0]))}</p>
         <p style="margin: 0; font-size: 13px;"><strong>Membership Category:</strong> ${escapeHtml(formattedCategory)}</p>
       </div>
 

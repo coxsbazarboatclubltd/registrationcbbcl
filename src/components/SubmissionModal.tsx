@@ -3,6 +3,7 @@ import { CbbcLogo } from './CbbcLogo';
 import { GeneratedPdfResult, downloadPdfBlob } from '../utils/pdfGenerator';
 import { ValidationError } from '../utils/formValidation';
 import { TurnstileWidget } from './TurnstileWidget';
+import { formatLongDate } from '../utils/formatDate';
 
 interface SubmissionModalProps {
   isOpen: boolean;
@@ -160,7 +161,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
                   </div>
                   <div className="flex justify-between border-b border-gray-200 pb-1">
                     <span className="text-gray-600 font-medium">Submission Date:</span>
-                    <span className="font-semibold text-gray-800">{submissionDate}</span>
+                    <span className="font-semibold text-gray-800">{formatLongDate(submissionDate)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 font-medium">Membership Category:</span>

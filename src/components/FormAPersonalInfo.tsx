@@ -3,6 +3,7 @@ import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
 import { SearchableCategorySelect } from './SearchableCategorySelect';
+import { formatLongDate } from '../utils/formatDate';
 
 interface FormAProps {
   data: MemberFormData;
@@ -55,7 +56,7 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
               </tr>
               <tr>
                 <td>Application Date:</td>
-                <td>{docDate}</td>
+                <td>{formatLongDate(docDate)}</td>
               </tr>
               <tr>
                 <td>Document Version:</td>

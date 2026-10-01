@@ -3,6 +3,7 @@ import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { ReferencesSection } from './ReferencesSection';
 import { DeclarationsAndConsent } from './DeclarationsAndConsent';
+import { formatLongDate } from '../utils/formatDate';
 
 interface FormEProps {
   data: MemberFormData;
@@ -53,7 +54,7 @@ export const FormEReferencesDeclaration: React.FC<FormEProps> = ({
               </tr>
               <tr>
                 <td>Application Date:</td>
-                <td>{docDate}</td>
+                <td>{formatLongDate(docDate)}</td>
               </tr>
               <tr>
                 <td>Document Version:</td>
@@ -69,7 +70,7 @@ export const FormEReferencesDeclaration: React.FC<FormEProps> = ({
       <ReferencesSection data={data} onChange={onChange} />
 
       {/* SECTION 02 & 03 – SELF DECLARATION, CONFIDENTIALITY & PRIVACY CONSENT */}
-      <DeclarationsAndConsent data={data} onChange={onChange} docDate={docDate} />
+      <DeclarationsAndConsent data={data} onChange={onChange} docDate={formatLongDate(docDate)} />
 
       {/* FOOTER */}
       <div className="footer">

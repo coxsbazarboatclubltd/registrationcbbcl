@@ -3,6 +3,7 @@ import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
 import { SearchableCategorySelect } from './SearchableCategorySelect';
+import { formatLongDate } from '../utils/formatDate';
 
 interface Form3Props {
   data: MemberFormData;
@@ -53,7 +54,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
               </tr>
               <tr>
                 <td>Application Date:</td>
-                <td>{docDate}</td>
+                <td>{formatLongDate(docDate)}</td>
               </tr>
               <tr>
                 <td>Document Version:</td>
@@ -470,19 +471,19 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
       <div className="field-row mt-[10px]">
         <div className="field">
           <label title="Sign on the final printed copy">Member Signature</label>
-          <div className="border-b border-[#c8c8c8] h-[22px]"></div>
+          <div className="border-b border-[#c8c8c8] h-[32px]"></div>
         </div>
         <div className="field">
           <label>Date</label>
-          <div className="locked-field date-display" title="Filled automatically with the application date">{docDate}</div>
+          <div className="locked-field date-display" title="Filled automatically with the application date">{formatLongDate(docDate)}</div>
         </div>
         <div className="field">
           <label>Secretariat Stamp</label>
-          <div className="border-b border-[#c8c8c8] h-[22px]"></div>
+          <div className="border-b border-[#c8c8c8] h-[32px]"></div>
         </div>
         <div className="field">
           <label>Verified By</label>
-          <div className="border-b border-[#c8c8c8] h-[22px]"></div>
+          <div className="border-b border-[#c8c8c8] h-[32px]"></div>
         </div>
       </div>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
+import { formatLongDate } from '../utils/formatDate';
 
 interface FormGProps {
   data: MemberFormData;
@@ -50,7 +51,7 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
               </tr>
               <tr>
                 <td>Application Date:</td>
-                <td>{docDate}</td>
+                <td>{formatLongDate(docDate)}</td>
               </tr>
               <tr>
                 <td>Document Version:</td>
@@ -83,7 +84,7 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-[9px] bg-[#faf8f5] p-2 border border-[#9d7f46]/30 rounded">
           <div>
             <span className="text-[#7a5c1e] font-bold block">Application Received Date:</span>
-            <span className="font-mono text-[#1a2744] font-bold">{docDate}</span>
+            <span className="font-mono text-[#1a2744] font-bold">{formatLongDate(docDate)}</span>
           </div>
           <div>
             <span className="text-[#7a5c1e] font-bold block">Document Reference:</span>

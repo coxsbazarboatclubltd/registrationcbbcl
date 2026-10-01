@@ -1,6 +1,7 @@
 import React from 'react';
 import { Lock } from 'lucide-react';
 import { MemberFormData } from '../types';
+import { formatLongDate } from '../utils/formatDate';
 
 interface DeclarationsAndConsentProps {
   data: MemberFormData;
@@ -65,27 +66,27 @@ export const DeclarationsAndConsent: React.FC<DeclarationsAndConsentProps> = ({
 
       {/* SIGNATURE SECTION — signatures are made by hand on the final printed copy after submission */}
       <div className="section pt-2">
-        <div className="field-row mt-2">
-          <div className="field w2">
-            <label className="text-[8px] font-bold uppercase text-[#1a2744]">
+        <div className="field-row mt-2 items-end">
+          <div className="field">
+            <label className="text-[8px] font-bold uppercase text-[#1a2744] whitespace-nowrap">
               Applicant's Signature{' '}
-              <span className="normal-case font-normal italic text-gray-500">(sign on final printed copy)</span>
+              <span className="normal-case font-normal italic text-gray-500">(sign on printed copy)</span>
             </label>
             <div className="border-b border-[#c8c8c8] h-8"></div>
           </div>
           <div className="field">
-            <label className="text-[8px] font-bold uppercase text-[#1a2744]">Date</label>
+            <label className="text-[8px] font-bold uppercase text-[#1a2744] whitespace-nowrap">Date</label>
             <div
               title="Filled automatically with the application date"
-              className="w-full text-[10px] leading-[3.2] px-2 py-1 border border-[#c8c8c8] rounded bg-gray-100 text-[#2c2c2c] font-semibold"
+              className="w-full h-8 flex items-center text-[10px] px-2 border border-[#c8c8c8] rounded bg-gray-100 text-[#2c2c2c] font-semibold whitespace-nowrap"
             >
-              {docDate}
+              {formatLongDate(docDate)}
             </div>
           </div>
-          <div className="field w2">
-            <label className="text-[8px] font-bold uppercase text-[#1a2744]">
+          <div className="field">
+            <label className="text-[8px] font-bold uppercase text-[#1a2744] whitespace-nowrap">
               Proposer's Name &amp; Signature{' '}
-              <span className="normal-case font-normal italic text-gray-500">(sign on final printed copy)</span>
+              <span className="normal-case font-normal italic text-gray-500">(sign on printed copy)</span>
             </label>
             <div className="border-b border-[#c8c8c8] h-8"></div>
           </div>

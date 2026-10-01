@@ -3,6 +3,7 @@ import { AlertTriangle } from 'lucide-react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
+import { formatLongDate } from '../utils/formatDate';
 
 interface Form2Props {
   data: MemberFormData;
@@ -59,7 +60,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               </tr>
               <tr>
                 <td>Application Date:</td>
-                <td>{docDate}</td>
+                <td>{formatLongDate(docDate)}</td>
               </tr>
               <tr>
                 <td>Document Version:</td>
