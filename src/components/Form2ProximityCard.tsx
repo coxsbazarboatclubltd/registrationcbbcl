@@ -1,4 +1,5 @@
 import React from 'react';
+import { AlertTriangle } from 'lucide-react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
@@ -348,7 +349,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
 
       {/* WARNING BOX */}
       <div className="warning-box">
-        <div className="warn-title">⚠ Important Notice · Security Protocols</div>
+        <div className="warn-title inline-flex items-center gap-1">
+          <AlertTriangle className="w-[10px] h-[10px] shrink-0" aria-hidden="true" /> Important Notice · Security Protocols
+        </div>
         <p>
           Proximity ID cards are the exclusive property of Cox's Bazar Boat Club Ltd. Members and registered dependents must carry these cards at all times on Club premises, lounges, recreational facilities, and dining rooms. Loss of card must be reported immediately to the Secretariat Registrar. Issuance of any <strong>duplicate card</strong> incurs a surcharge of BDT 5,000 and is subject to <strong>security clearance and executive committee review</strong>.
         </p>

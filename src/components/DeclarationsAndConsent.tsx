@@ -1,4 +1,5 @@
 import React from 'react';
+import { Lock } from 'lucide-react';
 import { MemberFormData } from '../types';
 
 interface DeclarationsAndConsentProps {
@@ -35,7 +36,7 @@ export const DeclarationsAndConsent: React.FC<DeclarationsAndConsentProps> = ({
       {/* CONFIDENTIALITY & DATA PRIVACY CONSENT (Requirement 5) */}
       <div className="section bg-[#faf8f5] border border-[#9d7f46]/30 rounded-lg p-3">
         <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#9d7f46]/30 text-[#1a2744]">
-          <span className="text-sm">🔒</span>
+          <Lock className="w-3.5 h-3.5 shrink-0 text-[#9d7f46]" aria-hidden="true" />
           <h3 className="font-['Montserrat'] font-bold text-xs uppercase tracking-wider text-[#1a2744]">
             Confidentiality &amp; Data Protection Declaration
           </h3>

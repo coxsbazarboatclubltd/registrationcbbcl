@@ -1,4 +1,5 @@
 import React from 'react';
+import { AlertTriangle } from 'lucide-react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 
@@ -65,7 +66,9 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
 
       {/* NOTICE BANNER */}
       <div className="bg-red-50 border border-red-200 text-red-900 rounded p-2 mb-3 text-[9px]">
-        <div className="font-bold uppercase tracking-wider mb-0.5">⚠️ Confidential Internal Secretariat Document</div>
+        <div className="font-bold uppercase tracking-wider mb-0.5 flex items-center gap-1">
+          <AlertTriangle className="w-[11px] h-[11px] shrink-0" aria-hidden="true" /> Confidential Internal Secretariat Document
+        </div>
         <p className="text-[8.5px] leading-tight">
           This page is reserved strictly for Secretariat Processing, Background Checks, Balloting, and Executive Board Signatures. It is not editable by applicants and forms the official archival record of Cox's Bazar Boat Club Ltd.
         </p>
