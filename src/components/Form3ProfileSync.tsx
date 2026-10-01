@@ -345,6 +345,7 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
           <div className="section-num">04</div>
           <h2>Dependent Family Demographics</h2>
         </div>
+        {data.maritalStatus === 'Married' ? (
         <div className="spouse-sync">
           <div className="ss-label">Spouse Digital Sync</div>
           <div className="field-row">
@@ -383,6 +384,9 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
             </div>
           </div>
         </div>
+        ) : (
+          <p className="text-[8px] italic text-gray-500">Not applicable — applicant is not married.</p>
+        )}
       </div>
 
       {/* SECTION 05 – CLUB FACILITIES & PRIVILEGES REQUEST */}

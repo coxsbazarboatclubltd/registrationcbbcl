@@ -23,6 +23,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
 }) => {
   const childCount = Math.min(Math.max(Number(data.numberOfChildren) || 0, 0), 6);
   const childIndexes = Array.from({ length: childCount }, (_, i) => i + 1);
+  // Spouse details only apply to married applicants (Marital Status on Form A)
+  const isMarried = data.maritalStatus === 'Married';
+  const dependentCount = childCount + (isMarried ? 1 : 0);
 
   return (
     <div className="page" id="form-3-page">
@@ -149,7 +152,12 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           The following direct dependents are registered for institutional proximity security cards. Upload or verify physical passports as required by the Club Secretariat.
         </p>
 
-        <div className={`dep-grid${childCount + 1 > 4 ? ' compact' : ''}`}>
+        {dependentCount === 0 && (
+          <p className="text-[8px] italic text-gray-500 mb-2">No dependents to register (applicant is not married and has no children).</p>
+        )}
+        <div className={`dep-grid${dependentCount > 4 ? ' compact' : ''}`}>
+          {isMarried && (
+            <>
           {/* SPOUSE */}
           <div className="dep-card">
             <div className="dep-type">Spouse</div>
@@ -206,6 +214,9 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
               </select>
             </div>
           </div>
+
+            </>
+          )}
 
           {/* CHILDREN (dynamic based on No. of Children) */}
           {childIndexes.map((i) => (
@@ -267,6 +278,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           ))}
         </div>
 
+        {isMarried && (
         <div className="field-row">
           <div className="field w2">
             <label>Spouse NID / Passport</label>
@@ -291,6 +303,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
             />
           </div>
         </div>
+        )}
       </div>
 
       {/* SECTION 02 – EMERGENCY CONTACT PROFILE */}

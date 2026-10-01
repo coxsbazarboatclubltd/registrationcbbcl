@@ -19,6 +19,8 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
   docNo,
   docDate,
 }) => {
+  // Spouse details only apply to married applicants (Marital Status on Form A)
+  const isMarried = data.maritalStatus === 'Married';
   const childCount = Math.min(Math.max(Number(data.numberOfChildren) || 0, 0), 6);
   const childIndexes = Array.from({ length: childCount }, (_, i) => i + 1);
 
@@ -188,6 +190,8 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           <h2>Family &amp; Dependent Information</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-2 mb-2">
+          {isMarried && (
+            <>
           {/* Spouse Details */}
           <div className="field">
             <label>Spouse Full Name</label>
@@ -265,6 +269,9 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
               />
             </div>
           </div>
+
+            </>
+          )}
 
           {/* Children Information */}
           <div className="col-span-full border-t border-[#9d7f46]/20 pt-2 mt-1">
