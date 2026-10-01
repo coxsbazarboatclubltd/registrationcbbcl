@@ -24,7 +24,8 @@ const LOCAL_CHROME_PATHS = [
 const MAX_HTML_BYTES = 4 * 1024 * 1024;
 
 async function launchBrowser() {
-  const puppeteer = require('puppeteer-core');
+  // ESM-only package; dynamic import works on every Node version Vercel runs
+  const { default: puppeteer } = await import('puppeteer-core');
   const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 
   if (isServerless) {
