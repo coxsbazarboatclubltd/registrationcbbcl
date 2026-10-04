@@ -72,13 +72,45 @@ function bakeFormValues(original: HTMLElement, clone: HTMLElement): void {
   });
 }
 
-export function buildPrintSnapshot(): string {
+// Hand-fillable blank form: auto-filled (grey) boxes become plain white.
+const BLANK_FORM_CSS = `
+.page .locked-field,
+.page .field input.locked-field,
+.page .field select.locked-field,
+.page .date-display,
+.page .bg-gray-100 { background: #ffffff !important; }
+`;
+
+/** Clears every choice (selects, radios, checkboxes) for the blank form. */
+function blankChoices(clone: HTMLElement): void {
+  clone.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach((input) => {
+    input.removeAttribute('checked');
+  });
+  clone.querySelectorAll('select').forEach((select) => {
+    Array.from(select.options).forEach((opt) => opt.removeAttribute('selected'));
+    const empty = document.createElement('option');
+    empty.setAttribute('selected', '');
+    select.insertBefore(empty, select.firstChild);
+  });
+}
+
+interface SnapshotOptions {
+  /** Container holding the .page elements to print (defaults to the live form). */
+  root?: HTMLElement;
+  /** Produce the hand-fillable blank form. */
+  blank?: boolean;
+}
+
+export function buildPrintSnapshot({ root, blank = false }: SnapshotOptions = {}): string {
+  const originals: HTMLElement[] = root
+    ? Array.from(root.querySelectorAll<HTMLElement>('.page'))
+    : PAGE_IDS.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
+
   const pages: string[] = [];
-  for (const id of PAGE_IDS) {
-    const original = document.getElementById(id);
-    if (!original) continue;
+  for (const original of originals) {
     const clone = original.cloneNode(true) as HTMLElement;
     bakeFormValues(original, clone);
+    if (blank) blankChoices(clone);
     clone.classList.remove('hidden');
     clone.style.cssText = '';
     pages.push(clone.outerHTML);
@@ -91,7 +123,7 @@ export function buildPrintSnapshot(): string {
 <meta charset="utf-8">
 <link rel="stylesheet" href="${FONT_LINK}">
 <style>${collectStyles()}</style>
-<style>${PRINT_CSS}</style>
+<style>${PRINT_CSS}${blank ? BLANK_FORM_CSS : ''}</style>
 </head>
 <body>${pages.join('\n')}</body>
 </html>`;

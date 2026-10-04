@@ -1,4 +1,5 @@
 import React from 'react';
+import { useBlankForm } from './BlankFormContext';
 import { AlertTriangle } from 'lucide-react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
@@ -21,6 +22,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
   docNo,
   docDate,
 }) => {
+  const isBlankForm = useBlankForm();
   const childCount = Math.min(Math.max(Number(data.numberOfChildren) || 0, 0), 6);
   const childIndexes = Array.from({ length: childCount }, (_, i) => i + 1);
   // Spouse details only apply to married applicants (Marital Status on Form A)
@@ -145,7 +147,7 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
           </div>
           <div className="flex items-center gap-1.5 text-[7px] font-bold uppercase tracking-[1px] text-[var(--label)]" title="Filled automatically from an earlier page">
             No. of Children:
-            <span className="locked-field px-2 py-0.5 rounded border border-[var(--border)] text-[9px] text-[var(--text)]">{data.numberOfChildren}</span>
+            <span className="locked-field px-2 py-0.5 rounded border border-[var(--border)] text-[9px] text-[var(--text)]">{isBlankForm ? '   ' : data.numberOfChildren}</span>
           </div>
         </div>
         <p className="text-[7.5px] color-[#6b6b6b] italic mb-[8px] leading-[1.5]">

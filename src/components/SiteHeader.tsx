@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BLANK_FORM_URL } from '../utils/blankForm';
 import { ChevronDown } from 'lucide-react';
 import { CbbcLogo } from './CbbcLogo';
 
@@ -170,6 +171,14 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ onClearForm, draftSavedA
               ✓ Draft saved {new Date(draftSavedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
           )}
+          <a
+            href={BLANK_FORM_URL}
+            download
+            className="text-[9px] uppercase tracking-wider text-[#c4a56a] hover:text-white underline transition-colors"
+            title="Download a blank printable form to fill in by hand"
+          >
+            Download Blank Form
+          </a>
           <button
             onClick={onClearForm}
             className="text-[9px] uppercase tracking-wider text-gray-400 hover:text-white underline transition-colors cursor-pointer"

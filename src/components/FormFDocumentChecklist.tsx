@@ -1,4 +1,5 @@
 import React from 'react';
+import { useBlankForm } from './BlankFormContext';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { CHECKLIST_ITEMS, isDocumentEnclosed } from '../utils/documentChecklist';
@@ -26,7 +27,8 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   const uploadedDocs = data.uploadedDocs || {};
   const isEnclosed = (item: (typeof CHECKLIST_ITEMS)[number]) => isDocumentEnclosed(data, item);
   const enclosedCount = CHECKLIST_ITEMS.filter(isEnclosed).length;
-  const enclosedCountLabel = `${enclosedCount} Document${enclosedCount === 1 ? '' : 's'}`;
+  const isBlankForm = useBlankForm();
+  const enclosedCountLabel = isBlankForm ? '' : `${enclosedCount} Document${enclosedCount === 1 ? '' : 's'}`;
 
   return (
     <div className="space-y-4">
@@ -139,7 +141,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               </div>
               <div>
                 <span className="font-bold text-[#1a2744] block">Date of Declaration:</span>
-                <span className="font-semibold text-[#0f5132]">{formatLongDate(docDate)}</span>
+                <span className="font-semibold text-[#0f5132]">{formatLongDate(docDate) || '________________________'}</span>
               </div>
             </div>
           </div>
@@ -306,7 +308,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               </div>
               <div>
                 <span className="font-bold text-[#1a2744] block">Date of Declaration:</span>
-                <span className="font-semibold text-[#0f5132]">{formatLongDate(docDate)}</span>
+                <span className="font-semibold text-[#0f5132]">{formatLongDate(docDate) || '________________________'}</span>
               </div>
             </div>
           </div>

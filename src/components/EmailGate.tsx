@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BLANK_FORM_URL } from '../utils/blankForm';
 import { CbbcLogo } from './CbbcLogo';
 import { OtpService } from '../services/otpService';
 
@@ -166,6 +167,18 @@ export const EmailGate: React.FC<EmailGateProps> = ({ onVerified }) => {
               </button>
             </form>
           )}
+
+          {/* Paper option: no verification needed */}
+          <div className="mt-6 pt-4 border-t border-gray-200 text-center">
+            <p className="text-[11px] text-gray-600 mb-1">Prefer to fill in the form by hand?</p>
+            <a
+              href={BLANK_FORM_URL}
+              download
+              className="inline-flex items-center gap-1.5 text-[12px] font-bold text-[#1a2744] hover:text-[#9d7f46] underline"
+            >
+              Download the blank application form (PDF)
+            </a>
+          </div>
         </div>
       </div>
     </div>

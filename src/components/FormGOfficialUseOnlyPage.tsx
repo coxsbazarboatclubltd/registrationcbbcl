@@ -3,6 +3,7 @@ import { AlertTriangle } from 'lucide-react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { formatLongDate } from '../utils/formatDate';
+import { useBlankForm } from './BlankFormContext';
 
 interface FormGProps {
   data: MemberFormData;
@@ -15,6 +16,7 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
   docNo,
   docDate,
 }) => {
+  const isBlankForm = useBlankForm();
   return (
     <div className="page" id="form-7-page">
       {/* WATERMARK */}
@@ -96,7 +98,7 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
           </div>
           <div>
             <span className="text-[#7a5c1e] font-bold block">Processing Status:</span>
-            <span className="font-bold text-[#0f5132]">Received &amp; Under Audit</span>
+            <span className="font-bold text-[#0f5132]">{isBlankForm ? '' : 'Received & Under Audit'}</span>
           </div>
         </div>
       </div>

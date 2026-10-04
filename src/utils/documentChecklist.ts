@@ -14,6 +14,7 @@ export const CHECKLIST_ITEMS = [
   { field: 'docTradeLicense', name: 'Trade License / Employment ID', note: 'Trade license or employment identification', required: true },
   { field: 'docTinCertificate', name: 'TIN Certificate', note: 'Tax identification certificate copy', required: true },
   { field: 'docCompanyId', name: 'Company ID / Official Card', note: 'Official ID card or employment proof', required: false },
+  { field: 'docEducationCertificate', name: 'Education Certificate', note: 'Highest academic degree / certificate copy', required: false },
   { field: 'docOtherAttachments', name: 'Supporting Documents & Other Attachments', note: 'Utility Bill, Organization Letter, Recommendation', required: false },
 ] as const;
 

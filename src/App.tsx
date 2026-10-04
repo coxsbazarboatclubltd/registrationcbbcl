@@ -14,6 +14,7 @@ import { SubmissionModal } from './components/SubmissionModal';
 import { validateMemberForm, ValidationError } from './utils/formValidation';
 import { generateApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
 import { buildPrintSnapshot } from './utils/pdfSnapshot';
+import { BlankFormRenderer } from './components/BlankFormRenderer';
 import { ReferenceService } from './services/referenceService';
 import { SubmissionService } from './services/submissionService';
 import { EmailGate } from './components/EmailGate';
@@ -189,6 +190,30 @@ export default function App() {
     localStorage.setItem(OTP_SESSION_KEY, JSON.stringify(session));
     setFormData((prev) => ({ ...prev, email: verifiedEmail }));
   };
+
+  // LOCAL DEV ONLY: lets scripts/generate-blank-form.cjs render the
+  // hand-fillable blank form (served as a static file on the live site).
+  const [renderBlankForm, setRenderBlankForm] = useState(false);
+  const blankFormRef = useRef<HTMLDivElement>(null);
+  const blankFormResolver = useRef<((html: string) => void) | null>(null);
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    (window as any).__cbbclBlankFormSnapshot = () =>
+      new Promise<string>((resolve) => {
+        blankFormResolver.current = resolve;
+        setRenderBlankForm(true);
+      });
+  }, []);
+  useEffect(() => {
+    if (!renderBlankForm || !blankFormRef.current) return;
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        blankFormResolver.current?.(buildPrintSnapshot({ root: blankFormRef.current!, blank: true }));
+        blankFormResolver.current = null;
+        setRenderBlankForm(false);
+      })
+    );
+  }, [renderBlankForm]);
 
   const handleFieldChange = (field: keyof MemberFormData, value: any) => {
     setFormData((prev) => ({
@@ -566,6 +591,9 @@ export default function App() {
       </main>
 
       <SiteFooter />
+
+      {/* BLANK FORM PAGES (dev-only, off-screen; see __cbbclBlankFormSnapshot) */}
+      {import.meta.env.DEV && renderBlankForm && <BlankFormRenderer ref={blankFormRef} />}
 
       {/* PDF GENERATION OVERLAY */}
       {isSavingPdf && (
