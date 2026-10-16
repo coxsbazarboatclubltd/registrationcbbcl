@@ -2,6 +2,7 @@ import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
 import { MemberFormData } from '../types';
 import { buildPrintSnapshot } from './pdfSnapshot';
+import { appendAttachmentsToPdf } from './attachments';
 
 export interface GeneratedPdfResult {
   blob: Blob;
@@ -320,6 +321,10 @@ export async function generateApplicationPdf(
   docDate: string,
   otpSessionToken?: string
 ): Promise<GeneratedPdfResult> {
+  const cleanName = (data.candidateName || 'Applicant').replace(/[^a-zA-Z0-9_-]/g, '_');
+  const filename = `${refNo.trim() || 'CBBCL'}_${cleanName}_Membership_Application.pdf`;
+
+  let formPdf: Blob;
   try {
     const html = buildPrintSnapshot();
     const response = await fetch('/api/pdf', {
@@ -330,15 +335,13 @@ export async function generateApplicationPdf(
     if (!response.ok || !response.headers.get('content-type')?.includes('application/pdf')) {
       throw new Error(`PDF service responded with HTTP ${response.status}`);
     }
-    const blob = await response.blob();
-    const cleanName = (data.candidateName || 'Applicant').replace(/[^a-zA-Z0-9_-]/g, '_');
-    return {
-      blob,
-      dataUri: await blobToDataUri(blob),
-      filename: `${refNo}_${cleanName}_Membership_Application.pdf`,
-    };
+    formPdf = await response.blob();
   } catch (err) {
     console.warn('Server PDF rendering unavailable, using in-browser fallback:', err);
-    return generateFullApplicationPdf(data, refNo, docDate);
+    formPdf = (await generateFullApplicationPdf(data, refNo, docDate)).blob;
   }
+
+  // Uploaded supporting documents are appended here, in the browser, as A4 pages.
+  const blob = await appendAttachmentsToPdf(formPdf, data, refNo);
+  return { blob, dataUri: await blobToDataUri(blob), filename };
 }

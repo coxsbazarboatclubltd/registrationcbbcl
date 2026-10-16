@@ -26,6 +26,8 @@ export interface UploadedDocumentMeta {
   fileSize: string;
   fileType: string;
   fileDataUrl?: string;
+  /** Stored size in bytes (after image compression) — counts toward the attachment budget */
+  byteSize?: number;
   uploadedAt: string;
 }
 

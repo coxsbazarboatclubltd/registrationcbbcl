@@ -15,6 +15,7 @@ import { validateMemberForm, ValidationError } from './utils/formValidation';
 import { generateApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
 import { buildPrintSnapshot } from './utils/pdfSnapshot';
 import { BlankFormRenderer } from './components/BlankFormRenderer';
+import { MAX_SUBMISSION_PDF_DATA_URI_CHARS, uploadedAttachments } from './utils/attachments';
 import { ReferenceService } from './services/referenceService';
 import { SubmissionService } from './services/submissionService';
 import { EmailGate } from './components/EmailGate';
@@ -266,8 +267,34 @@ export default function App() {
 
   // Prints the same A4 snapshot the PDF uses (one sheet per page, no
   // on-screen scaling), via a hidden iframe so the app UI isn't printed.
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if (!ensureFormComplete()) return;
+
+    // With uploaded documents, print the complete PDF (form + A4 attachment
+    // pages). The tab is opened synchronously so popup blockers allow it.
+    if (uploadedAttachments(formData).length > 0) {
+      if (isSavingPdf || isSubmitting) return;
+      const tab = window.open('', '_blank');
+      tab?.document.write(
+        '<p style="font-family:Montserrat,Arial,sans-serif;padding:32px;color:#1a2744">Preparing your application for printing…</p>'
+      );
+      setIsSavingPdf(true);
+      try {
+        const tempRefNo = formData.registrationNumber || referenceNumber || 'CBBCL-2026-000001';
+        const result = await generateApplicationPdf(formData, tempRefNo, dateStr, otpSession?.token);
+        if (tab && !tab.closed) tab.location.href = URL.createObjectURL(result.blob);
+        else downloadPdfBlob(result.blob, result.filename);
+      } catch (err) {
+        console.error('Print preparation error:', err);
+        tab?.close();
+        alert('Could not prepare the application for printing. Please try again.');
+      } finally {
+        setIsSavingPdf(false);
+      }
+      return;
+    }
+
+    // No attachments: print the A4 page snapshot directly (no server call).
     const iframe = document.createElement('iframe');
     iframe.setAttribute('aria-hidden', 'true');
     iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
@@ -336,6 +363,16 @@ export default function App() {
       setPdfResult(generated);
     } catch (pdfErr: any) {
       console.warn('PDF generation error:', pdfErr);
+    }
+
+    // The PDF is sent inside the request body, which Vercel caps at 4.5 MB.
+    if (generated && generated.dataUri.length > MAX_SUBMISSION_PDF_DATA_URI_CHARS) {
+      setErrorDetails(
+        'Your uploaded documents make the application PDF too large to submit online. Please replace large PDF uploads with photos/scans or remove some uploads on Page 6 and try again.'
+      );
+      setModalStatus('error');
+      setIsSubmitting(false);
+      return;
     }
 
     // 3. Transmit Application to Serverless Function /api/submit

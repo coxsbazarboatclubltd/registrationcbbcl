@@ -1,5 +1,5 @@
 import { MemberFormData } from '../types';
-import { CHECKLIST_ITEMS, isDocumentEnclosed } from './documentChecklist';
+import { CHECKLIST_ITEMS, incompleteTwoSidedUploads, isDocumentEnclosed } from './documentChecklist';
 
 export interface ValidationError {
   field: keyof MemberFormData | 'general' | 'checklist' | 'declaration' | 'uploads';
@@ -128,6 +128,13 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
         message: `Document Checklist: "${item.name}" is mandatory — please tick it as enclosed on Page 6.`,
       });
     }
+  }
+  // Two-sided documents (National ID) need both sides when uploaded
+  for (const item of incompleteTwoSidedUploads(data)) {
+    errors.push({
+      field: 'uploads',
+      message: `${item.name}: please upload both the front and the back side on Page 6 (one side only is not accepted).`,
+    });
   }
 
   // 7. Required Photo Upload

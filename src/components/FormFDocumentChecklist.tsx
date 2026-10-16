@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import {
+  ACCEPTED_ATTACHMENT_TYPES,
+  MAX_TOTAL_ATTACHMENT_BYTES,
+  attachmentBytesUsed,
+  formatBytes,
+  prepareAttachment,
+} from '../utils/attachments';
 import { useBlankForm } from './BlankFormContext';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
-import { CHECKLIST_ITEMS, isDocumentEnclosed } from '../utils/documentChecklist';
+import {
+  CHECKLIST_ITEMS,
+  incompleteTwoSidedUploads,
+  isDocumentEnclosed,
+  isTwoSided,
+  uploadSlots,
+} from '../utils/documentChecklist';
 import { formatLongDate } from '../utils/formatDate';
 
 interface FormFProps {
@@ -29,6 +42,47 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   const enclosedCount = CHECKLIST_ITEMS.filter(isEnclosed).length;
   const isBlankForm = useBlankForm();
   const enclosedCountLabel = isBlankForm ? '' : `${enclosedCount} Document${enclosedCount === 1 ? '' : 's'}`;
+
+  // Supporting-document uploads (appended to the generated PDF as A4 pages)
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadingName, setUploadingName] = useState<string | null>(null);
+  const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const bytesUsed = attachmentBytesUsed(uploadedDocs);
+
+  const handleUpload = async (item: (typeof CHECKLIST_ITEMS)[number], slotKey: string, file: File | undefined) => {
+    if (!file) return;
+    setUploadError(null);
+    setUploadingName(slotKey);
+    try {
+      const prepared = await prepareAttachment(file);
+      const replacing = uploadedDocs[slotKey];
+      const replacingBytes = replacing ? attachmentBytesUsed({ [slotKey]: replacing }) : 0;
+      if (bytesUsed - replacingBytes + (prepared.byteSize || 0) > MAX_TOTAL_ATTACHMENT_BYTES) {
+        throw new Error(
+          `"${file.name}" (${prepared.fileSize}) would exceed the ${formatBytes(MAX_TOTAL_ATTACHMENT_BYTES)} upload limit. ` +
+            'Try a photo/scan instead of a large PDF, or remove another upload.'
+        );
+      }
+      onChange('uploadedDocs', { ...uploadedDocs, [slotKey]: prepared });
+      onChange(item.field as keyof MemberFormData, true);
+    } catch (err: any) {
+      setUploadError(err?.message || 'The file could not be uploaded.');
+    } finally {
+      setUploadingName(null);
+      const input = fileInputs.current[slotKey];
+      if (input) input.value = '';
+    }
+  };
+
+  const handleRemoveUpload = (item: (typeof CHECKLIST_ITEMS)[number], slotKey: string) => {
+    const next = { ...uploadedDocs };
+    delete next[slotKey];
+    onChange('uploadedDocs', next);
+    // Untick only when no file remains for this document
+    if (!uploadSlots(item).some((slot) => next[slot.key])) {
+      onChange(item.field as keyof MemberFormData, false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -60,9 +114,10 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
             <table className="w-full text-left text-[10px] border-collapse">
               <thead>
                 <tr className="bg-[#1a2744] text-white uppercase text-[9px] tracking-wider">
-                  <th className="p-2 border-r border-[#9d7f46]/30 text-center w-[12%]">Enclosed</th>
-                  <th className="p-2 border-r border-[#9d7f46]/30 w-[43%]">Document Title</th>
-                  <th className="p-2 w-[45%]">Description &amp; Guidelines</th>
+                  <th className="p-2 border-r border-[#9d7f46]/30 text-center w-[10%]">Enclosed</th>
+                  <th className="p-2 border-r border-[#9d7f46]/30 w-[32%]">Document Title</th>
+                  <th className="p-2 border-r border-[#9d7f46]/30 w-[30%]">Description &amp; Guidelines</th>
+                  <th className="p-2 w-[28%]">Upload Copy (PDF / JPG / PNG)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#c8c8c8]">
@@ -86,14 +141,101 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                           <span className="ml-1 text-[8px] italic text-gray-500">(Optional)</span>
                         )}
                       </td>
-                      <td className="p-2 text-gray-600">
+                      <td className="p-2 border-r border-[#c8c8c8] text-gray-600">
                         {item.note}
+                      </td>
+                      <td className="p-2">
+                        {isTwoSided(item) && (
+                          <div className="mb-1 text-[8px] font-semibold text-[#9d7f46]">
+                            Upload both the front and back of your NID card
+                          </div>
+                        )}
+                        <div className="space-y-1">
+                          {uploadSlots(item).map((slot) => {
+                            const uploaded = uploadedDocs[slot.key];
+                            return (
+                              <div key={slot.key} className="flex items-center gap-1.5 min-w-0">
+                                {slot.side && (
+                                  <span className="shrink-0 w-9 text-[8px] font-bold uppercase text-gray-500">{slot.side}</span>
+                                )}
+                                <input
+                                  type="file"
+                                  accept={ACCEPTED_ATTACHMENT_TYPES}
+                                  className="hidden"
+                                  ref={(el) => (fileInputs.current[slot.key] = el)}
+                                  onChange={(e) => handleUpload(item, slot.key, e.target.files?.[0])}
+                                />
+                                {uploadingName === slot.key ? (
+                                  <span className="text-[9px] italic text-gray-500">Processing…</span>
+                                ) : uploaded ? (
+                                  <>
+                                    <span className="text-green-700 font-bold shrink-0">✓</span>
+                                    <span className="truncate text-[9px] text-[#1a2744]" title={uploaded.fileName}>
+                                      {uploaded.fileName}
+                                    </span>
+                                    <span className="shrink-0 text-[8px] text-gray-500">{uploaded.fileSize}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() => fileInputs.current[slot.key]?.click()}
+                                      className="shrink-0 text-[8px] font-bold uppercase text-[#1a2744] underline cursor-pointer"
+                                    >
+                                      Replace
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRemoveUpload(item, slot.key)}
+                                      className="shrink-0 text-[8px] font-bold uppercase text-red-600 underline cursor-pointer"
+                                    >
+                                      Remove
+                                    </button>
+                                  </>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => fileInputs.current[slot.key]?.click()}
+                                    className="text-[9px] font-bold uppercase tracking-wider text-[#1a2744] bg-white border border-[#9d7f46]/60 hover:bg-[#1a2744] hover:text-white px-2.5 py-1 rounded transition-colors cursor-pointer"
+                                  >
+                                    {slot.side ? `Upload ${slot.side}` : 'Upload'}
+                                  </button>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {isTwoSided(item) && incompleteTwoSidedUploads(data).includes(item) && (
+                          <div className="mt-1 text-[8px] font-semibold text-red-600">
+                            Both sides are required — please also upload the{' '}
+                            {uploadedDocs[uploadSlots(item)[0].key] ? 'back' : 'front'} side.
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
+          </div>
+
+          {/* Upload status: errors + storage budget (Vercel request size limit) */}
+          {uploadError && (
+            <div className="p-2 bg-red-50 border border-red-200 text-red-700 text-[10px] rounded flex items-start justify-between gap-2">
+              <span>⚠ {uploadError}</span>
+              <button type="button" onClick={() => setUploadError(null)} className="font-bold text-red-800 cursor-pointer">
+                ×
+              </button>
+            </div>
+          )}
+          <div className="flex items-center gap-3 text-[9px] text-gray-600">
+            <div className="flex-1 h-1.5 bg-gray-200 rounded overflow-hidden">
+              <div
+                className={`h-full ${bytesUsed > MAX_TOTAL_ATTACHMENT_BYTES * 0.85 ? 'bg-amber-500' : 'bg-[#0f5132]'}`}
+                style={{ width: `${Math.min(100, (bytesUsed / MAX_TOTAL_ATTACHMENT_BYTES) * 100)}%` }}
+              />
+            </div>
+            <span className="shrink-0">
+              Uploaded: {formatBytes(bytesUsed)} of {formatBytes(MAX_TOTAL_ATTACHMENT_BYTES)} · Photos are compressed
+              automatically; each upload is added to your PDF on its own A4 page.
+            </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 text-[10px]">

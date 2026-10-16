@@ -261,7 +261,6 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
               }}
               className="w-full h-[135px]"
             />
-            <div className="seal-label mt-1">Applicant Seal</div>
           </div>
         </div>
       </div>
