@@ -1,5 +1,6 @@
 import { MemberFormData } from '../types';
-import { CHECKLIST_ITEMS, incompleteTwoSidedUploads, isDocumentEnclosed } from './documentChecklist';
+import { checklistItemsFor, incompleteTwoSidedUploads, isDocumentEnclosed } from './documentChecklist';
+import { DOCUMENT_UPLOADS_ENABLED } from './attachments';
 
 export interface ValidationError {
   field: keyof MemberFormData | 'general' | 'checklist' | 'declaration' | 'uploads';
@@ -121,7 +122,7 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
   }
 
   // 6c. Document checklist — every mandatory document must be confirmed as enclosed
-  for (const item of CHECKLIST_ITEMS) {
+  for (const item of checklistItemsFor(data)) {
     if (item.required && !isDocumentEnclosed(data, item)) {
       errors.push({
         field: 'checklist',
@@ -130,7 +131,7 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
     }
   }
   // Two-sided documents (National ID) need both sides when uploaded
-  for (const item of incompleteTwoSidedUploads(data)) {
+  for (const item of DOCUMENT_UPLOADS_ENABLED ? incompleteTwoSidedUploads(data) : []) {
     errors.push({
       field: 'uploads',
       message: `${item.name}: please upload both the front and the back side on Page 6 (one side only is not accepted).`,

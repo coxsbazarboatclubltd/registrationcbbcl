@@ -24,7 +24,11 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
 
       <p className="text-[8px] text-[#6b6b6b] mb-2 leading-relaxed">
         Both references are mandatory. Each reference must be an existing member of Cox's Bazar Boat Club Ltd. with a valid
-        Club Member No. — references from non-members will not be accepted. References must not be immediate family members.
+        Club Member No. — references from non-members will not be accepted. References must not be immediate family members.{' '}
+        <span className="font-semibold text-[#1a2744]">
+          If you do not have a reference or need assistance with the reference section, please contact the Secretariat by
+          calling <span className="whitespace-nowrap">+880 1332 886688</span>.
+        </span>
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

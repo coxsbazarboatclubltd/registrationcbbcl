@@ -1,6 +1,6 @@
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, degrees, rgb } from 'pdf-lib';
 import { MemberFormData, UploadedDocumentMeta } from '../types';
-import { CHECKLIST_ITEMS, uploadSlots } from './documentChecklist';
+import { checklistItemsFor, uploadSlots } from './documentChecklist';
 
 /**
  * Supporting-document uploads (Form F checklist) and how they are appended to
@@ -12,6 +12,13 @@ import { CHECKLIST_ITEMS, uploadSlots } from './documentChecklist';
  * base64 adds a third, so attachments must stay within ~2 MB in total.
  */
 export const MAX_TOTAL_ATTACHMENT_BYTES = 2 * 1024 * 1024;
+
+/**
+ * Online document uploads are ARCHIVED (switched off): members email their
+ * documents to registration@cbbcl.org separately, for confidentiality. Set to
+ * true to restore the Upload column and the attachment pages in the PDF.
+ */
+export const DOCUMENT_UPLOADS_ENABLED = false;
 export const ACCEPTED_ATTACHMENT_TYPES = '.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png';
 
 // Images are normalised to ~200 dpi on A4 — sharp in print, small on upload.
@@ -204,8 +211,9 @@ interface AttachmentFile {
 
 /** Documents with at least one uploaded file, in checklist order (two-sided ones grouped). */
 export function uploadedAttachments(data: MemberFormData) {
+  if (!DOCUMENT_UPLOADS_ENABLED) return [];
   const docs = data.uploadedDocs || {};
-  return CHECKLIST_ITEMS.map((item) => ({
+  return checklistItemsFor(data).map((item) => ({
     item,
     files: uploadSlots(item)
       .map((slot) => ({ side: slot.side, doc: docs[slot.key] }))

@@ -1,16 +1,20 @@
 import React, { useRef, useState } from 'react';
 import {
   ACCEPTED_ATTACHMENT_TYPES,
+  DOCUMENT_UPLOADS_ENABLED,
   MAX_TOTAL_ATTACHMENT_BYTES,
   attachmentBytesUsed,
   formatBytes,
   prepareAttachment,
 } from '../utils/attachments';
 import { useBlankForm } from './BlankFormContext';
+import { EmailDocumentsNotice } from './EmailDocumentsNotice';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import {
   CHECKLIST_ITEMS,
+  checklistItemsFor,
+  checklistNote,
   incompleteTwoSidedUploads,
   isDocumentEnclosed,
   isTwoSided,
@@ -25,11 +29,6 @@ interface FormFProps {
   docDate: string;
 }
 
-// Secretariat verification list: every checklist document, plus reference signatures
-const OFFICE_VERIFICATION_ITEMS = [
-  ...CHECKLIST_ITEMS.map((item) => item.name),
-  'Proposer & Seconder (Reference) Signatures',
-];
 
 export const FormFDocumentChecklist: React.FC<FormFProps> = ({
   data,
@@ -39,7 +38,11 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
 }) => {
   const uploadedDocs = data.uploadedDocs || {};
   const isEnclosed = (item: (typeof CHECKLIST_ITEMS)[number]) => isDocumentEnclosed(data, item);
-  const enclosedCount = CHECKLIST_ITEMS.filter(isEnclosed).length;
+  // Only the documents that apply (spouse/children photos depend on Pages 1–2)
+  const items = checklistItemsFor(data);
+  const enclosedCount = items.filter(isEnclosed).length;
+  // Secretariat verification list: every applicable document, plus reference signatures
+  const OFFICE_VERIFICATION_ITEMS = [...items.map((item) => item.name), 'Proposer & Seconder (Reference) Signatures'];
   const isBlankForm = useBlankForm();
   const enclosedCountLabel = isBlankForm ? '' : `${enclosedCount} Document${enclosedCount === 1 ? '' : 's'}`;
 
@@ -116,12 +119,14 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                 <tr className="bg-[#1a2744] text-white uppercase text-[9px] tracking-wider">
                   <th className="p-2 border-r border-[#9d7f46]/30 text-center w-[10%]">Enclosed</th>
                   <th className="p-2 border-r border-[#9d7f46]/30 w-[32%]">Document Title</th>
-                  <th className="p-2 border-r border-[#9d7f46]/30 w-[30%]">Description &amp; Guidelines</th>
-                  <th className="p-2 w-[28%]">Upload Copy (PDF / JPG / PNG)</th>
+                  <th className={`p-2 ${DOCUMENT_UPLOADS_ENABLED ? 'border-r border-[#9d7f46]/30 w-[30%]' : 'w-[58%]'}`}>
+                    Description &amp; Guidelines
+                  </th>
+                  {DOCUMENT_UPLOADS_ENABLED && <th className="p-2 w-[28%]">Upload Copy (PDF / JPG / PNG)</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#c8c8c8]">
-                {CHECKLIST_ITEMS.map((item, idx) => {
+                {items.map((item, idx) => {
                   const isChecked = isEnclosed(item);
                   return (
                     <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#faf8f5]'}>
@@ -141,9 +146,10 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                           <span className="ml-1 text-[8px] italic text-gray-500">(Optional)</span>
                         )}
                       </td>
-                      <td className="p-2 border-r border-[#c8c8c8] text-gray-600">
-                        {item.note}
+                      <td className={`p-2 text-gray-600 ${DOCUMENT_UPLOADS_ENABLED ? 'border-r border-[#c8c8c8]' : ''}`}>
+                        {isBlankForm ? item.note : checklistNote(item, data)}
                       </td>
+                      {DOCUMENT_UPLOADS_ENABLED && (
                       <td className="p-2">
                         {isTwoSided(item) && (
                           <div className="mb-1 text-[8px] font-semibold text-[#9d7f46]">
@@ -209,6 +215,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                           </div>
                         )}
                       </td>
+                      )}
                     </tr>
                   );
                 })}
@@ -216,6 +223,8 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
             </table>
           </div>
 
+          {DOCUMENT_UPLOADS_ENABLED && (
+          <>
           {/* Upload status: errors + storage budget (Vercel request size limit) */}
           {uploadError && (
             <div className="p-2 bg-red-50 border border-red-200 text-red-700 text-[10px] rounded flex items-start justify-between gap-2">
@@ -237,6 +246,12 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               automatically; each upload is added to your PDF on its own A4 page.
             </span>
           </div>
+
+          </>
+          )}
+
+          {/* Documents are emailed separately (confidential) — see EmailDocumentsNotice */}
+          <EmailDocumentsNotice data={data} docDate={docDate} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 text-[10px]">
             <div className="field">
@@ -379,11 +394,11 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#c8c8c8]">
-                {CHECKLIST_ITEMS.map((item, idx) => {
+                {items.map((item, idx) => {
                   const isChecked = isEnclosed(item);
                   return (
                     <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#faf8f5]'}>
-                      <td className="px-2 py-1.5 border-r border-[#c8c8c8] text-center">
+                      <td className="px-2 py-0.5 border-r border-[#c8c8c8] text-center">
                         <input
                           type="checkbox"
                           checked={isChecked}
@@ -391,7 +406,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                           className="w-4 h-4 accent-[#0f5132] cursor-pointer"
                         />
                       </td>
-                      <td className="px-2 py-1.5 border-r border-[#c8c8c8]">
+                      <td className="px-2 py-0.5 border-r border-[#c8c8c8]">
                         <span className="font-bold text-[#1a2744]">{item.name}</span>
                         {item.required ? (
                           <span className="text-red-600 font-bold"> *</span>
@@ -399,14 +414,18 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
                           <span className="ml-1 text-[8px] italic text-gray-500">(Optional)</span>
                         )}
                       </td>
-                      <td className="px-2 py-1.5 text-gray-600">
-                        {item.note}
+                      <td className="px-2 py-0.5 text-gray-600">
+                        {isBlankForm ? item.note : checklistNote(item, data)}
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
+          </div>
+
+          <div className="mt-2">
+            <EmailDocumentsNotice data={data} docDate={docDate} print />
           </div>
 
           <div className="mt-2 text-[9px] grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -464,7 +483,7 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
           </div>
           <p className="text-[8px] text-gray-500 italic mb-1">For Office Use Only — to be marked by the Secretariat after printing.</p>
           <div className="bg-white border border-[#c8c8c8] rounded p-2.5 text-[9px]">
-            <div className="grid grid-cols-3 gap-x-3 gap-y-1.5 mb-2">
+            <div className="grid grid-cols-4 gap-x-3 gap-y-1 mb-2">
               {OFFICE_VERIFICATION_ITEMS.map((label) => (
                 <label key={label} className="flex items-center gap-2 text-gray-500">
                   <input type="checkbox" checked={false} disabled className="accent-[#0f5132]" />

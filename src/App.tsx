@@ -15,6 +15,7 @@ import { validateMemberForm, ValidationError } from './utils/formValidation';
 import { generateApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
 import { buildPrintSnapshot } from './utils/pdfSnapshot';
 import { BlankFormRenderer } from './components/BlankFormRenderer';
+import { documentsMailtoHref } from './components/EmailDocumentsNotice';
 import { MAX_SUBMISSION_PDF_DATA_URI_CHARS, uploadedAttachments } from './utils/attachments';
 import { ReferenceService } from './services/referenceService';
 import { SubmissionService } from './services/submissionService';
@@ -665,6 +666,7 @@ export default function App() {
         onRetry={handleSubmit}
         onClose={() => setIsModalOpen(false)}
         onReset={discardDraft}
+        documentsMailtoHref={documentsMailtoHref(formData, dateStr)}
       />
     </div>
   );

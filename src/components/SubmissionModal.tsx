@@ -19,6 +19,8 @@ interface SubmissionModalProps {
   onRetry: () => void;
   onClose: () => void;
   onReset: () => void | Promise<void>;
+  /** mailto: link for emailing the checklist documents (pre-filled details) */
+  documentsMailtoHref?: string;
 }
 
 export const SubmissionModal: React.FC<SubmissionModalProps> = ({
@@ -35,6 +37,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
   onRetry,
   onClose,
   onReset,
+  documentsMailtoHref,
 }) => {
   if (!isOpen) return null;
 
@@ -182,6 +185,24 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
                 <p className="text-xs text-gray-600 leading-relaxed pt-1">
                   The Membership Office will review your application package and notify you regarding executive committee approval.
                 </p>
+              </div>
+
+              {/* NEXT STEP: email the confidential documents separately */}
+              <div className="border-2 border-red-300 bg-red-50 rounded-lg p-3 text-left text-xs text-red-800 leading-relaxed">
+                <p className="font-bold uppercase tracking-wider text-red-700 mb-1">Next step: email your documents</p>
+                <p>
+                  Please email clear scanned copies of all the checklist documents to{' '}
+                  <span className="font-bold">registration@cbbcl.org</span>, separately and under privacy. Your email must
+                  include your <strong>Full Name, Phone Number, Email Address and Application Date</strong>.
+                </p>
+                {documentsMailtoHref && (
+                  <a
+                    href={documentsMailtoHref}
+                    className="mt-2 inline-block bg-red-700 hover:bg-red-800 text-white font-bold uppercase tracking-wider text-[10px] px-3 py-1.5 rounded"
+                  >
+                    Compose email with my details
+                  </a>
+                )}
               </div>
 
               {/* SUCCESS ACTION BUTTONS */}
