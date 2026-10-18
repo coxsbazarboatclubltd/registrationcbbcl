@@ -12,7 +12,7 @@ import { SiteFooter } from './components/SiteFooter';
 import { MemberFormData, EMPTY_MEMBER_DATA } from './types';
 import { SubmissionModal } from './components/SubmissionModal';
 import { validateMemberForm, ValidationError } from './utils/formValidation';
-import { generateApplicationPdf, downloadPdfBlob, GeneratedPdfResult } from './utils/pdfGenerator';
+import { generateApplicationPdf, downloadPdfBlob, GeneratedPdfResult, PdfServiceUnavailableError, SessionExpiredError } from './utils/pdfGenerator';
 import { buildPrintSnapshot } from './utils/pdfSnapshot';
 import { BlankFormRenderer } from './components/BlankFormRenderer';
 import { documentsMailtoHref } from './components/EmailDocumentsNotice';
@@ -238,6 +238,19 @@ export default function App() {
     }
   };
 
+  // Expired/invalid email session: drop it so the email-verification step
+  // shows again. The draft (all entered data) is kept.
+  const handleSessionExpired = (message: string) => {
+    setOtpSession(null);
+    try {
+      localStorage.removeItem(OTP_SESSION_KEY);
+      sessionStorage.removeItem(OTP_SESSION_KEY);
+    } catch {
+      // storage unavailable — the in-memory reset above is enough
+    }
+    alert(message);
+  };
+
   // Same completeness check as Submit; shows the validation list and returns
   // false when anything required is missing.
   const ensureFormComplete = (): boolean => {
@@ -259,8 +272,16 @@ export default function App() {
       const result = await generateApplicationPdf(formData, tempRefNo, dateStr, otpSession?.token);
       downloadPdfBlob(result.blob, result.filename);
     } catch (err) {
+      if (err instanceof SessionExpiredError) {
+        handleSessionExpired(err.message);
+        return;
+      }
       console.error('Save as PDF error:', err);
-      alert('Could not generate PDF download. Please ensure all form pages are rendered and try again.');
+      alert(
+        err instanceof PdfServiceUnavailableError
+          ? err.message
+          : 'Could not generate PDF download. Please ensure all form pages are rendered and try again.'
+      );
     } finally {
       setIsSavingPdf(false);
     }
@@ -286,9 +307,17 @@ export default function App() {
         if (tab && !tab.closed) tab.location.href = URL.createObjectURL(result.blob);
         else downloadPdfBlob(result.blob, result.filename);
       } catch (err) {
-        console.error('Print preparation error:', err);
         tab?.close();
-        alert('Could not prepare the application for printing. Please try again.');
+        if (err instanceof SessionExpiredError) {
+          handleSessionExpired(err.message);
+          return;
+        }
+        console.error('Print preparation error:', err);
+        alert(
+          err instanceof PdfServiceUnavailableError
+            ? err.message
+            : 'Could not prepare the application for printing. Please try again.'
+        );
       } finally {
         setIsSavingPdf(false);
       }
@@ -360,9 +389,17 @@ export default function App() {
       // Let React render the final values (reference number, pinned email)
       // into the pages before they're snapshotted for the PDF.
       await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      generated = await generateApplicationPdf(updatedFormData, refNo, dateStr, otpSession?.token);
+      generated = await generateApplicationPdf(updatedFormData, refNo, dateStr, otpSession?.token, {
+        allowFallback: true,
+      });
       setPdfResult(generated);
     } catch (pdfErr: any) {
+      if (pdfErr instanceof SessionExpiredError) {
+        setIsModalOpen(false);
+        setIsSubmitting(false);
+        handleSessionExpired(pdfErr.message);
+        return;
+      }
       console.warn('PDF generation error:', pdfErr);
     }
 

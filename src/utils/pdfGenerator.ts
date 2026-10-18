@@ -226,8 +226,14 @@ export async function generateFullApplicationPdf(
           logging: false,
           backgroundColor: '#ffffff',
           windowWidth: 1200,
-          onclone: (_clonedDocument: Document, clonedElement: HTMLElement) => {
+          onclone: async (clonedDocument: Document, clonedElement: HTMLElement) => {
             replaceFormControlsForCapture(clonedElement);
+            // Measure text with the real webfont, not a fallback font
+            try {
+              await clonedDocument.fonts.ready;
+            } catch {
+              // ignore — render with whatever is loaded
+            }
           },
         })
       )
@@ -315,29 +321,68 @@ export function downloadPdfBlob(blob: Blob, filename: string): void {
  * falls back to the in-browser html2canvas capture above if the server is
  * unreachable, so a PDF is always produced.
  */
+/** The email-verification session was rejected by /api/pdf; the applicant must verify again. */
+export class SessionExpiredError extends Error {
+  constructor() {
+    super('Your email verification has expired. Please verify your email again — your form is saved.');
+    this.name = 'SessionExpiredError';
+  }
+}
+
+/** The server PDF service could not produce a PDF (after a retry). */
+export class PdfServiceUnavailableError extends Error {
+  constructor() {
+    super("The PDF couldn't be created right now. Please try again in a minute — your form is saved.");
+    this.name = 'PdfServiceUnavailableError';
+  }
+}
+
+async function renderOnServer(otpSessionToken?: string): Promise<Blob> {
+  const html = buildPrintSnapshot();
+  const response = await fetch('/api/pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ html, otpSessionToken }),
+  });
+  // An expired/invalid email session must be surfaced (re-verify), never hidden
+  // behind the lower-quality in-browser capture.
+  if (response.status === 403) throw new SessionExpiredError();
+  if (!response.ok || !response.headers.get('content-type')?.includes('application/pdf')) {
+    throw new Error(`PDF service responded with HTTP ${response.status}`);
+  }
+  return response.blob();
+}
+
+/**
+ * Produces the application PDF with the server-side Chromium renderer
+ * (/api/pdf, sharp vector text), retrying once. The in-browser html2canvas
+ * capture misplaces some text/badges, so it is only used when `allowFallback`
+ * is set — i.e. for submission, where an imperfect PDF beats losing the
+ * application. Downloads/printing instead report PdfServiceUnavailableError.
+ */
 export async function generateApplicationPdf(
   data: MemberFormData,
   refNo: string,
   docDate: string,
-  otpSessionToken?: string
+  otpSessionToken?: string,
+  { allowFallback = false }: { allowFallback?: boolean } = {}
 ): Promise<GeneratedPdfResult> {
   const cleanName = (data.candidateName || 'Applicant').replace(/[^a-zA-Z0-9_-]/g, '_');
   const filename = `${refNo.trim() || 'CBBCL'}_${cleanName}_Membership_Application.pdf`;
 
-  let formPdf: Blob;
-  try {
-    const html = buildPrintSnapshot();
-    const response = await fetch('/api/pdf', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ html, otpSessionToken }),
-    });
-    if (!response.ok || !response.headers.get('content-type')?.includes('application/pdf')) {
-      throw new Error(`PDF service responded with HTTP ${response.status}`);
+  let formPdf: Blob | null = null;
+  for (let attempt = 1; attempt <= 2 && !formPdf; attempt++) {
+    try {
+      formPdf = await renderOnServer(otpSessionToken);
+    } catch (err) {
+      if (err instanceof SessionExpiredError) throw err;
+      console.warn(`Server PDF attempt ${attempt} failed:`, err);
+      if (attempt === 1) await new Promise((r) => setTimeout(r, 1500));
     }
-    formPdf = await response.blob();
-  } catch (err) {
-    console.warn('Server PDF rendering unavailable, using in-browser fallback:', err);
+  }
+  if (!formPdf) {
+    if (!allowFallback) throw new PdfServiceUnavailableError();
+    console.warn('Server PDF unavailable; using in-browser capture for the submission.');
     formPdf = (await generateFullApplicationPdf(data, refNo, docDate)).blob;
   }
 

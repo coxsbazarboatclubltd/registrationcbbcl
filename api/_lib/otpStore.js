@@ -3,7 +3,9 @@ const crypto = require('crypto');
 const OTP_TTL_MS = 10 * 60 * 1000; // 10 minutes
 const OTP_MAX_ATTEMPTS = 5;
 const REQUEST_COOLDOWN_MS = 60 * 1000; // 1 min between resend requests per email
-const SESSION_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
+// Long enough to fill the form over several sittings (drafts persist); it only
+// proves the applicant controls the email address.
+const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 function getSecret() {
   return process.env.OTP_TOKEN_SECRET || process.env.RESEND_API_KEY || 'cbbcl-otp-dev-secret';
