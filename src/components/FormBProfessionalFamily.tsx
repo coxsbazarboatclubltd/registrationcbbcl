@@ -2,6 +2,7 @@ import React from 'react';
 import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { formatLongDate } from '../utils/formatDate';
+import { REGISTRATION_NUMBER_PENDING } from '../utils/ids';
 
 interface FormBProps {
   data: MemberFormData;
@@ -52,11 +53,11 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
             <tbody>
               <tr>
                 <td>Registration No.:</td>
-                <td className="font-bold text-[#0f5132]">{data.registrationNumber || 'CBBCL-2026-000001'}</td>
+                <td className="font-bold text-[#0f5132]">{data.registrationNumber || REGISTRATION_NUMBER_PENDING}</td>
               </tr>
               <tr>
                 <td>Document No.:</td>
-                <td>{docNo || 'CBBCL-DOC-20260726-00001'}</td>
+                <td>{docNo}</td>
               </tr>
               <tr>
                 <td>Application Date:</td>
@@ -194,7 +195,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
             <>
           {/* Spouse Details */}
           <div className="field">
-            <label>Spouse Full Name</label>
+            <label>Spouse Full Name <span className="text-red-600">*</span></label>
             <input
               type="text"
               value={data.spouseName}
@@ -203,7 +204,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           </div>
 
           <div className="field">
-            <label>Spouse Date of Birth &amp; Anniversary</label>
+            <label>Spouse Date of Birth <span className="text-red-600">*</span> &amp; Anniversary</label>
             <div className="flex gap-2">
               <input
                 type="date"
@@ -241,7 +242,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           </div>
 
           <div className="field">
-            <label>Spouse NID / Passport</label>
+            <label>Spouse NID / Passport <span className="text-red-600">*</span></label>
             <input
               type="text"
               placeholder="Spouse NID / Passport"
@@ -251,7 +252,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
           </div>
 
           <div className="field md:col-span-2">
-            <label>Spouse Mobile Contact &amp; Email</label>
+            <label>Spouse Mobile <span className="text-red-600">*</span> &amp; Email</label>
             <div className="flex gap-2">
               <input
                 type="tel"
@@ -296,7 +297,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
             {childIndexes.map((i) => (
               <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-1 bg-white/60 p-1.5 rounded border border-[#c8c8c8]" key={i}>
                 <div className="field md:col-span-1">
-                  <label>Child {pad2(i)} – Name</label>
+                  <label>Child {pad2(i)} – Name <span className="text-red-600">*</span></label>
                   <input
                     type="text"
                     placeholder={`Child ${i} Name`}
@@ -305,7 +306,7 @@ export const FormBProfessionalFamily: React.FC<FormBProps> = ({
                   />
                 </div>
                 <div className="field md:col-span-1">
-                  <label>DOB &amp; Gender</label>
+                  <label>DOB &amp; Gender <span className="text-red-600">*</span></label>
                   <div className="flex gap-1">
                     <input
                       type="date"

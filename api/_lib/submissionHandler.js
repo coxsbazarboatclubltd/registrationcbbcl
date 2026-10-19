@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const { sendApplicationEmails } = require('./emailService');
 const { verifySessionToken } = require('./otpStore');
 
@@ -71,7 +72,7 @@ async function handleSubmission(body, clientIp) {
     };
   }
 
-  const referenceNumber = refNo || `CBBCL-${new Date().getFullYear()}-000001`;
+  const referenceNumber = refNo || `CBBCL-${new Date().getFullYear()}-SRV-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
   const formattedCategory = (data.membershipCategory || 'Permanent').toUpperCase() + ' MEMBERSHIP';
   const officeEmail = process.env.MEMBERSHIP_EMAIL || process.env.MEMBERSHIP_OFFICE_EMAIL || DEFAULT_OFFICE_EMAIL;
 

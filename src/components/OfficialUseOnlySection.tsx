@@ -1,4 +1,5 @@
 import React from 'react';
+import { REGISTRATION_NUMBER_PENDING } from '../utils/ids';
 
 interface OfficialUseOnlySectionProps {
   registrationNumber: string;
@@ -33,7 +34,7 @@ export const OfficialUseOnlySection: React.FC<OfficialUseOnlySectionProps> = ({
         </div>
         <div className="border border-[#c8c8c8] p-1.5 bg-white rounded">
           <span className="block font-bold text-gray-500 uppercase text-[7.5px]">Registration Number</span>
-          <span className="font-bold text-[#0f5132]">{registrationNumber || 'CBBCL-2026-000001'}</span>
+          <span className="font-bold text-[#0f5132]">{registrationNumber || REGISTRATION_NUMBER_PENDING}</span>
         </div>
         <div className="border border-[#c8c8c8] p-1.5 bg-white rounded">
           <span className="block font-bold text-gray-500 uppercase text-[7.5px]">Document Verification</span>

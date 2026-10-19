@@ -4,6 +4,7 @@ import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
 import { SearchableCategorySelect } from './SearchableCategorySelect';
 import { formatLongDate } from '../utils/formatDate';
+import { REGISTRATION_NUMBER_PENDING } from '../utils/ids';
 
 interface FormAProps {
   data: MemberFormData;
@@ -48,11 +49,11 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
             <tbody>
               <tr>
                 <td>Registration No.:</td>
-                <td className="font-bold text-[#0f5132]">{data.registrationNumber || 'CBBCL-2026-000001'}</td>
+                <td className="font-bold text-[#0f5132]">{data.registrationNumber || REGISTRATION_NUMBER_PENDING}</td>
               </tr>
               <tr>
                 <td>Document No.:</td>
-                <td>{docNo || 'CBBCL-DOC-20260726-00001'}</td>
+                <td>{docNo}</td>
               </tr>
               <tr>
                 <td>Application Date:</td>

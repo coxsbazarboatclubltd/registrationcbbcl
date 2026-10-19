@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { REGISTRATION_NUMBER_PENDING } from '../utils/ids';
 import {
   ACCEPTED_ATTACHMENT_TYPES,
   DOCUMENT_UPLOADS_ENABLED,
@@ -354,11 +355,11 @@ export const FormFDocumentChecklist: React.FC<FormFProps> = ({
               <tbody>
                 <tr>
                   <td>Registration No.:</td>
-                  <td className="font-bold text-[#0f5132]">{data.registrationNumber || 'CBBCL-2026-000001'}</td>
+                  <td className="font-bold text-[#0f5132]">{data.registrationNumber || REGISTRATION_NUMBER_PENDING}</td>
                 </tr>
                 <tr>
                   <td>Document No.:</td>
-                  <td>{docNo || 'CBBCL-DOC-20260726-00001'}</td>
+                  <td>{docNo}</td>
                 </tr>
                 <tr>
                   <td>Application Date:</td>

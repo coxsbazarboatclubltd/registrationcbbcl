@@ -214,7 +214,7 @@ export interface MemberFormData {
 }
 
 export const EMPTY_MEMBER_DATA: MemberFormData = {
-  registrationNumber: "CBBCL-2026-000001",
+  registrationNumber: "",
   membershipCategory: "Permanent Member",
   candidateName: "",
   fatherHusbandName: "",

@@ -17,7 +17,7 @@ import { buildPrintSnapshot } from './utils/pdfSnapshot';
 import { BlankFormRenderer } from './components/BlankFormRenderer';
 import { documentsMailtoHref } from './components/EmailDocumentsNotice';
 import { MAX_SUBMISSION_PDF_DATA_URI_CHARS, uploadedAttachments } from './utils/attachments';
-import { ReferenceService } from './services/referenceService';
+import { generateDocumentNumber, generateRegistrationNumber } from './utils/ids';
 import { SubmissionService } from './services/submissionService';
 import { EmailGate } from './components/EmailGate';
 import { installUppercaseInputs } from './utils/forceUppercase';
@@ -59,7 +59,12 @@ export default function App() {
       // Earlier builds pre-filled a sample profile and persisted it; discard
       // those drafts so returning visitors start from a clean form.
       if (draft && draft.formData?.candidateName !== 'SAYEED REZA CHOWDHURY') {
-        setFormData((prev) => ({ ...EMPTY_MEMBER_DATA, ...draft.formData, email: prev.email || draft.formData.email || '' }));
+        setFormData((prev) => ({
+          ...EMPTY_MEMBER_DATA,
+          ...draft.formData,
+          registrationNumber: '', // assigned fresh at submission
+          email: prev.email || draft.formData.email || '',
+        }));
         if (draft.activeTab >= 1 && draft.activeTab <= 7) setActiveTab(draft.activeTab as TabNumber);
         if (draft.savedAt) setDraftSavedAt(draft.savedAt);
       }
@@ -176,13 +181,10 @@ export default function App() {
     const now = new Date();
     const pad = (n: number) => String(n).padStart(2, '0');
     const dStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-    const cleanDate = dStr.replace(/-/g, '');
-    const timeBase = String(now.getTime()).slice(-5);
-    const randDigits = String(Math.floor(Math.random() * 900) + 100);
 
     return {
       dateStr: dStr,
-      docNo: `CBBCL-DOC-${cleanDate}-${timeBase}${randDigits}`,
+      docNo: generateDocumentNumber(now),
     };
   }, []);
 
@@ -268,7 +270,7 @@ export default function App() {
     setIsSavingPdf(true);
 
     try {
-      const tempRefNo = formData.registrationNumber || referenceNumber || 'CBBCL-2026-000001';
+      const tempRefNo = referenceNumber || '';
       const result = await generateApplicationPdf(formData, tempRefNo, dateStr, otpSession?.token);
       downloadPdfBlob(result.blob, result.filename);
     } catch (err) {
@@ -302,7 +304,7 @@ export default function App() {
       );
       setIsSavingPdf(true);
       try {
-        const tempRefNo = formData.registrationNumber || referenceNumber || 'CBBCL-2026-000001';
+        const tempRefNo = referenceNumber || '';
         const result = await generateApplicationPdf(formData, tempRefNo, dateStr, otpSession?.token);
         if (tab && !tab.closed) tab.location.href = URL.createObjectURL(result.blob);
         else downloadPdfBlob(result.blob, result.filename);
@@ -353,8 +355,8 @@ export default function App() {
     setValidationErrors([]);
     setErrorDetails(undefined);
 
-    // Generate unique application reference number (Format: CBBCL-YYYY-000001)
-    const refNo = referenceNumber || ReferenceService.generateReferenceNumber();
+    // Unique registration number, assigned at submission (reused on retry)
+    const refNo = referenceNumber || generateRegistrationNumber();
     setReferenceNumber(refNo);
 
     // Update registration number in formData. Pin email to the verified OTP

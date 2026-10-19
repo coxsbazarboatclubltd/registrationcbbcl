@@ -94,6 +94,40 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
     });
   }
 
+  // 6a. Family — spouse details are mandatory when married; each child's core
+  // details are mandatory for the number of children entered (Form B)
+  const blank = (v: unknown) => !String(v ?? '').trim();
+  if (data.maritalStatus === 'Married') {
+    if (blank(data.spouseName) || String(data.spouseName).trim().length < 2) {
+      errors.push({ field: 'spouseName', message: 'Spouse Full Name is required (Marital Status: Married) — Page 2.' });
+    }
+    if (blank(data.spouseDob)) {
+      errors.push({ field: 'spouseDob', message: 'Spouse Date of Birth is required (Marital Status: Married) — Page 2.' });
+    }
+    if (blank(data.spouseNidPassport)) {
+      errors.push({ field: 'spouseNidPassport', message: 'Spouse NID / Passport number is required (Marital Status: Married) — Page 2.' });
+    }
+    if (String(data.spouseMobile || '').replace(/[\s\-+()]/g, '').length < 8) {
+      errors.push({ field: 'spouseMobile', message: 'A valid Spouse Mobile number is required (Marital Status: Married) — Page 2.' });
+    }
+  }
+  const children = Math.min(Math.max(Number(data.numberOfChildren) || 0, 0), 6);
+  for (let i = 1; i <= children; i++) {
+    const n = String(i).padStart(2, '0');
+    const get = (suffix: string) => (data as unknown as Record<string, unknown>)[`child${n}${suffix}`];
+    const missing = [
+      blank(get('Name')) && 'Name',
+      blank(get('Dob')) && 'Date of Birth',
+      blank(get('Gender')) && 'Gender',
+    ].filter(Boolean);
+    if (missing.length) {
+      errors.push({
+        field: 'general',
+        message: `Child ${n}: ${missing.join(', ')} ${missing.length > 1 ? 'are' : 'is'} required — Page 2 (Number of Children: ${children}).`,
+      });
+    }
+  }
+
   // 6b. References — both mandatory, and both must be existing Club members
   const references = [
     { n: 1, name: data.ref1Name, memNo: data.ref1MemNo, relationship: data.ref1Relationship, phone: data.ref1Phone },

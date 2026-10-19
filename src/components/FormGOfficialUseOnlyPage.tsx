@@ -4,6 +4,7 @@ import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { formatLongDate } from '../utils/formatDate';
 import { useBlankForm } from './BlankFormContext';
+import { REGISTRATION_NUMBER_PENDING } from '../utils/ids';
 
 interface FormGProps {
   data: MemberFormData;
@@ -45,11 +46,11 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
             <tbody>
               <tr>
                 <td>Registration No.:</td>
-                <td className="font-bold text-[#0f5132]">{data.registrationNumber || 'CBBCL-2026-000001'}</td>
+                <td className="font-bold text-[#0f5132]">{data.registrationNumber || REGISTRATION_NUMBER_PENDING}</td>
               </tr>
               <tr>
                 <td>Document No.:</td>
-                <td>{docNo || 'CBBCL-DOC-20260726-00001'}</td>
+                <td>{docNo}</td>
               </tr>
               <tr>
                 <td>Application Date:</td>
@@ -90,7 +91,7 @@ export const FormGOfficialUseOnlyPage: React.FC<FormGProps> = ({
           </div>
           <div>
             <span className="text-[#7a5c1e] font-bold block">Document Reference:</span>
-            <span className="font-mono text-[#1a2744] font-bold">{docNo || 'CBBCL-DOC-20260726-00001'}</span>
+            <span className="font-mono text-[#1a2744] font-bold">{docNo}</span>
           </div>
           <div>
             <span className="text-[#7a5c1e] font-bold block">Membership Category:</span>

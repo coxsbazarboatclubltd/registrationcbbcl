@@ -5,6 +5,7 @@ import { CbbcWatermarkLogo } from './CbbcWatermarkLogo';
 import { MemberFormData } from '../types';
 import { PhotoUploader } from './PhotoUploader';
 import { formatLongDate } from '../utils/formatDate';
+import { REGISTRATION_NUMBER_PENDING } from '../utils/ids';
 
 interface Form2Props {
   data: MemberFormData;
@@ -57,11 +58,11 @@ export const Form2ProximityCard: React.FC<Form2Props> = ({
             <tbody>
               <tr>
                 <td>Registration No.:</td>
-                <td className="font-bold text-[#0f5132]">{data.registrationNumber || 'CBBCL-2026-000001'}</td>
+                <td className="font-bold text-[#0f5132]">{data.registrationNumber || REGISTRATION_NUMBER_PENDING}</td>
               </tr>
               <tr>
                 <td>Document No.:</td>
-                <td>{docNo || 'CBBCL-DOC-20260726-00001'}</td>
+                <td>{docNo}</td>
               </tr>
               <tr>
                 <td>Application Date:</td>
