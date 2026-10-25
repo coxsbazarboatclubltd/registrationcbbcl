@@ -11,7 +11,7 @@ export const CHECKLIST_ITEMS = [
   { field: 'docChildrenPhoto', name: "Children's Photographs", note: 'One recent passport-size photo of each child (if applicable)', required: true, appliesWhen: 'children' },
   { field: 'docNidCopy', name: 'National ID (NID)', note: 'Smart NID clear copy — both front & back sides', required: true, twoSided: true },
   { field: 'docPassportCopy', name: 'Passport Copy', note: 'Valid passport copy (information pages)', required: true },
-  { field: 'docSpecimenSignature', name: 'Specimen Signature', note: 'Signature on white paper', required: true },
+  { field: 'docSpecimenSignature', name: 'Your Digital Signature', note: 'Clear scan or photo of your signature on white paper', required: true },
   { field: 'docBirthCertificate', name: 'Birth Certificate', note: 'Applicant and children / dependent birth certificate copies', required: true },
   { field: 'docTinCertificate', name: 'TIN Certificate', note: 'Tax identification certificate copy', required: true },
   { field: 'docTradeLicense', name: 'Trade License / Employment ID', note: 'Trade license or employment identification', required: false },

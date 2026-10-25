@@ -90,9 +90,11 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
               <div className="field col-span-2 grid grid-cols-1 md:grid-cols-4 gap-2">
                 <div className="md:col-span-1">
                   <label>Title <span className="text-red-600">*</span></label>
+                  <div className="flex gap-1">
                   <select
                     value={data.title}
                     onChange={(e) => onChange('title', e.target.value)}
+                    className={data.title === 'other' ? 'w-1/2 flex-1' : undefined}
                   >
                     <option value="mr">Mr.</option>
                     <option value="mrs">Mrs.</option>
@@ -107,6 +109,17 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
                     <option value="hon">Hon.</option>
                     <option value="other">Other</option>
                   </select>
+                  {data.title === 'other' && (
+                    <input
+                      type="text"
+                      aria-label="Your title"
+                      placeholder="Your title"
+                      value={data.titleOther || ''}
+                      onChange={(e) => onChange('titleOther', e.target.value)}
+                      className="w-1/2 flex-1"
+                    />
+                  )}
+                  </div>
                 </div>
                 <div className="md:col-span-3">
                   <label>Candidate Full Name (as per NID / Passport) <span className="text-red-600">*</span></label>

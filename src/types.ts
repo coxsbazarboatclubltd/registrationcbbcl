@@ -135,6 +135,8 @@ export interface MemberFormData {
   
   // Form 3 specifics
   title: string;
+  /** Free-text title when "Other" is chosen (e.g. COL., JUSTICE) */
+  titleOther?: string;
   professionType: 'business' | 'service' | 'retired' | 'other';
   professionOther?: string;
   officeTel: string;

@@ -87,25 +87,34 @@ export const Form3ProfileSync: React.FC<Form3Props> = ({
             <div className="title-row">
               <span className="tl">Title</span>
               <div className="title-opts">
-                <select
-                  className="title-select locked-field border border-[#9d7f46]/50 rounded px-2 py-1 text-[10px] bg-white text-[#1a2744] font-semibold h-[26px]"
-                  value={data.title}
-                  disabled
-                  title="Filled automatically from an earlier page"
-                >
-                  <option value="mr">Mr.</option>
-                  <option value="mrs">Mrs.</option>
-                  <option value="miss">Miss</option>
-                  <option value="ms">Ms.</option>
-                  <option value="dr">Dr.</option>
-                  <option value="prof">Prof.</option>
-                  <option value="engr">Engr.</option>
-                  <option value="arch">Architect</option>
-                  <option value="barrister">Barrister</option>
-                  <option value="advocate">Advocate</option>
-                  <option value="hon">Hon.</option>
-                  <option value="other">Other</option>
-                </select>
+                {data.title === 'other' ? (
+                  <div
+                    className="title-select locked-field border border-[#9d7f46]/50 rounded px-2 py-1 text-[10px] text-[#1a2744] font-semibold h-[26px] flex items-center"
+                    title="Filled automatically from an earlier page"
+                  >
+                    {data.titleOther || 'Other'}
+                  </div>
+                ) : (
+                  <select
+                    className="title-select locked-field border border-[#9d7f46]/50 rounded px-2 py-1 text-[10px] bg-white text-[#1a2744] font-semibold h-[26px]"
+                    value={data.title}
+                    disabled
+                    title="Filled automatically from an earlier page"
+                  >
+                    <option value="mr">Mr.</option>
+                    <option value="mrs">Mrs.</option>
+                    <option value="miss">Miss</option>
+                    <option value="ms">Ms.</option>
+                    <option value="dr">Dr.</option>
+                    <option value="prof">Prof.</option>
+                    <option value="engr">Engr.</option>
+                    <option value="arch">Architect</option>
+                    <option value="barrister">Barrister</option>
+                    <option value="advocate">Advocate</option>
+                    <option value="hon">Hon.</option>
+                    <option value="other">Other</option>
+                  </select>
+                )}
               </div>
               <div className="title-name">
                 <input

@@ -55,7 +55,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Club Member No. <span className="text-red-600">*</span></label>
                 <input
                   type="text"
-                  placeholder="e.g. P-0112"
+                  placeholder="e.g. CBBCL-LM-0001"
                   value={data.ref1MemNo}
                   onChange={(e) => onChange('ref1MemNo', e.target.value)}
                   className="w-full text-[10px] leading-[2.2] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"
@@ -164,7 +164,7 @@ export const ReferencesSection: React.FC<ReferencesSectionProps> = ({
                 <label className="block text-[8px] font-bold uppercase text-[#1a2744] mb-0.5">Club Member No. <span className="text-red-600">*</span></label>
                 <input
                   type="text"
-                  placeholder="e.g. P-0488"
+                  placeholder="e.g. CBBCL-LM-0001"
                   value={data.ref2MemNo}
                   onChange={(e) => onChange('ref2MemNo', e.target.value)}
                   className="w-full text-[10px] leading-[2.2] px-2 py-1 border border-[#c8c8c8] rounded bg-white text-[#2c2c2c] focus:outline-none focus:border-[#1a2744]"

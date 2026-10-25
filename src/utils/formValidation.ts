@@ -21,6 +21,11 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
     });
   }
 
+  // Title: "Other" needs the actual title typed in
+  if (data.title === 'other' && !String(data.titleOther || '').trim()) {
+    errors.push({ field: 'title', message: 'Title: you chose "Other" — please type your title on Page 1.' });
+  }
+
   // 1. Candidate Full Name
   if (!data.candidateName || data.candidateName.trim().length < 2) {
     errors.push({

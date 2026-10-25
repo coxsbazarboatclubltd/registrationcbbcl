@@ -39,7 +39,7 @@ function buildOfficeEmailHtml(params, formattedCategory) {
         <tr><td style="padding: 6px; font-weight: bold;">Document Number:</td><td style="padding: 6px;">${escapeHtml(documentNumber)}</td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">Submission Date:</td><td style="padding: 6px;">${escapeHtml(formatLongDate(submissionDate || new Date().toISOString().split('T')[0]))}</td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">Membership Category:</td><td style="padding: 6px;">${escapeHtml(data.membershipCategory || 'Permanent Member')}</td></tr>
-        <tr><td style="padding: 6px; font-weight: bold;">Applicant Name:</td><td style="padding: 6px;">${data.title ? escapeHtml(data.title.toUpperCase()) + ' ' : ''}${escapeHtml(data.candidateName)}</td></tr>
+        <tr><td style="padding: 6px; font-weight: bold;">Applicant Name:</td><td style="padding: 6px;">${(() => { const t = data.title === 'other' ? data.titleOther : data.title; return t ? escapeHtml(String(t).toUpperCase()) + ' ' : ''; })()}${escapeHtml(data.candidateName)}</td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">Email:</td><td style="padding: 6px;"><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">Mobile Phone:</td><td style="padding: 6px;">${escapeHtml(data.mobile)}</td></tr>
         <tr><td style="padding: 6px; font-weight: bold;">National ID / Passport:</td><td style="padding: 6px;">${escapeHtml(data.nid || data.passportNo || 'N/A')}</td></tr>
