@@ -10,6 +10,8 @@ interface PhotoUploaderProps {
   maxDim?: number; // max width/height for compression
   /** Display-only: mirrors a photo uploaded on an earlier page */
   locked?: boolean;
+  /** Shows a red required marker next to the label */
+  required?: boolean;
 }
 
 export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
@@ -21,7 +23,9 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
   aspectRatio = 'aspect-[3/4]',
   maxDim = 800,
   locked = false,
+  required = false,
 }) => {
+  const mark = required ? <span className="text-red-600"> *</span> : null;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (file: File) => {
@@ -100,7 +104,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
           <img src={photoUrl} alt={label} className="w-full h-full object-cover rounded-sm" />
         ) : (
           <div className="p-2 flex flex-col items-center justify-center gap-1 text-[#1a2744]">
-            <div className="text-[9px] font-bold uppercase tracking-wider leading-tight">{label}</div>
+            <div className="text-[9px] font-bold uppercase tracking-wider leading-tight">{label}{mark}</div>
             {sublabel && <div className="text-[7.5px] text-[#6b6b6b] leading-tight whitespace-pre-line">{sublabel}</div>}
             <span className="text-[7px] text-gray-500 italic mt-0.5 no-print">Upload on Form A</span>
           </div>
@@ -147,7 +151,7 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
         <div className="p-2 flex flex-col items-center justify-center gap-1 text-[#1a2744]">
           <span className="text-lg leading-none no-print">📷</span>
           <div className="text-[9px] font-bold uppercase tracking-wider text-[#1a2744] leading-tight">
-            {label}
+            {label}{mark}
           </div>
           {sublabel && (
             <div className="text-[7.5px] text-[#6b6b6b] leading-tight whitespace-pre-line">

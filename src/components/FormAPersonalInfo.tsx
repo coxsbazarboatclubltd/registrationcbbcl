@@ -267,6 +267,7 @@ export const FormAPersonalInfo: React.FC<FormAProps> = ({
           <div className="photo-box flex flex-col items-center justify-between p-1">
             <PhotoUploader
               label="Candidate Photo"
+              required
               sublabel="Passport Size&#10;2 inch × 2 inch"
               photoUrl={data.candidatePhotoUrl}
               onPhotoChange={(url) => {

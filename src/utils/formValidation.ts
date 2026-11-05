@@ -177,11 +177,12 @@ export function validateMemberForm(data: MemberFormData): ValidationError[] {
     });
   }
 
-  // 7. Required Photo Upload
-  if (!data.candidatePhotoUrl && !data.docPassportPhoto) {
+  // 7. Candidate photo is mandatory: the photo itself must be uploaded
+  // (ticking the checklist box alone is not enough)
+  if (!String(data.candidatePhotoUrl || '').trim()) {
     errors.push({
       field: 'uploads',
-      message: 'Candidate Passport Photograph is required. Please upload or verify photo.',
+      message: 'Candidate Photo is mandatory: please upload your passport-size photograph in the photo box on Page 1.',
     });
   }
 
