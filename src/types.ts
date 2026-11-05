@@ -1,5 +1,4 @@
 export type MembershipCategoryType =
-  | 'Founder Member'
   | 'Donor Member'
   | 'Life Member'
   | 'Permanent Member'
@@ -10,7 +9,6 @@ export type MembershipCategoryType =
   | 'Honorary Member';
 
 export const MEMBERSHIP_CATEGORIES: MembershipCategoryType[] = [
-  'Founder Member',
   'Donor Member',
   'Life Member',
   'Permanent Member',

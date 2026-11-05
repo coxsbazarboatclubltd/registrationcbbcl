@@ -63,6 +63,10 @@ export default function App() {
           ...EMPTY_MEMBER_DATA,
           ...draft.formData,
           registrationNumber: '', // assigned fresh at submission
+          // "Founder Member" was retired as a category: make the applicant choose again
+          ...((draft.formData.membershipCategory as string) === 'Founder Member'
+            ? { membershipCategory: '' as MemberFormData['membershipCategory'] }
+            : {}),
           email: prev.email || draft.formData.email || '',
         }));
         if (draft.activeTab >= 1 && draft.activeTab <= 7) setActiveTab(draft.activeTab as TabNumber);
